@@ -9,7 +9,7 @@
 int main()
 {
     SDLApp *app = new SDLApp(SCREEN_WIDTH, SCREEN_HEIGHT, "Golf Royale");
-    Texture *texture = new Texture(app->getRenderer(), "assets/img/GolfRoyaleBg.png");
+    app->loadTextures("assets/images/");
 
     // Main loop flag
     bool quit = false;
@@ -29,18 +29,6 @@ int main()
                 quit = true;
             }
         }
-
-        // Clear screen
-        SDL_SetRenderDrawColor(app->getRenderer(), 0xFF, 0xFF, 0xFF, 0xFF);
-        SDL_RenderClear(app->getRenderer());
-
-        // Render entities
-        SDL_Rect rect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
-
-        texture->render(rect);
-
-        // Update screen
-        SDL_RenderPresent(app->getRenderer());
     }
 
     delete app;
