@@ -1,3 +1,6 @@
+#ifndef SDLAppH
+#define SDLAppH
+
 #include <SDL2/SDL.h>
 #include <vector>
 
@@ -18,3 +21,5 @@ private:
 
     std::vector<SDLEntity*> entities;
 };
+
+#endif
