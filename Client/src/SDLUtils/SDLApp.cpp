@@ -1,5 +1,4 @@
 #include "SDLApp.h"
-#include "SDLEntity.h"
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <dirent.h>
@@ -47,9 +46,6 @@ SDLApp::~SDLApp()
 
 void SDLApp::update(float deltaTime)
 {
-    // Update entities
-    for (SDLEntity *entity : entities)
-        entity->update(deltaTime);
 }
 
 void SDLApp::render()
@@ -59,8 +55,6 @@ void SDLApp::render()
     SDL_RenderClear(renderer);
 
     // Render entities
-    for (SDLEntity *entity : entities)
-        entity->render();
 
     // Update screen
     SDL_RenderPresent(renderer);

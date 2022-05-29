@@ -5,7 +5,6 @@
 #include <unordered_map>
 #include <vector>
 
-class SDLEntity;
 class Texture;
 
 class SDLApp
@@ -25,7 +24,6 @@ private:
     SDL_Renderer* renderer;
 
     std::unordered_map<std::string, Texture*> textures;
-    std::vector<SDLEntity*> entities;
 };
 
 #endif

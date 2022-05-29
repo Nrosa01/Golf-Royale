@@ -15,6 +15,7 @@ OBJDIR = obj
 BINDIR = bin
 
 ############## Do not change anything from here downwards! #############
+# Look at all the subdirectories in the src directory and compile them.
 SRC = $(wildcard $(SRCDIR)/*$(EXT)) $(wildcard $(SRCDIR)/*/*$(EXT))
 OBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)/%.o)
 # UNIX-based OS variables & settings
