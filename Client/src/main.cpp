@@ -1,7 +1,8 @@
 #include <iostream>
 #include <SDL2/SDL.h>
-#include "Texture.h"
-#include "SDLApp.h"
+#include "SDLUtils/Texture.h"
+#include "SDLUtils/SDLApp.h"
+#include "SDLUtils/Test.h"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
@@ -10,6 +11,8 @@ int main()
 {
     SDLApp *app = new SDLApp(SCREEN_WIDTH, SCREEN_HEIGHT, "Golf Royale");
     app->loadTextures("assets/images/");
+    Test test;
+    test.test();
 
     // Main loop flag
     bool quit = false;
