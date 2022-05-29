@@ -13,9 +13,6 @@ int main()
     SDLApp app(SCREEN_WIDTH, SCREEN_HEIGHT, "Golf Royale");
     app.loadTextures("assets/images/");
 
-    Entity ent;
-    ent.AddComponent(new Renderer(ent.GetTransform(), app.getTexture("GolfRoyaleBg")));
-
     // Main loop flag
     bool quit = false;
 
@@ -38,8 +35,7 @@ int main()
             SDL_SetRenderDrawColor(app.getRenderer(), 0xFF, 0xFF, 0xFF, 0xFF);
             SDL_RenderClear(app.getRenderer());
 
-            ent.Render();
-
+    
             //Update screen
             SDL_RenderPresent(app.getRenderer());
         }
