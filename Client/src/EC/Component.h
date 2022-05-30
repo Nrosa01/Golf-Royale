@@ -2,6 +2,8 @@
 #define ENT_COMPONENT_H
 
 #include <string>
+#include "../SDLUtils/InputSytem.h"
+
 class Entity;
 
 class Component

@@ -29,15 +29,38 @@ int main()
     while (!quit)
     {
         time.frameStartTime = SDL_GetTicks();
+        Input()->UpdateState();
 
         // Handle events on queue
         while (SDL_PollEvent(&e) != 0)
         {
-            // User requests quit
-            if (e.type == SDL_QUIT || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE))
+            auto key = e.key.keysym.sym;
+            switch (e.type)
+            {
+            case SDL_QUIT:
                 quit = true;
-            else
-                app.handleEvent(e);
+            case SDL_KEYDOWN:
+                if (key == SDLK_ESCAPE)
+                    quit = true;
+                Input()->OnKeyDown(key);
+                break;
+            case SDL_KEYUP:
+                Input()->OnKeyUp(key);
+                break;
+            case SDL_MOUSEBUTTONDOWN:
+                Input()->OnMouseButtonDown(e.button);
+                break;
+            case SDL_MOUSEBUTTONUP:
+                Input()->OnMouseButtonUp(e.button);
+                break;
+            case SDL_MOUSEMOTION:
+                // This is usually implemented as a callback but for now it will be this way, just for testing...
+                Input()->SetMouseMotion(Vector2D(e.motion.xrel, e.motion.yrel));
+                break;
+            default:
+                // std::cout << "Default (" << eventHandler.type << ")\n";
+                break;
+            }
         }
 
         app.update(time.deltaTime);

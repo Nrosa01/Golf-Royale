@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <vector>
 #include "../GameState/GameStateMachine.h"
+#include "InputSytem.h"
 
 class Texture;
 
@@ -33,6 +34,7 @@ private:
     std::unordered_map<std::string, Texture*> textures;
     int width;
     int height;
+    InputSystem* input;
 };
 
 #endif

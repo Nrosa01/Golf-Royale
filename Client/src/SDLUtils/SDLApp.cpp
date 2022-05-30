@@ -3,6 +3,7 @@
 #include <iostream>
 #include <dirent.h>
 #include "Texture.h"
+//#include "InputSytem.h"
 
 SDLApp::SDLApp(int width, int height, const char *title)
 {
@@ -39,11 +40,13 @@ SDLApp::SDLApp(int width, int height, const char *title)
     gameStateMachine = new GameStateMachine();
     this->width = width;
     this->height = height;
+    input = new InputSystem();
 }
 
 SDLApp::~SDLApp()
 {
     delete gameStateMachine;
+    delete input;
 
     // Free resources and close SDL
     SDL_DestroyRenderer(renderer);
