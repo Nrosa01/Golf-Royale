@@ -36,6 +36,7 @@ public:
 
    void load(string filename, uint numRows = 1, uint numCols = 1); // construir/cargar la textura de un fichero
    void render(const SDL_Rect& rect, SDL_RendererFlip flip = SDL_FLIP_NONE) const; // dibujar la textura en su totalidad en la posición proporcionada
+   void render(const SDL_Rect& rect, int angle, SDL_RendererFlip flip = SDL_FLIP_NONE) const; // dibujar la textura en su totalidad en la posición proporcionada
    void renderFrame(const SDL_Rect& destRect, int row, int col, int angle = 0, SDL_RendererFlip flip = SDL_FLIP_NONE) const; // dibujar uno de los frames de la textura en la posición proporcionada
 };
 

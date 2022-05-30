@@ -1,5 +1,6 @@
 #include "Ball.h"
 #include "Transform.h"
+#include "Renderer.h"
 #include "../Entity.h"
 #include "../../SDLUtils/SDLApp.h"
 #include <iostream>
@@ -8,6 +9,7 @@ Ball::Ball(bool main) : Component("Ball")
 {
     state = BallState::IDLE;
     this->mainBall = main;
+    friction = 0.97f;
 }
 
 Ball::~Ball() {}
@@ -15,13 +17,12 @@ Ball::~Ball() {}
 void Ball::init()
 {
     transform = this->ent->GetTransform();
-    velocity = Vector2D(10, 20);
+    // renderer = this->ent->GetComponent<Renderer>("Renderer");
+    renderer = dynamic_cast<Renderer *>(this->ent->GetComponent("Renderer"));
 }
 
 void Ball::update(float deltaTime)
 {
-    std::cout << "Velocity x: " << velocity.getX() << " y: " << velocity.getY() << std::endl;
-
     if (Input()->IsMouseButtonDown(0) && state == BallState::IDLE)
     {
         state = BallState::PRESSED;
@@ -37,45 +38,81 @@ void Ball::update(float deltaTime)
         std::cout << "setVelocity: " << velocity.x << " " << velocity.y << std::endl;
     }
 
-    if (isOutOfBoundsX())
+    if(state != BallState::MOVING)
+        return;
+
+    if (isOutOfBoundsX(deltaTime))
         velocity.x = -velocity.x;
-    if (isOutOfBoundsY())
+    if (isOutOfBoundsY(deltaTime))
         velocity.y = -velocity.y;
+
+    if (state != BallState::MOVING)
+        return;
 
     // Update position
     transform->GetPosition().x += velocity.x * deltaTime;
     transform->GetPosition().y += velocity.y * deltaTime;
 
     // Simulate friction
-    if (velocity.Magnitude() > 0.01f)
+    if (velocity.Magnitude() > 1.5f)
     {
-        velocity.x -= friction * deltaTime;
-        velocity.y -= friction * deltaTime;
+        velocity.x = velocity.x * friction;
+        velocity.y = velocity.y * friction;
     }
     else
     {
         velocity.x = 0.0f;
         velocity.y = 0.0f;
-        state == BallState::IDLE;
+        state = BallState::IDLE;
     }
+
+    // handleBallScale();
 }
 
-bool Ball::isOutOfBoundsX()
+void Ball::handleBallScale()
+{
+    // Set transform scale between 1 and 2 based on velocity
+    // Scale in x and y is relative to velocity in x and y
+    // Extra scale is between 0 and 1
+    // As this is squach and stretch, if extra scale in x is big, then it will be less in y
+    Vector2D &scale = transform->GetScale();
+    float ratioBetweenXAndY;
+
+    // Take care with 0s
+    if (velocity.x == 0.0f)
+        ratioBetweenXAndY = 0.0f;
+    else
+        ratioBetweenXAndY = velocity.y / velocity.x;
+
+    float extraScaleX = (SDL_abs(velocity.x) / maxSpeed);
+    float extraScaleY = (SDL_abs(velocity.y) / maxSpeed);
+    scale.x = 1.0f * (1.0f - ratioBetweenXAndY) + extraScaleX;
+    scale.y = 1.0f * ratioBetweenXAndY + extraScaleY;
+
+    scale.x = SDL_max(scale.x, 0.5f);
+    scale.y = SDL_max(scale.y, 0.5f);
+    scale.x = SDL_min(scale.x, 1.5f);
+    scale.y = SDL_min(scale.y, 1.5f);
+}
+
+bool Ball::isOutOfBoundsX(float deltaTime)
 {
     int screenWidth = this->ent->GetGame()->getWidth();
+    int posToCheck = transform->GetPosition().x + velocity.x * deltaTime;
 
     // If we are mainBall, we are retriscted to the left half of the screen
     if (mainBall)
-        return transform->GetPosition().x > screenWidth / 2 || transform->GetPosition().x < 0;
+        return posToCheck > screenWidth / 2 || posToCheck < 0;
     else
-        return transform->GetPosition().x < screenWidth / 2 || transform->GetPosition().x > screenWidth;
+        return posToCheck < screenWidth / 2 || posToCheck > screenWidth;
 }
 
-bool Ball::isOutOfBoundsY()
+bool Ball::isOutOfBoundsY(float deltaTime)
 {
     int screenHeight = this->ent->GetGame()->getHeight();
+    int posToCheck = transform->GetPosition().y + velocity.y * deltaTime;
 
-    return transform->GetPosition().y > screenHeight || transform->GetPosition().y < 0;
+    return posToCheck > screenHeight || posToCheck < 0;
 }
 
 float Ball::getDistance(Vector2D startPoint, Vector2D endPoint)
@@ -85,8 +122,9 @@ float Ball::getDistance(Vector2D startPoint, Vector2D endPoint)
 
 void Ball::setVelocity(Vector2D startPoint, Vector2D endPoint)
 {
-    float distance = getDistance(startPoint, endPoint);
+    float multiplicador = 3.0f;
+    float distance = getDistance(startPoint, endPoint) * multiplicador;
     Vector2D dir = (endPoint - startPoint).Normalized();
-    dir *= (int)distance;
+    dir *= -distance;
     velocity = dir;
 }

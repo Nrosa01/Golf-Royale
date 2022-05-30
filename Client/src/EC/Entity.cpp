@@ -3,15 +3,16 @@
 #include "Component.h"
 #include "Components/Transform.h"
 #include "../SDLUtils/SDLApp.h"
+#include <string>
 
-Entity::Entity(int x, int y, SDLApp* game)
+Entity::Entity(int x, int y, SDLApp *game)
 {
     transform = new Transform(Vector2D(x, y), 1.0f);
     AddComponent(transform);
     SetGame(game);
 }
 
-Entity::Entity(SDLApp* game)
+Entity::Entity(SDLApp *game)
 {
     transform = new Transform(Vector2D(0, 0), 1.0f);
     AddComponent(transform);
@@ -29,10 +30,21 @@ void Entity::AddComponent(Component *component)
     components[component->getName()] = component;
     component->setOwner(this);
     this->unitializedComponents.push_back(component);
+    this->componentArray.push_back(component);
 }
 
 void Entity::RemoveComponent(std::string name)
 {
+    // Delete from array
+    for (auto it = componentArray.begin(); it != componentArray.end(); it++)
+    {
+        if ((*it)->getName() == name)
+        {
+            componentArray.erase(it);
+            break;
+        }
+    }
+
     // Find component
     auto component = components.find(name);
     if (component != components.end())
@@ -47,10 +59,15 @@ void Entity::RemoveComponent(std::string name)
 template <typename T>
 T *Entity::GetComponent(std::string name)
 {
+    return dynamic_cast<T *>(GetComponent(name));
+}
+
+Component *Entity::GetComponent(std::string name)
+{
     // Find component
     auto component = components.find(name);
     if (component != components.end())
-        return static_cast<T *>(component->second);
+        return component->second;
     else
         return nullptr;
 }
@@ -63,14 +80,14 @@ void Entity::update(float deltaTime)
 
     this->unitializedComponents.clear();
 
-    for (auto component : components)
-        component.second->update(deltaTime);
+    for (auto component : componentArray)
+        component->update(deltaTime);
 }
 
 void Entity::render()
 {
-    for (auto component : components)
-        component.second->render();
+    for (auto component : componentArray)
+        component->render();
 }
 
 Transform *Entity::GetTransform()
@@ -83,7 +100,7 @@ void Entity::SetGame(SDLApp *game)
     this->game = game;
 }
 
-SDLApp* Entity::GetGame()
+SDLApp *Entity::GetGame()
 {
     return game;
 }

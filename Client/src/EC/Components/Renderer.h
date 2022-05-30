@@ -13,6 +13,8 @@ public:
     virtual ~Renderer();
     virtual void init();
     virtual void render();
+    int getWidth();
+    int getHeight();
 private:
 Transform* transform;
 Texture* texture;

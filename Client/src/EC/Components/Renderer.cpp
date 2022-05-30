@@ -20,8 +20,18 @@ void Renderer::render()
     int textH = texture->getH();
     destRect.x = transform->GetPosition().getX() - textW / 2;
     destRect.y = transform->GetPosition().getY() - textH / 2;
-    destRect.w = transform->GetScale() * textW;
-    destRect.h = transform->GetScale() * textH;
+    destRect.w = transform->GetScale().x * textW;
+    destRect.h = transform->GetScale().y * textH;
 
     texture->render(destRect);
+}
+
+int Renderer::getWidth()
+{
+    return texture->getW();
+}
+
+int Renderer::getHeight()
+{
+    return texture->getH();
 }

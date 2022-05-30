@@ -17,5 +17,6 @@ PlayState::PlayState(SDLApp *app) : GameState(app)
 
     Entity* enemyBall = new Entity(app->getWidth() - (app->getWidth() / 4), app->getHeight() - (app->getHeight() / 15), app);
     enemyBall->AddComponent(new Renderer(app->getTexture("ball")));
+    enemyBall->AddComponent(new Ball(false));
     this->entities.push_back(enemyBall);
 }

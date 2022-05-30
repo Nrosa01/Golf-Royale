@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <iostream>
 #include <list>
+#include <vector>
 
 class Transform;
 class Component;
@@ -20,6 +21,7 @@ public:
     void RemoveComponent(std::string name);
     template <typename T>
     T *GetComponent(std::string name);
+    Component *GetComponent(std::string name);
     void update(float deltaTime);
     void render();
 
@@ -29,7 +31,8 @@ public:
 private:
     Transform *transform;
     SDLApp* game;
-    std::unordered_map<std::string, Component *> components;
+    std::unordered_map<std::string, Component *> components; //Used for fast getComponent
+    std::vector<Component *> componentArray;
     std::list<Component *> unitializedComponents;
 };
 

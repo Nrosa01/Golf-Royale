@@ -10,19 +10,19 @@ public:
 	float y;
 
 	Vector2D() : x(), y() {};
-	Vector2D(int x, int y) : x(x), y(y) {};
+	Vector2D(float x, float y) : x(x), y(y) {};
 
-	int getX() const { return x; }; // obtener x
-	void setX(int xValue) { x = xValue; }; // establecer x
-	int getY() const { return y; }; // obtener y
-	void setY(int yValue) { y = yValue; }; // establecer y
+	float getX() const { return x; }; // obtener x
+	void setX(float xValue) { x = xValue; }; // establecer x
+	float getY() const { return y; }; // obtener y
+	void setY(float yValue) { y = yValue; }; // establecer y
 
 	Vector2D operator+  (const Vector2D& vector) const; // suma
 	Vector2D operator-  (const Vector2D& vector) const; // resta
 	Vector2D operator+= (const Vector2D vector);        // suma
-	int operator*       (const Vector2D& vector) const; // producto escalar
-	Vector2D operator*  (int number) const;             // producto de vector por escalar
-	Vector2D operator*=  (int number);             // producto de vector por escalar
+	float operator*       (const Vector2D& vector) const; // producto escalar
+	Vector2D operator*  (float number) const;             // producto de vector por escalar
+	void operator*=  (float number);             // producto de vector por escalar
 	bool operator==     (const Vector2D& vector) const; // igualdad
 	bool operator!=     (const Vector2D& vector) const; // desigualdad
 	void operator=      (const Vector2D& vector);       // asignación

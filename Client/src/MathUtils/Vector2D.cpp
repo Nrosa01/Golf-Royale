@@ -9,11 +9,11 @@ Vector2D Vector2D::operator-(const Vector2D& vector) const { return { x - vector
 
 Vector2D Vector2D::operator+=(const Vector2D vector) { return {x += vector.x, y += vector.y}; }
 
-int Vector2D::operator*(const Vector2D& vector) const { return vector.x * x + vector.y * y; }
+float Vector2D::operator*(const Vector2D& vector) const { return vector.x * x + vector.y * y; }
 
-Vector2D Vector2D::operator*(int number) const { return { x * number , y * number }; }
+Vector2D Vector2D::operator*(float number) const { return { x * number , y * number }; }
 
-Vector2D Vector2D::operator*=(int number) { x *= number; y *= number; }
+void Vector2D::operator*=(float number) { x *= number; y *= number; }
 
 bool Vector2D::operator==(const Vector2D& vector) const { return (x == vector.x && y == vector.y); }
 
@@ -27,7 +27,7 @@ Vector2D Vector2D::Normalized() const
 {
 	if (this->x == 0 && this->y == 0) return { 0,0 };
 	float module = Magnitude();
-	return {(int)(this->x / module), (int)(this->y/module)};
+	return {(this->x / module), (this->y/module)};
 }
 
 float Vector2D::Magnitude() const

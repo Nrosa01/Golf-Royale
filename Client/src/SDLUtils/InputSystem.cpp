@@ -264,7 +264,7 @@ bool InputSystem::IsMouseButtonReleased(int button)
 
 Vector2D InputSystem::GetMousePosition()
 {
-    Vector2D mousePos;
-    SDL_GetMouseState(&mousePos.x, &mousePos.y);
-    return mousePos;
+    int x, y;
+    SDL_GetMouseState(&x, &y);
+    return Vector2D(x, y);
 }
