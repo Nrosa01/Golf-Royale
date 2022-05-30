@@ -34,18 +34,29 @@ SDLApp::SDLApp(int width, int height, const char *title)
     }
     else
         std::cout << "Renderer created!" << std::endl;
+
+    // Init game state machine
+    gameStateMachine = new GameStateMachine();
 }
 
 SDLApp::~SDLApp()
 {
+    delete gameStateMachine;
+
     // Free resources and close SDL
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
 }
 
+void SDLApp::pushState(GameState *stateToPush)
+{
+    gameStateMachine->pushState(stateToPush);
+}
+
 void SDLApp::update(float deltaTime)
 {
+    gameStateMachine->update(deltaTime);
 }
 
 void SDLApp::render()
@@ -55,6 +66,7 @@ void SDLApp::render()
     SDL_RenderClear(renderer);
 
     // Render entities
+    gameStateMachine->render();
 
     // Update screen
     SDL_RenderPresent(renderer);
@@ -111,4 +123,9 @@ Texture* SDLApp::getTexture(std::string name) const
         return it->second;
     else
         return nullptr;
+}
+
+void SDLApp::handleEvent(SDL_Event& e)
+{
+    gameStateMachine->handleEvent(e);
 }

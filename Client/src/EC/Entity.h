@@ -18,7 +18,6 @@ public:
 
     Entity()
     {
-        std::cout << "Entity created" << std::endl;
         transform = new Transform(Vector2D(0, 0), 1.0f);
         AddComponent(transform);
     };
@@ -56,13 +55,13 @@ public:
         return nullptr;
     };
 
-    void Update(float deltaTime)
+    void update(float deltaTime)
     {
         for (auto &component : components)
             component.second->update(deltaTime);
     };
 
-    void Render()
+    void render()
     {
         for (auto &component : components)
             component.second->render();
