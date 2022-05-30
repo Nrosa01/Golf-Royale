@@ -20,13 +20,19 @@ public:
     void render();
     void handleEvent(SDL_Event& e);
     void pushState(GameState* stateToPush);
+    int getWidth() const;
+    int getHeight() const;
 
     SDL_Renderer* getRenderer() const { return renderer; };
 private:
+    SDL_DisplayMode getDisplayMOde() const;
+
     SDL_Window* window;
     SDL_Renderer* renderer;
     GameStateMachine* gameStateMachine;
     std::unordered_map<std::string, Texture*> textures;
+    int width;
+    int height;
 };
 
 #endif

@@ -1,0 +1,27 @@
+#include "Renderer.h"
+#include "../Entity.h"
+#include "Transform.h"
+#include "../../SDLUtils/Texture.h"
+#include <SDL2/SDL.h>
+
+Renderer::Renderer(Texture *texture) : Component("Renderer"), transform(nullptr), texture(texture){};
+
+Renderer::~Renderer(){};
+
+void Renderer::init()
+{
+    transform = this->ent->GetTransform();
+}
+
+virtual void Renderer::render()
+{
+    SDL_Rect destRect;
+    int textW = texture->getW();
+    int textH = texture->getH();
+    destRect.x = transform->GetPosition().getX() - textW / 2;
+    destRect.y = transform->GetPosition().getY() - textH / 2;
+    destRect.w = transform->GetScale() * textW;
+    destRect.h = transform->GetScale() * textH;
+
+    texture->render(destRect);
+}

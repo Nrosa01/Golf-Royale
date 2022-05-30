@@ -6,6 +6,7 @@
 #include "Component.h"
 #include "Components/Transform.h"
 #include <iostream>
+#include <list>
 
 class Entity
 {
@@ -31,6 +32,8 @@ public:
     void AddComponent(Component *component)
     {
         components[component->GetName()] = component;
+        component->SetOwner(this);
+        this->unitializedComponents.push_back(component);
     };
 
     void RemoveComponent(std::string name)
@@ -57,6 +60,11 @@ public:
 
     void update(float deltaTime)
     {
+        for (auto &component : unitializedComponents)
+            component->init();
+
+        this->unitializedComponents.clear();
+
         for (auto &component : components)
             component.second->update(deltaTime);
     };
@@ -75,6 +83,7 @@ public:
 private:
     Transform *transform;
     std::unordered_map<std::string, Component *> components;
+    std::list<Component *> unitializedComponents;
 };
 
 #endif
