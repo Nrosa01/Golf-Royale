@@ -13,6 +13,8 @@ int Vector2D::operator*(const Vector2D& vector) const { return vector.x * x + ve
 
 Vector2D Vector2D::operator*(int number) const { return { x * number , y * number }; }
 
+Vector2D Vector2D::operator*=(int number) { x *= number; y *= number; }
+
 bool Vector2D::operator==(const Vector2D& vector) const { return (x == vector.x && y == vector.y); }
 
 bool Vector2D::operator!=(const Vector2D& vector) const { return (x != vector.x || y != vector.y); }

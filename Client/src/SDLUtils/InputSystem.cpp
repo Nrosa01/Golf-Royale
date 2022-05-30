@@ -204,3 +204,67 @@ bool InputSystem::keyWasReleased(SDL_Keycode key)
     int i = getId(key);
     return keys[i].wasReleased;
 }
+
+bool InputSystem::IsMouseButtonDown(int button)
+{
+	switch (button)
+	{
+	case 0:
+		return mouseButtonState.left.down;
+		break;
+	case 1:
+		return mouseButtonState.right.down;
+		break;
+	case 2:
+		return mouseButtonState.middle.down;
+		break;
+	default:
+		return false;
+		break;
+	}
+}
+
+bool InputSystem::IsMouseButtonPressed(int button)
+{
+	switch (button)
+	{
+	case 0:
+		return mouseButtonState.left.wasPressed;
+		break;
+	case 1:
+		return mouseButtonState.right.wasPressed;
+		break;
+	case 2:
+		return mouseButtonState.middle.wasPressed;
+		break;
+	default:
+		return false;
+		break;
+	}
+}
+
+bool InputSystem::IsMouseButtonReleased(int button)
+{
+	switch (button)
+	{
+	case 0:
+		return mouseButtonState.left.wasReleased;
+		break;
+	case 1:
+		return mouseButtonState.right.wasReleased;
+		break;
+	case 2:
+		return mouseButtonState.middle.wasReleased;
+		break;
+	default:
+		return false;
+		break;
+	}
+}
+
+Vector2D InputSystem::GetMousePosition()
+{
+    Vector2D mousePos;
+    SDL_GetMouseState(&mousePos.x, &mousePos.y);
+    return mousePos;
+}

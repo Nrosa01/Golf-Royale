@@ -5,11 +5,10 @@ using namespace std;
 
 class Vector2D
 {
-private:
-	int x;
-	int y;
-
 public:
+	float x;
+	float y;
+
 	Vector2D() : x(), y() {};
 	Vector2D(int x, int y) : x(x), y(y) {};
 
@@ -23,6 +22,7 @@ public:
 	Vector2D operator+= (const Vector2D vector);        // suma
 	int operator*       (const Vector2D& vector) const; // producto escalar
 	Vector2D operator*  (int number) const;             // producto de vector por escalar
+	Vector2D operator*=  (int number);             // producto de vector por escalar
 	bool operator==     (const Vector2D& vector) const; // igualdad
 	bool operator!=     (const Vector2D& vector) const; // desigualdad
 	void operator=      (const Vector2D& vector);       // asignación

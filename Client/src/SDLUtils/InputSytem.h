@@ -55,8 +55,13 @@ public:
     void OnMouseButtonDown(SDL_MouseButtonEvent buttonEvent);
     void OnMouseButtonUp(SDL_MouseButtonEvent buttonEvent);
 
+    bool IsMouseButtonDown(int button);
+    bool IsMouseButtonPressed(int button);
+    bool IsMouseButtonReleased(int button);
+
     void SetMouseMotion(Vector2D motion);
     Vector2D GetMouseMotion() const;
+    Vector2D GetMousePosition();
 };
 
 inline InputSystem *Input()

@@ -2,17 +2,20 @@
 #include "../MathUtils/Vector2D.h"
 #include "Component.h"
 #include "Components/Transform.h"
+#include "../SDLUtils/SDLApp.h"
 
-Entity::Entity(int x, int y)
+Entity::Entity(int x, int y, SDLApp* game)
 {
     transform = new Transform(Vector2D(x, y), 1.0f);
     AddComponent(transform);
+    SetGame(game);
 }
 
-Entity::Entity()
+Entity::Entity(SDLApp* game)
 {
     transform = new Transform(Vector2D(0, 0), 1.0f);
     AddComponent(transform);
+    SetGame(game);
 }
 
 Entity::~Entity()
@@ -73,4 +76,14 @@ void Entity::render()
 Transform *Entity::GetTransform()
 {
     return transform;
+}
+
+void Entity::SetGame(SDLApp *game)
+{
+    this->game = game;
+}
+
+SDLApp* Entity::GetGame()
+{
+    return game;
 }
