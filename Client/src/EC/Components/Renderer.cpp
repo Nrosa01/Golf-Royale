@@ -13,7 +13,7 @@ void Renderer::init()
     transform = this->ent->GetTransform();
 }
 
-virtual void Renderer::render()
+void Renderer::render()
 {
     SDL_Rect destRect;
     int textW = texture->getW();

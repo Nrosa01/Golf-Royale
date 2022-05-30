@@ -1,27 +1,27 @@
-#pragma once
-#include "../EC/Entity.h"
-#include "../EC/EventHandler.h"
+#ifndef GAMESTATE_H
+#define GAMESTATE_H
+
+#include <SDL2/SDL.h>
 #include <list>
+using namespace std;
 
 class SDLApp;
+class Entity;
+class EventHandler;
 
 class GameState
 {
 protected:
-	list<Entity*> gameObjects;
+	list<Entity*> entities;
 	list<EventHandler*> eventHandlers;
 	SDLApp* game;
 
-	GameState(SDLApp* g) { game = g; };
+	GameState(SDLApp* g);
 public:
-	virtual void update(float deltaTime) {
-		for (Entity* o : gameObjects) o->update(deltaTime);
-	}
-	virtual void render() { for (Entity* o : gameObjects) o->render(); }
-	virtual void handleEvent(SDL_Event& e) { for (EventHandler* h : eventHandlers) if (h->handleEvent(e)) return; }
-
-	virtual ~GameState()
-	{
-		for (Entity* o : gameObjects) delete o;
-	}
+	virtual void update(float deltaTime);
+	virtual void render();
+	virtual void handleEvent(SDL_Event& e);
+	virtual ~GameState();
 };
+
+#endif

@@ -1,5 +1,5 @@
-#ifndef RENDERER_H
-#define RENDERER_H
+#ifndef ENT_RENDERER_H
+#define ENT_RENDERER_H
 
 #include "../Component.h"
 
