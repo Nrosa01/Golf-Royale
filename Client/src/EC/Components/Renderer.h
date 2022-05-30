@@ -1,27 +1,18 @@
-#ifndef RENDERER_H
-#define RENDERER_H
+#ifndef ENT_RENDERER_H
+#define ENT_RENDERER_H
 
 #include "../Component.h"
-#include "Transform.h"
-#include "../../SDLUtils/Texture.h"
-#include <SDL2/SDL.h>
+
+class Texture;
+class Transform;
 
 class Renderer : public Component
 {
 public:
-    Renderer(Transform* transform, Texture* texture) : Component("Renderer"), transform(transform), texture(texture) {};
-    virtual ~Renderer() {};
-    virtual void update(float deltaTime) {};
-    virtual void render() 
-    {
-        SDL_Rect destRect;
-        destRect.x = transform->GetPosition().getX();
-        destRect.y = transform->GetPosition().getY();
-        destRect.w = transform->GetScale() * texture->getW();
-        destRect.h = transform->GetScale() * texture->getH();
-
-        texture->render(destRect);
-    };
+    Renderer(Texture* texture);
+    virtual ~Renderer();
+    virtual void init();
+    virtual void render();
 private:
 Transform* transform;
 Texture* texture;

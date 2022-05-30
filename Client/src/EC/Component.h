@@ -1,16 +1,25 @@
-#ifndef COMPONENT_H
-#define COMPONENT_H
+#ifndef ENT_COMPONENT_H
+#define ENT_COMPONENT_H
+
+#include <string>
+class Entity;
 
 class Component
 {
 public:
-    Component(std::string cmpName) : cmpName(cmpName) {};
-    virtual ~Component() {};
-    virtual void update(float deltaTime) = 0;
-    virtual void render() = 0;
-    std::string GetName() { return cmpName; }
+    Component(std::string cmpName);
+    virtual ~Component();
+    virtual void init();
+    virtual void update(float deltaTime);
+    virtual void render();
+    std::string getName();
+    void setOwner(Entity *owner);
+
+protected:
+    Entity *ent;
+
 private:
-std::string cmpName;
+    std::string cmpName;
 };
 
 #endif

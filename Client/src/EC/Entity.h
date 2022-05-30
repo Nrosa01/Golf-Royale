@@ -2,79 +2,32 @@
 #define SDLEntityH
 
 #include <unordered_map>
-#include "../MathUtils/Vector2D.h"
-#include "Component.h"
-#include "Components/Transform.h"
 #include <iostream>
+#include <list>
+
+class Transform;
+class Component;
 
 class Entity
 {
 public:
-    Entity(int x, int y)
-    {
-        transform = new Transform(Vector2D(x, y), 1.0f);
-        AddComponent(transform);
-    };
+    Entity(int x, int y);
+    Entity();
+    ~Entity();
 
-    Entity()
-    {
-        transform = new Transform(Vector2D(0, 0), 1.0f);
-        AddComponent(transform);
-    };
-
-    ~Entity()
-    {
-        for (auto &component : components)
-            delete component.second;
-    };
-
-    void AddComponent(Component *component)
-    {
-        components[component->GetName()] = component;
-    };
-
-    void RemoveComponent(std::string name)
-    {
-        // Find component
-        auto it = components.find(name);
-        if (it != components.end())
-        {
-            // Delete component
-            delete it->second;
-            // Remove from map
-            components.erase(it);
-        }
-    };
-
+    void AddComponent(Component *component);
+    void RemoveComponent(std::string name);
     template <typename T>
-    T *GetComponent(std::string name)
-    {
-        auto it = components.find(name);
-        if (it != components.end())
-            return static_cast<T *>(it->second);
-        return nullptr;
-    };
+    T *GetComponent(std::string name);
+    void update(float deltaTime);
+    void render();
 
-    void update(float deltaTime)
-    {
-        for (auto &component : components)
-            component.second->update(deltaTime);
-    };
-
-    void render()
-    {
-        for (auto &component : components)
-            component.second->render();
-    };
-
-    Transform *GetTransform()
-    {
-        return transform;
-    };
+    Transform *GetTransform();
 
 private:
     Transform *transform;
     std::unordered_map<std::string, Component *> components;
+    std::list<Component *> unitializedComponents;
 };
 
 #endif

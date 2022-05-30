@@ -1,4 +1,6 @@
-#pragma once
+#ifndef TIME_MANAGER_H
+#define TIME_MANAGER_H
+
 #include <SDL2/SDL_stdinc.h>
 
 struct TimeManager
@@ -15,3 +17,5 @@ public:
 		return deltaTime;
 	}
 };
+
+#endif

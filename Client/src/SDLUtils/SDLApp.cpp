@@ -37,6 +37,8 @@ SDLApp::SDLApp(int width, int height, const char *title)
 
     // Init game state machine
     gameStateMachine = new GameStateMachine();
+    this->width = width;
+    this->height = height;
 }
 
 SDLApp::~SDLApp()
@@ -103,7 +105,7 @@ void SDLApp::loadTextures(const char *pathName)
                 Texture *texture = new Texture(renderer);
                 // As this is simple project, there are no animations so all textures are 1*1, they are not spritesheets
                 // If I had more time, I would load these settings from a json
-                texture->load(filePath.c_str(), 1, 1); 
+                texture->load(filePath.c_str(), 1, 1);
                 std::cout << "Loaded texture " << fileNameWithoutExt << std::endl;
                 textures.insert(std::pair<std::string, Texture *>(fileNameWithoutExt, texture));
             }
@@ -115,7 +117,7 @@ void SDLApp::loadTextures(const char *pathName)
         std::cout << "Path " << pathName << " is not a directory!" << std::endl;
 }
 
-Texture* SDLApp::getTexture(std::string name) const
+Texture *SDLApp::getTexture(std::string name) const
 {
     // Get texture from map
     std::unordered_map<std::string, Texture *>::const_iterator it = textures.find(name);
@@ -125,7 +127,28 @@ Texture* SDLApp::getTexture(std::string name) const
         return nullptr;
 }
 
-void SDLApp::handleEvent(SDL_Event& e)
+void SDLApp::handleEvent(SDL_Event &e)
 {
     gameStateMachine->handleEvent(e);
+}
+
+SDL_DisplayMode SDLApp::getDisplayMOde() const
+{
+    SDL_DisplayMode displayMode;
+    if (SDL_GetDesktopDisplayMode(0, &displayMode) != 0)
+    {
+        SDL_Log("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError());
+        return displayMode;
+    }
+    return displayMode;
+}
+
+int SDLApp::getWidth() const
+{
+    return this->width;
+}
+
+int SDLApp::getHeight() const
+{
+    return this->height;
 }

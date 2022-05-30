@@ -5,7 +5,7 @@
 #include "SDLUtils/TimeManager.h"
 #include "EC/Entity.h"
 #include "EC/Components/Renderer.h"
-#include "GameState/MainMenuState.h"
+#include "GameState/PlayState.h"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
@@ -16,7 +16,7 @@ int main()
 {
     SDLApp app(SCREEN_WIDTH, SCREEN_HEIGHT, "Golf Royale");
     app.loadTextures("assets/images/");
-    app.pushState(new MainMenuState(&app));
+    app.pushState(new PlayState(&app));
 
     // Main loop flag
     bool quit = false;

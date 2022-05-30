@@ -1,5 +1,5 @@
-#ifndef TextureH
-#define TextureH
+#ifndef Texture_H
+#define Texture_H
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
