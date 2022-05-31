@@ -2,7 +2,7 @@
 #define GAMESTATE_H
 
 #include <SDL2/SDL.h>
-#include <list>
+#include <vector>
 using namespace std;
 
 class SDLApp;
@@ -13,8 +13,8 @@ class Entity;
 class GameState
 {
 protected:
-	list<Entity*> entities;
-	SDLApp* game;
+	vector<Entity*> entities;
+	SDLApp* app;
 
 	GameState(SDLApp* g);
 public:

@@ -5,18 +5,18 @@
 #include "../SDLUtils/SDLApp.h"
 #include <string>
 
-Entity::Entity(int x, int y, SDLApp *game)
+Entity::Entity(int x, int y, SDLApp *app)
 {
     transform = new Transform(Vector2D(x, y), 1.0f);
     AddComponent(transform);
-    SetGame(game);
+    SetGame(app);
 }
 
-Entity::Entity(SDLApp *game)
+Entity::Entity(SDLApp *app)
 {
     transform = new Transform(Vector2D(0, 0), 1.0f);
     AddComponent(transform);
-    SetGame(game);
+    SetGame(app);
 }
 
 Entity::~Entity()
@@ -84,6 +84,12 @@ void Entity::update(float deltaTime)
         component->update(deltaTime);
 }
 
+void Entity::lateUpdate(float deltaTime)
+{
+    for (auto component : componentArray)
+        component->lateUpdate(deltaTime);
+}
+
 void Entity::render()
 {
     for (auto component : componentArray)
@@ -95,12 +101,12 @@ Transform *Entity::GetTransform()
     return transform;
 }
 
-void Entity::SetGame(SDLApp *game)
+void Entity::SetGame(SDLApp *app)
 {
-    this->game = game;
+    this->app = app;
 }
 
 SDLApp *Entity::GetGame()
 {
-    return game;
+    return app;
 }

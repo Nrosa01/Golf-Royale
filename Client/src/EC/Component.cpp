@@ -10,6 +10,8 @@ void Component::init() {}
 
 void Component::update(float deltaTime) {}
 
+void Component::lateUpdate(float deltaTime) {}
+
 void Component::render() {}
 
 void Component::setOwner(Entity *owner) { ent = owner; }

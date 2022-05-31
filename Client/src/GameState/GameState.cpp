@@ -2,7 +2,7 @@
 #include "../EC/Entity.h"
 #include "../SDLUtils/SDLApp.h"
 
-GameState::GameState(SDLApp* app) : game(app){ }
+GameState::GameState(SDLApp *app) : app(app) {}
 
 GameState::~GameState()
 {
@@ -15,6 +15,9 @@ void GameState::update(float deltaTime)
 {
     for (auto it = entities.begin(); it != entities.end(); ++it)
         (*it)->update(deltaTime);
+
+    for (auto it = entities.begin(); it != entities.end(); ++it)
+        (*it)->lateUpdate(deltaTime);
 }
 
 void GameState::render()

@@ -12,7 +12,7 @@ public:
     Transitioner(float duration);
     virtual ~Transitioner();
     virtual void init();
-    virtual void update(float deltaTime);
+    virtual void lateUpdate(float deltaTime);
     void startScale();
     void startFade();
 

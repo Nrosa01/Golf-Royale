@@ -13,6 +13,7 @@ public:
     virtual ~Component();
     virtual void init();
     virtual void update(float deltaTime);
+    virtual void lateUpdate(float deltaTime);
     virtual void render();
     std::string getName();
     void setOwner(Entity *owner);
