@@ -1,4 +1,4 @@
 # build and execute bash
 
 make
-./bin/Golf-Server
+./bin/Golf-Server $@

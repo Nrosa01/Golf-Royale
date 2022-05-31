@@ -13,7 +13,7 @@ enum MessageType : uint8_t
     BALL_HIT
 };
 
-class NetworkMessage : public Serializable
+struct NetworkMessage : public Serializable
 {
 public:
     uint8_t type;
@@ -37,7 +37,7 @@ public:
     };
 };
 
-class LoginMessage : public NetworkMessage
+struct LoginMessage : public NetworkMessage
 {
     char loginCode[5];
 
