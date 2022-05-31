@@ -38,9 +38,9 @@ void Ball::update(float deltaTime)
     {
         state = BallState::MOVING;
         setVelocity(startPressPoint, Input()->GetMousePosition());
-        
-        if(velocity.Magnitude() > mininumThreshold)
-        this->playSound("swing");
+
+        if (velocity.Magnitude() > mininumThreshold)
+            this->playSound("swing");
         // std::cout << "endPressPoint: " << Input()->GetMousePosition().x << " " << Input()->GetMousePosition().y << std::endl;
         // std::cout << "setVelocity: " << velocity.x << " " << velocity.y << std::endl;
     }

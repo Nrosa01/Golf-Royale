@@ -2,3 +2,5 @@
 *.o
 
 Client/bin/
+
+Server/bin/

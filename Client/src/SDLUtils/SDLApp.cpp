@@ -284,10 +284,7 @@ void SDLApp::playAudio(std::string name)
     // Get audio from map
     std::unordered_map<std::string, Mix_Chunk *>::const_iterator it = sounds.find(name);
     if (it != sounds.end())
-    {
-        // Play audio
         Mix_PlayChannel(-1, it->second, 0);
-    }
 }
 
 SDL_DisplayMode SDLApp::getDisplayMOde() const
