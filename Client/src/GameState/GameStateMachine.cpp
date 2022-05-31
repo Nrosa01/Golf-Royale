@@ -28,11 +28,6 @@ void GameStateMachine::render()
     states.top()->render();
 }
 
-void GameStateMachine::handleEvent(SDL_Event &e)
-{
-    states.top()->handleEvent(e);
-}
-
 void GameStateMachine::pushState(GameState *stateToPush)
 {
     states.push(stateToPush);

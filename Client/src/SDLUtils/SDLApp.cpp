@@ -35,6 +35,14 @@ SDLApp::SDLApp(int width, int height, const char *title)
     else
         std::cout << "Renderer created!" << std::endl;
 
+    if (TTF_Init() != 0)
+    {
+        std::cout << "TTF could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
+        return;
+    }
+    else
+        std::cout << "TTF_Init" << std::endl;
+
     // Init game state machine
     gameStateMachine = new GameStateMachine();
     this->width = width;
@@ -119,6 +127,65 @@ void SDLApp::loadTextures(const char *pathName)
         std::cout << "Path " << pathName << " is not a directory!" << std::endl;
 }
 
+void SDLApp::loadFonts(const char *pathName)
+{
+    // Load fonts
+    std::cout << "Loading fonts from " << pathName << "..." << std::endl;
+
+    // Using dirent, check if pathName is a directory
+    DIR *dir = opendir(pathName);
+
+    // If it is a directory, load all files in it with extension .ttf
+    if (dir != nullptr)
+    {
+        // Get all files in directory
+        struct dirent *ent;
+        while ((ent = readdir(dir)) != nullptr)
+        {
+            // Get file extension
+            std::string fileName = ent->d_name;
+            std::string ext = fileName.substr(fileName.find_last_of(".") + 1);
+            std::string fileNameWithoutExt = fileName.substr(0, fileName.find_last_of("."));
+
+            // If file extension is .ttf, load font
+            if (ext == "ttf" || ext == "otf")
+            {
+                std::string filePath = pathName;
+                filePath.append("/");
+                filePath.append(fileName);
+
+                // Load font with size 12, 24, 36, 48, 60, 72, 84, 96, 108, 120
+                for(int i = 12; i <= 120; i += 12)
+                {
+                    TTF_Font *font = TTF_OpenFont(filePath.c_str(), i);
+                    if (font == nullptr)
+                    {
+                        std::cout << "Font could not be loaded! SDL_Error: " << SDL_GetError() << std::endl;
+                        return;
+                    }
+                    else
+                        std::cout << "Loaded font " << fileNameWithoutExt << " with size " << i << std::endl;
+                    fonts.insert(std::pair<std::string, TTF_Font *>(fileNameWithoutExt + "_" + std::to_string(i), font));
+                }
+            }
+        }
+
+        std::cout << "Fonts loaded!" << std::endl;
+    }
+    else // If pathName is not a directory, we throw an error message
+        std::cout << "Path " << pathName << " is not a directory!" << std::endl;
+}
+
+TTF_Font *SDLApp::getFont(std::string fontName) const
+{
+    // Get font from map
+    std::unordered_map<std::string, TTF_Font *>::const_iterator it = fonts.find(fontName);
+    if (it != fonts.end())
+        return it->second;
+    else
+        return nullptr;
+}
+
 Texture *SDLApp::getTexture(std::string name) const
 {
     // Get texture from map
@@ -148,4 +215,59 @@ int SDLApp::getWidth() const
 int SDLApp::getHeight() const
 {
     return this->height;
+}
+
+void SDLApp::renderText(float p_x, float p_y, const char *p_text, std::string fontName, SDL_Color textColor)
+{
+    this->renderText(p_x, p_y, p_text, getFont(fontName), textColor);
+}
+
+void SDLApp::renderText(float p_x, float p_y, const char *p_text, TTF_Font *font, SDL_Color textColor)
+{
+    SDL_Surface *surfaceMessage = TTF_RenderText_Blended(font, p_text, textColor);
+    SDL_Texture *message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
+
+    SDL_Rect src;
+    src.x = 0;
+    src.y = 0;
+    src.w = surfaceMessage->w;
+    src.h = surfaceMessage->h;
+
+    SDL_Rect dst;
+    dst.x = p_x;
+    dst.y = p_y;
+    dst.w = src.w;
+    dst.h = src.h;
+
+    SDL_RenderCopy(renderer, message, &src, &dst);
+    SDL_FreeSurface(surfaceMessage);
+    SDL_DestroyTexture(message);
+}
+
+
+void SDLApp::renderTextCenter(float p_x, float p_y, const char *p_text, std::string fontName, SDL_Color textColor)
+{
+    this->renderTextCenter(p_x, p_y, p_text, getFont(fontName), textColor);
+}
+
+void SDLApp::renderTextCenter(float p_x, float p_y, const char *p_text, TTF_Font *font, SDL_Color textColor)
+{
+    SDL_Surface *surfaceMessage = TTF_RenderText_Blended(font, p_text, textColor);
+    SDL_Texture *message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
+
+    SDL_Rect src;
+    src.x = 0;
+    src.y = 0;
+    src.w = surfaceMessage->w;
+    src.h = surfaceMessage->h;
+
+    SDL_Rect dst;
+    dst.x = this->getWidth() / 2 - src.w / 2 + p_x;
+    dst.y = this->getHeight() / 2 - src.h / 2 + p_y;
+    dst.w = src.w;
+    dst.h = src.h;
+
+    SDL_RenderCopy(renderer, message, &src, &dst);
+    SDL_FreeSurface(surfaceMessage);
+    SDL_DestroyTexture(message);
 }

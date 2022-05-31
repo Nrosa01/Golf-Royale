@@ -23,11 +23,14 @@ void Ball::init()
 
 void Ball::update(float deltaTime)
 {
+    if (!this->mainBall)
+        return;
+
     if (Input()->IsMouseButtonDown(0) && state == BallState::IDLE)
     {
         state = BallState::PRESSED;
         startPressPoint = Input()->GetMousePosition();
-        //std::cout << "startPressPoint: " << startPressPoint.x << " " << startPressPoint.y << std::endl;
+        // std::cout << "startPressPoint: " << startPressPoint.x << " " << startPressPoint.y << std::endl;
     }
 
     if (!Input()->IsMouseButtonDown(0) && state == BallState::PRESSED)
