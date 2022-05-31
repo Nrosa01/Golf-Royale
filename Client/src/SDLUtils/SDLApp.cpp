@@ -51,6 +51,13 @@ SDLApp::SDLApp(int width, int height, const char *title)
     else
         std::cout << "SDL_mixer initialized!" << std::endl;
 
+    // Change downscale method to jagged because the game is pixelart
+    // It should be nearest by default, but I prefer to make it sure
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
+
+    // Disable screensaver, so the game doesn't lock the screen
+    SDL_DisableScreenSaver();
+
     // Init game state machine
     gameStateMachine = new GameStateMachine();
     this->width = width;

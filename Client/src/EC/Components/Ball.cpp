@@ -20,6 +20,7 @@ void Ball::init()
     transform = this->ent->GetTransform();
     // renderer = this->ent->GetComponent<Renderer>("Renderer");
     renderer = dynamic_cast<Renderer *>(this->ent->GetComponent("Renderer"));
+    multiplicador = 10.0f;
 }
 
 void Ball::update(float deltaTime)
@@ -112,8 +113,8 @@ bool Ball::isOutOfBoundsX(float deltaTime)
 {
     int screenWidth = this->ent->GetGame()->getWidth();
     int posToCheck = transform->GetPosition().x + velocity.x * deltaTime;
-    int posToCheckRight = posToCheck + renderer->getWidth()/2 * transform->GetScale().x;
-    int posToCheckLeft = posToCheck - renderer->getWidth()/2 * transform->GetScale().x;
+    int posToCheckRight = posToCheck + renderer->getWidth() / 2 * transform->GetScale().x;
+    int posToCheckLeft = posToCheck - renderer->getWidth() / 2 * transform->GetScale().x;
 
     // If we are mainBall, we are retriscted to the left half of the screen
     if (mainBall)
@@ -139,7 +140,6 @@ float Ball::getDistance(Vector2D startPoint, Vector2D endPoint)
 
 void Ball::setVelocity(Vector2D startPoint, Vector2D endPoint)
 {
-    float multiplicador = 10.0f;
     float distance = getDistance(startPoint, endPoint) * multiplicador;
     Vector2D dir = (endPoint - startPoint).Normalized();
     dir *= -distance;

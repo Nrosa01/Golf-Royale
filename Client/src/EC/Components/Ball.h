@@ -26,16 +26,18 @@ public:
     float getDistance(Vector2D startPoint, Vector2D endPoint);
     void setVelocity(Vector2D startPoint, Vector2D endPoint);
     void handleBallScale();
+
 private:
-Vector2D velocity;
-Vector2D startPressPoint;
-Transform* transform;
-Renderer* renderer;
-float friction;
-float maxSpeed = 30.0f;
-bool mainBall;
-BallState state;
-float mininumThreshold;
+    Vector2D velocity;
+    Vector2D startPressPoint;
+    Transform *transform;
+    Renderer *renderer;
+    float friction;
+    float maxSpeed = 30.0f;
+    bool mainBall;
+    BallState state;
+    float mininumThreshold;
+    float multiplicador;
 };
 
 #endif

@@ -6,9 +6,13 @@
 class MainMenuState : public GameState
 {
 public:
-    MainMenuState(SDLApp* app);
+    MainMenuState(SDLApp *app);
     virtual void update(float deltaTime);
     virtual ~MainMenuState(){};
+
+private:
+    bool startTransition;
+    float timer;
 };
 
 #endif

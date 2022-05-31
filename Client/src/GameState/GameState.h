@@ -8,6 +8,8 @@ using namespace std;
 class SDLApp;
 class Entity;
 
+#define TRANSITION_TIME 0.15f
+
 class GameState
 {
 protected:
