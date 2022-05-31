@@ -27,7 +27,7 @@ int main()
     TimeManager time;
 
     // While application is running
-    while (!quit)
+    while (!quit && !app.isExitRequested())
     {
         time.frameStartTime = SDL_GetTicks();
         Input()->UpdateState();

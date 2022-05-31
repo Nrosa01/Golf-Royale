@@ -29,6 +29,8 @@ public:
     void pushState(GameState *stateToPush);
     int getWidth() const;
     int getHeight() const;
+    void quit();
+    bool isExitRequested() const;
 
     SDL_Renderer *getRenderer() const { return renderer; };
 
@@ -43,6 +45,7 @@ private:
     int width;
     int height;
     InputSystem *input;
+    bool exitRequested;
 };
 
 #endif

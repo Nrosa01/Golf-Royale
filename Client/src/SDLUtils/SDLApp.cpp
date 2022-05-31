@@ -48,6 +48,7 @@ SDLApp::SDLApp(int width, int height, const char *title)
     this->width = width;
     this->height = height;
     input = new InputSystem();
+    exitRequested = false;
 }
 
 SDLApp::~SDLApp()
@@ -234,8 +235,8 @@ void SDLApp::renderText(float p_x, float p_y, const char *p_text, TTF_Font *font
     src.h = surfaceMessage->h;
 
     SDL_Rect dst;
-    dst.x = p_x;
-    dst.y = p_y;
+    dst.x = p_x - src.w / 2;
+    dst.y = p_y - src.h / 2;
     dst.w = src.w;
     dst.h = src.h;
 
@@ -270,4 +271,14 @@ void SDLApp::renderTextCenter(float p_x, float p_y, const char *p_text, TTF_Font
     SDL_RenderCopy(renderer, message, &src, &dst);
     SDL_FreeSurface(surfaceMessage);
     SDL_DestroyTexture(message);
+}
+
+void SDLApp::quit()
+{
+    this->exitRequested = true;
+}
+
+bool SDLApp::isExitRequested() const
+{
+    return this->exitRequested;
 }

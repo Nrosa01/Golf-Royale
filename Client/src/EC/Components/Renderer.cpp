@@ -16,12 +16,12 @@ void Renderer::init()
 void Renderer::render()
 {
     SDL_Rect destRect;
-    int textW = texture->getW();
-    int textH = texture->getH();
+    int textW = texture->getW() * transform->GetScale().x;
+    int textH = texture->getH() * transform->GetScale().y;
     destRect.x = transform->GetPosition().getX() - textW / 2;
     destRect.y = transform->GetPosition().getY() - textH / 2;
-    destRect.w = transform->GetScale().x * textW;
-    destRect.h = transform->GetScale().y * textH;
+    destRect.w = textW;
+    destRect.h = textH;
 
     texture->render(destRect);
 }
