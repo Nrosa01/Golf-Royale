@@ -3,7 +3,6 @@
 #include <iostream>
 #include <dirent.h>
 #include "Texture.h"
-//#include "InputSytem.h"
 
 SDLApp::SDLApp(int width, int height, const char *title)
 {
@@ -128,11 +127,6 @@ Texture *SDLApp::getTexture(std::string name) const
         return it->second;
     else
         return nullptr;
-}
-
-void SDLApp::handleEvent(SDL_Event &e)
-{
-    gameStateMachine->handleEvent(e);
 }
 
 SDL_DisplayMode SDLApp::getDisplayMOde() const

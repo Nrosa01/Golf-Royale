@@ -9,7 +9,7 @@ Ball::Ball(bool main) : Component("Ball")
 {
     state = BallState::IDLE;
     this->mainBall = main;
-    friction = 0.97f;
+    friction = 0.9995f;
 }
 
 Ball::~Ball() {}
@@ -27,18 +27,18 @@ void Ball::update(float deltaTime)
     {
         state = BallState::PRESSED;
         startPressPoint = Input()->GetMousePosition();
-        std::cout << "startPressPoint: " << startPressPoint.x << " " << startPressPoint.y << std::endl;
+        //std::cout << "startPressPoint: " << startPressPoint.x << " " << startPressPoint.y << std::endl;
     }
 
     if (!Input()->IsMouseButtonDown(0) && state == BallState::PRESSED)
     {
         state = BallState::MOVING;
         setVelocity(startPressPoint, Input()->GetMousePosition());
-        std::cout << "endPressPoint: " << Input()->GetMousePosition().x << " " << Input()->GetMousePosition().y << std::endl;
-        std::cout << "setVelocity: " << velocity.x << " " << velocity.y << std::endl;
+        // std::cout << "endPressPoint: " << Input()->GetMousePosition().x << " " << Input()->GetMousePosition().y << std::endl;
+        // std::cout << "setVelocity: " << velocity.x << " " << velocity.y << std::endl;
     }
 
-    if(state != BallState::MOVING)
+    if (state != BallState::MOVING)
         return;
 
     if (isOutOfBoundsX(deltaTime))
@@ -56,8 +56,8 @@ void Ball::update(float deltaTime)
     // Simulate friction
     if (velocity.Magnitude() > 1.5f)
     {
-        velocity.x = velocity.x * friction;
-        velocity.y = velocity.y * friction;
+        velocity.x *= friction;
+        velocity.y *= friction;
     }
     else
     {
@@ -122,7 +122,7 @@ float Ball::getDistance(Vector2D startPoint, Vector2D endPoint)
 
 void Ball::setVelocity(Vector2D startPoint, Vector2D endPoint)
 {
-    float multiplicador = 3.0f;
+    float multiplicador = 10.0f;
     float distance = getDistance(startPoint, endPoint) * multiplicador;
     Vector2D dir = (endPoint - startPoint).Normalized();
     dir *= -distance;

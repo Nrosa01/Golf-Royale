@@ -19,7 +19,6 @@ public:
     Texture* getTexture(std::string name) const;
     void update(float deltaTime);
     void render();
-    void handleEvent(SDL_Event& e);
     void pushState(GameState* stateToPush);
     int getWidth() const;
     int getHeight() const;

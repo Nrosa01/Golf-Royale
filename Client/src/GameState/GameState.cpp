@@ -1,6 +1,5 @@
 #include "GameState.h"
 #include "../EC/Entity.h"
-#include "../EC/EventHandler.h"
 #include "../SDLUtils/SDLApp.h"
 
 GameState::GameState(SDLApp* app) : game(app){ }
@@ -22,10 +21,4 @@ void GameState::render()
 {
     for (auto it = entities.begin(); it != entities.end(); ++it)
         (*it)->render();
-}
-
-void GameState::handleEvent(SDL_Event& e)
-{
-    for (auto it = eventHandlers.begin(); it != eventHandlers.end(); ++it)
-        (*it)->handleEvent(e);
 }
