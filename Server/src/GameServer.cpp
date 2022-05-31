@@ -25,9 +25,17 @@ void GameServer::run()
         {
         case MessageType::LOGIN:
         {
+            if (isConnected(clientSocket))
+            {
+                std::cout << "Recv: Cliente ya conectado\n";
+                continue;
+            }
+
             LoginMessage login;
             login.from_bin(msg);
+            clients.insert(std::pair<uint32_t, Socket *>(clientSocket->getHashId(), clientSocket));
             std::cout << "Recv: Mensaje de tipo LOGIN " << login.loginCode << "\n";
+            std::cout << "Recv: Clientes conectados: " << clients.size() << "\n";
             break;
         }
         case MessageType::LOGOUT:
@@ -55,4 +63,9 @@ uint8_t GameServer::getType(char *data)
     memcpy(&type, data, sizeof(uint8_t));
 
     return type;
+}
+
+bool GameServer::isConnected(Socket *socket)
+{
+    return clients.count(socket->getHashId()) > 0;
 }

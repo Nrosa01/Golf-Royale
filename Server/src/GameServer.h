@@ -3,6 +3,7 @@
 
 #include "Socket.h"
 #include <stdint.h>
+#include <unordered_map>
 
 class GameServer
 {
@@ -11,8 +12,12 @@ public:
 
     void run();
     uint8_t getType(char* data);
+    bool isConnected(Socket* socket);
 private:
     Socket socket;
+
+    // Hash to socket, to find connected clients
+    std::unordered_map<uint32_t, Socket*> clients;
 };
 
 #endif

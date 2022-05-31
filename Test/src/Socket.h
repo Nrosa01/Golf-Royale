@@ -112,6 +112,8 @@ public:
 
     friend bool operator== (const Socket &s1, const Socket &s2);
 
+    uint32_t getHashId() const;
+
 protected:
 
     /**

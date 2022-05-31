@@ -93,3 +93,15 @@ std::ostream &operator<<(std::ostream &os, const Socket &s)
 
     return os;
 };
+
+uint32_t Socket::getHashId() const
+{
+    // Retornar el hash de la dirección de la estructura sockaddr_in
+    // de la estructura sockaddr de la clase Socket
+    struct sockaddr_in *s_addr = (struct sockaddr_in *)&sa;
+    auto familty = s_addr->sin_family;
+    auto addr = s_addr->sin_addr.s_addr;
+    auto port = s_addr->sin_port;
+
+    return (familty << 24) | (addr << 8) | port;
+}
