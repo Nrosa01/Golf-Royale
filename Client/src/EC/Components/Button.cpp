@@ -4,8 +4,8 @@
 #include "../../SDLUtils/Texture.h"
 #include "../Entity.h"
 
-Button::Button(Texture *buttonImg, const char *text, std::string font, ButtonCallback callback) : Component("Button"), texture(buttonImg), 
-text(text), font(font), callback(callback), lerpAnimTime(0.1f) {}
+Button::Button(Texture *buttonImg, const char *text, std::string font, ButtonCallback callback) : Component("Button"), texture(buttonImg),
+                                                                                                  text(text), font(font), callback(callback), lerpAnimTime(0.1f) {}
 
 Button::~Button() {}
 
@@ -13,28 +13,38 @@ void Button::init()
 {
     transform = this->ent->GetTransform();
     initialScale = transform->GetScale();
+    wasOverLastFrame = false;
 }
 
 void Button::update(float deltaTime)
 {
     if (isPressed() && callback != nullptr)
     {
+        this->playSound("button");
         callback();
     }
 
-    if(isMouseOver())
+    if (isMouseOver())
     {
-        //Lerp scale from current Scale to 1.1f
+        // Lerp scale from current Scale to 1.1f
         timer += deltaTime;
-        if(timer > lerpAnimTime)
+        if (timer > lerpAnimTime)
             timer = lerpAnimTime;
+
+        if (!wasOverLastFrame)
+        {
+            wasOverLastFrame = true;
+            this->playSound("swoosh");
+        }
     }
     else
     {
-        //Lerp scale from current Scale to 1.0f
+        // Lerp scale from current Scale to 1.0f
         timer -= deltaTime;
-        if(timer < 0.0f)
+        if (timer < 0.0f)
             timer = 0.0f;
+
+        wasOverLastFrame = false;
     }
 
     float scaleX = initialScale.x + (timer / lerpAnimTime) * 0.1f;
@@ -59,7 +69,7 @@ void Button::render()
         int textPosX = transform->GetPosition().getX();
         int textPosY = transform->GetPosition().getY();
         SDL_Color hoverColor = {255, 255, 255, 255};
-        SDL_Color defaultColor = {120, 120, 120, 255};
+        SDL_Color defaultColor = {255, 255, 255, 175};
         SDL_Color color = isMouseOver() ? hoverColor : defaultColor;
         this->ent->GetGame()->renderText(textPosX, textPosY, text, font, color);
     }

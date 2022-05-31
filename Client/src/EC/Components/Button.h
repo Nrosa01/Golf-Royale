@@ -27,6 +27,7 @@ private:
     float timer = 0.0f;
     Transform *transform;
     Vector2D initialScale;
+    bool wasOverLastFrame;
 };
 
 #endif

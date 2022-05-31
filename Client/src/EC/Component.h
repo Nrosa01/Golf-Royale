@@ -16,6 +16,7 @@ public:
     virtual void render();
     std::string getName();
     void setOwner(Entity *owner);
+    void playSound(std::string soundName);
 
 protected:
     Entity *ent;

@@ -35,6 +35,7 @@ float friction;
 float maxSpeed = 30.0f;
 bool mainBall;
 BallState state;
+float mininumThreshold;
 };
 
 #endif

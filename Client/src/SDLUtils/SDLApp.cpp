@@ -43,12 +43,21 @@ SDLApp::SDLApp(int width, int height, const char *title)
     else
         std::cout << "TTF_Init" << std::endl;
 
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) < 0)
+    {
+        std::cout << "SDL_mixer could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
+        return;
+    }
+    else
+        std::cout << "SDL_mixer initialized!" << std::endl;
+
     // Init game state machine
     gameStateMachine = new GameStateMachine();
     this->width = width;
     this->height = height;
     input = new InputSystem();
     exitRequested = false;
+    newState = nullptr;
 }
 
 SDLApp::~SDLApp()
@@ -57,6 +66,18 @@ SDLApp::~SDLApp()
     delete input;
 
     // Free resources and close SDL
+    for (auto &texture : textures)
+        delete texture.second;
+
+    for (auto &font : fonts)
+        TTF_CloseFont(font.second);
+
+    for (auto &sound : sounds)
+        Mix_FreeChunk(sound.second);
+
+    Mix_CloseAudio();
+    TTF_Quit();
+
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
@@ -64,12 +85,27 @@ SDLApp::~SDLApp()
 
 void SDLApp::pushState(GameState *stateToPush)
 {
-    gameStateMachine->pushState(stateToPush);
+    newState = stateToPush;
+}
+
+void SDLApp::popState()
+{
+    gameStateMachine->popState();
 }
 
 void SDLApp::update(float deltaTime)
 {
+    checkStateChanged();
     gameStateMachine->update(deltaTime);
+}
+
+void SDLApp::checkStateChanged()
+{
+    if (newState != nullptr)
+    {
+        gameStateMachine->pushState(newState);
+        newState = nullptr;
+    }
 }
 
 void SDLApp::render()
@@ -195,6 +231,63 @@ Texture *SDLApp::getTexture(std::string name) const
         return it->second;
     else
         return nullptr;
+}
+
+void SDLApp::loadAudio(const char *pathName)
+{
+    // Load audio
+    std::cout << "Loading audio from " << pathName << "..." << std::endl;
+
+    // Using dirent, check if pathName is a directory
+    DIR *dir = opendir(pathName);
+
+    // If it is a directory, load all files in it with extension .wav
+    if (dir != nullptr)
+    {
+        // Get all files in directory
+        struct dirent *ent;
+        while ((ent = readdir(dir)) != nullptr)
+        {
+            // Get file extension
+            std::string fileName = ent->d_name;
+            std::string ext = fileName.substr(fileName.find_last_of(".") + 1);
+            std::string fileNameWithoutExt = fileName.substr(0, fileName.find_last_of("."));
+
+            // If file extension is .wav, load audio
+            if (ext == "wav" || ext == "mp3")
+            {
+                std::string filePath = pathName;
+                filePath.append("/");
+                filePath.append(fileName);
+
+                // Load audio
+                Mix_Chunk *chunk = Mix_LoadWAV(filePath.c_str());
+                if (chunk == nullptr)
+                {
+                    std::cout << "Audio could not be loaded! SDL_Error: " << SDL_GetError() << std::endl;
+                    return;
+                }
+                else
+                    std::cout << "Loaded audio " << fileNameWithoutExt << std::endl;
+                sounds.insert(std::pair<std::string, Mix_Chunk *>(fileNameWithoutExt, chunk));
+            }
+        }
+
+        std::cout << "Audio loaded!" << std::endl;
+    }
+    else // If pathName is not a directory, we throw an error message
+        std::cout << "Path " << pathName << " is not a directory!" << std::endl;
+}
+
+void SDLApp::playAudio(std::string name)
+{
+    // Get audio from map
+    std::unordered_map<std::string, Mix_Chunk *>::const_iterator it = sounds.find(name);
+    if (it != sounds.end())
+    {
+        // Play audio
+        Mix_PlayChannel(-1, it->second, 0);
+    }
 }
 
 SDL_DisplayMode SDLApp::getDisplayMOde() const

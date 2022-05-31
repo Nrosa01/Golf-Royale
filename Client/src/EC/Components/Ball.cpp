@@ -10,6 +10,7 @@ Ball::Ball(bool main) : Component("Ball")
     state = BallState::IDLE;
     this->mainBall = main;
     friction = 0.9995f;
+    mininumThreshold = 1.5f;
 }
 
 Ball::~Ball() {}
@@ -37,6 +38,9 @@ void Ball::update(float deltaTime)
     {
         state = BallState::MOVING;
         setVelocity(startPressPoint, Input()->GetMousePosition());
+        
+        if(velocity.Magnitude() > mininumThreshold)
+        this->playSound("swing");
         // std::cout << "endPressPoint: " << Input()->GetMousePosition().x << " " << Input()->GetMousePosition().y << std::endl;
         // std::cout << "setVelocity: " << velocity.x << " " << velocity.y << std::endl;
     }
@@ -45,9 +49,15 @@ void Ball::update(float deltaTime)
         return;
 
     if (isOutOfBoundsX(deltaTime))
+    {
         velocity.x = -velocity.x;
+        this->playSound("collision");
+    }
     if (isOutOfBoundsY(deltaTime))
+    {
         velocity.y = -velocity.y;
+        this->playSound("collision");
+    }
 
     if (state != BallState::MOVING)
         return;
@@ -57,7 +67,7 @@ void Ball::update(float deltaTime)
     transform->GetPosition().y += velocity.y * deltaTime;
 
     // Simulate friction
-    if (velocity.Magnitude() > 1.5f)
+    if (velocity.Magnitude() > mininumThreshold)
     {
         velocity.x *= friction;
         velocity.y *= friction;

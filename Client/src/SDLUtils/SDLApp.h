@@ -7,6 +7,7 @@
 #include "../GameState/GameStateMachine.h"
 #include "InputSytem.h"
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 
 class Texture;
 
@@ -20,6 +21,8 @@ public:
     Texture *getTexture(std::string name) const;
     void loadFonts(const char *pathName);
     TTF_Font *getFont(std::string name) const;
+    void loadAudio(const char *pathName);
+    void playAudio(std::string name);
     void update(float deltaTime);
     void render();
     void renderText(float p_x, float p_y, const char *p_text, TTF_Font *font, SDL_Color textColor);
@@ -27,6 +30,8 @@ public:
     void renderTextCenter(float p_x, float p_y, const char *p_text, std::string fontName, SDL_Color textColor);
     void renderTextCenter(float p_x, float p_y, const char *p_text, TTF_Font *font, SDL_Color textColor);
     void pushState(GameState *stateToPush);
+    void checkStateChanged();
+    void popState();
     int getWidth() const;
     int getHeight() const;
     void quit();
@@ -40,8 +45,10 @@ private:
     SDL_Window *window;
     SDL_Renderer *renderer;
     GameStateMachine *gameStateMachine;
+    GameState* newState;
     std::unordered_map<std::string, Texture *> textures;
     std::unordered_map<std::string, TTF_Font *> fonts;
+    std::unordered_map<std::string, Mix_Chunk *> sounds;
     int width;
     int height;
     InputSystem *input;

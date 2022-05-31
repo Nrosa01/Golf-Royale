@@ -4,6 +4,7 @@
 #include "../EC/Components/Transform.h"
 #include "../SDLUtils/SDLApp.h"
 #include "../EC/Components/Button.h"
+#include "PlayState.h"
 #include <iostream>
 
 MainMenuState::MainMenuState(SDLApp *app) : GameState(app)
@@ -13,9 +14,8 @@ MainMenuState::MainMenuState(SDLApp *app) : GameState(app)
     this->entities.push_back(bg);
 
     Entity *playButton = new Entity(app->getWidth() / 2, app->getHeight() / 2, app);
-    playButton->AddComponent(new Button(app->getTexture("button"), "Jugar", "toonFont_72", []() {
-        //this->app->setState("GameState");
-        std::cout << "Jugar" << std::endl;
+    playButton->AddComponent(new Button(app->getTexture("button"), "Jugar", "toonFont_72", [app]() {
+        app->pushState(new PlayState(app));
     }));
     this->entities.push_back(playButton);
     playButton->GetTransform()->GetScale() = Vector2D(0.75f, 1.0f);
