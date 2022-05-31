@@ -24,8 +24,12 @@ void GameServer::run()
         switch (msgType)
         {
         case MessageType::LOGIN:
-            std::cout << "Recv: Mensaje de tipo LOGIN\n";
+        {
+            LoginMessage login;
+            login.from_bin(msg);
+            std::cout << "Recv: Mensaje de tipo LOGIN " << login.loginCode << "\n";
             break;
+        }
         case MessageType::LOGOUT:
             std::cout << "Recv: Mensaje de tipo LOGOUT\n";
             break;

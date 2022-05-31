@@ -22,8 +22,9 @@ PlayState::PlayState(SDLApp *app) : GameState(app)
     enemyBall->AddComponent(new Ball(false));
     this->entities.push_back(enemyBall);
 
-    Client* client = new Client("0.0.0.0", "13001");
+    Client* client = new Client("0.0.0.0", "13000");
     client->login();
     client->logout();
+    client->test();
     delete client;
 }

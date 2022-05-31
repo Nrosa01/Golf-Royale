@@ -39,14 +39,20 @@ public:
 
 struct LoginMessage : public NetworkMessage
 {
-    char loginCode[5];
+    #define loginCodeMaxSize 5 * sizeof(char)
+    std::string loginCode;
 
     inline void to_bin()
     {
-        alloc_data(sizeof(type) + sizeof(loginCode));
-        memset(_data, 0, sizeof(type) + sizeof(loginCode));
-        memcpy(_data, &type, sizeof(type));
-        memcpy(_data + sizeof(type), loginCode, sizeof(loginCode));
+        uint16_t dataSize = sizeof(type) + loginCodeMaxSize;
+        alloc_data(dataSize);
+        memset(_data, 0, dataSize);
+
+        char *tmp = _data;
+        memcpy(tmp, &type, sizeof(type));
+
+        tmp += sizeof(type);
+        memcpy(tmp, loginCode.c_str(), loginCodeMaxSize);
     };
 
 
@@ -59,7 +65,9 @@ struct LoginMessage : public NetworkMessage
         memcpy(&type, tmp, sizeof(type));
 
         tmp += sizeof(type);
-        memcpy(loginCode, tmp, sizeof(loginCode));
+        char tempLoginCode[loginCodeMaxSize];
+        memcpy(&tempLoginCode, tmp, loginCodeMaxSize);
+        loginCode = tempLoginCode;
 
         return 0;
     };
