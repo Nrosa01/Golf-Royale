@@ -29,6 +29,7 @@ private:
     bool KEY_DOWN = false;
     bool KEY_WAS_RELEASED = false;
     Vector2D mouseMotion;
+    char lastChar = '\0';
 
 public:
     InputSystem();
@@ -62,6 +63,8 @@ public:
     void SetMouseMotion(Vector2D motion);
     Vector2D GetMouseMotion() const;
     Vector2D GetMousePosition();
+
+    char GetLastKeyPressed();
 };
 
 inline InputSystem *Input()

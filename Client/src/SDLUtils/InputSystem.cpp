@@ -92,6 +92,7 @@ void InputSystem::OnKeyDown(SDL_Keycode key)
         // std::cout << "111111\n";
         keys[i].wasPressed = true;
         KEY_WAS_PRESSED = true;
+        this->lastChar = key;
     }
 
     // YA ESTBA PULSADA ==> QUEREMOS MANTENERLA
@@ -267,4 +268,9 @@ Vector2D InputSystem::GetMousePosition()
     int x, y;
     SDL_GetMouseState(&x, &y);
     return Vector2D(x, y);
+}
+
+char InputSystem::GetLastKeyPressed()
+{
+    return lastChar;
 }
