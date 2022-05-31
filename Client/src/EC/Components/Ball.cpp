@@ -112,20 +112,24 @@ bool Ball::isOutOfBoundsX(float deltaTime)
 {
     int screenWidth = this->ent->GetGame()->getWidth();
     int posToCheck = transform->GetPosition().x + velocity.x * deltaTime;
+    int posToCheckRight = posToCheck + renderer->getWidth()/2 * transform->GetScale().x;
+    int posToCheckLeft = posToCheck - renderer->getWidth()/2 * transform->GetScale().x;
 
     // If we are mainBall, we are retriscted to the left half of the screen
     if (mainBall)
-        return posToCheck > screenWidth / 2 || posToCheck < 0;
+        return posToCheckRight > screenWidth / 2 || posToCheckLeft < 0;
     else
-        return posToCheck < screenWidth / 2 || posToCheck > screenWidth;
+        return posToCheckRight < screenWidth / 2 || posToCheckLeft > screenWidth;
 }
 
 bool Ball::isOutOfBoundsY(float deltaTime)
 {
     int screenHeight = this->ent->GetGame()->getHeight();
     int posToCheck = transform->GetPosition().y + velocity.y * deltaTime;
+    int posToCheckUP = posToCheck - transform->GetScale().y * renderer->getHeight() / 2;
+    int posToCheckDOWN = posToCheck + transform->GetScale().y * renderer->getHeight() / 2;
 
-    return posToCheck > screenHeight || posToCheck < 0;
+    return posToCheckDOWN > screenHeight || posToCheckUP < 0;
 }
 
 float Ball::getDistance(Vector2D startPoint, Vector2D endPoint)

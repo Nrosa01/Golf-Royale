@@ -4,38 +4,14 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        // {
-        //     "name": "(gdb) Launch",
-        //     "type": "cppdbg",
-        //     "request": "launch",
-        //     "program": "${workspaceFolder}/Client/bin/Golf-Royale",
-        //     "args": [],
-        //     "stopAtEntry": false,
-        //     "cwd": "${workspaceFolder}/Client",
-        //     "environment": [],
-        //     "externalConsole": false,
-        //     "MIMode": "gdb",
-        //     "setupCommands": [
-        //         {
-        //             "description": "Enable pretty-printing for gdb",
-        //             "text": "-enable-pretty-printing",
-        //             "ignoreFailures": true
-        //         },
-        //         {
-        //             "description":  "Set Disassembly Flavor to Intel",
-        //             "text": "-gdb-set disassembly-flavor intel",
-        //             "ignoreFailures": true
-        //         }
-        //     ]
-        // },
         {
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/Server/bin/Golf-Server",
-            "args": ["0.0.0.0", "13000"],
+            "program": "${workspaceFolder}/Client/bin/Golf-Royale",
+            "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/Server",
+            "cwd": "${workspaceFolder}/Client",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
@@ -51,7 +27,31 @@
                     "ignoreFailures": true
                 }
             ]
-        }
+        },
+        // {
+        //     "name": "(gdb) Launch",
+        //     "type": "cppdbg",
+        //     "request": "launch",
+        //     "program": "${workspaceFolder}/Server/bin/Golf-Server",
+        //     "args": ["0.0.0.0", "13000"],
+        //     "stopAtEntry": false,
+        //     "cwd": "${workspaceFolder}/Server",
+        //     "environment": [],
+        //     "externalConsole": false,
+        //     "MIMode": "gdb",
+        //     "setupCommands": [
+        //         {
+        //             "description": "Enable pretty-printing for gdb",
+        //             "text": "-enable-pretty-printing",
+        //             "ignoreFailures": true
+        //         },
+        //         {
+        //             "description":  "Set Disassembly Flavor to Intel",
+        //             "text": "-gdb-set disassembly-flavor intel",
+        //             "ignoreFailures": true
+        //         }
+        //     ]
+        // }
 
     ]
 }

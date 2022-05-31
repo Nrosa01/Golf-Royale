@@ -11,7 +11,7 @@ class Transform;
 class Button : public Component
 {
 public:
-    Button(Texture *buttonImg, const char *text, std::string font, ButtonCallback callback);
+    Button(Texture *buttonImg, const char *text, std::string font, int fontSize, ButtonCallback callback);
     virtual ~Button();
     virtual void init();
     virtual void update(float deltaTime);
@@ -28,6 +28,8 @@ private:
     Transform *transform;
     Vector2D initialScale;
     bool wasOverLastFrame;
+    int fontSize;
+    int initialFontSize;
 };
 
 #endif

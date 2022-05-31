@@ -4,7 +4,7 @@
 #include "../../SDLUtils/Texture.h"
 #include "../Entity.h"
 
-TextField::TextField(Texture *buttonImg, std::string font, int maxLength) : Component("TextField"), texture(buttonImg), font(font), maxLength(maxLength)
+TextField::TextField(Texture *buttonImg, std::string font, int fontSize, int maxLength) : Component("TextField"), texture(buttonImg), font(font), fontSize(fontSize), maxLength(maxLength)
 {
     this->text = "";
     this->transform = nullptr;
@@ -53,7 +53,7 @@ void TextField::update(float deltaTime)
     else
         timer -= deltaTime * pulseSpeed;
 
-    //Clamp timer between 0 and 1
+    // Clamp timer between 0 and 1
     if (timer > 1.0f)
         timer = 0.0f;
     else if (timer < 0.0f)
@@ -82,7 +82,7 @@ void TextField::render()
     int textPosX = transform->GetPosition().getX();
     int textPosY = transform->GetPosition().getY();
     SDL_Color defaultColor = {255, 255, 255, 255};
-    this->ent->GetGame()->renderText(textPosX, textPosY, text.c_str(), font, defaultColor);
+    this->ent->GetGame()->renderText(textPosX, textPosY, text.c_str(), font, fontSize, defaultColor);
 }
 
 bool TextField::isPressed()

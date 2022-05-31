@@ -12,6 +12,8 @@
 class Texture;
 
 class SDLApp
+#define MAX_FONT_SIZE 240
+
 {
 public:
     SDLApp(int width, int height, const char *title);
@@ -25,10 +27,10 @@ public:
     void playAudio(std::string name);
     void update(float deltaTime);
     void render();
-    void renderText(float p_x, float p_y, const char *p_text, TTF_Font *font, SDL_Color textColor);
-    void renderText(float p_x, float p_y, const char *p_text, std::string fontName, SDL_Color textColor);
-    void renderTextCenter(float p_x, float p_y, const char *p_text, std::string fontName, SDL_Color textColor);
-    void renderTextCenter(float p_x, float p_y, const char *p_text, TTF_Font *font, SDL_Color textColor);
+    void renderText(float p_x, float p_y, const char *p_text, TTF_Font *font, int size, SDL_Color textColor);
+    void renderText(float p_x, float p_y, const char *p_text, std::string fontName, int size, SDL_Color textColor);
+    void renderTextCenter(float p_x, float p_y, const char *p_text, std::string fontName, int size, SDL_Color textColor);
+    void renderTextCenter(float p_x, float p_y, const char *p_text, TTF_Font *font, int size, SDL_Color textColor);
     void pushState(GameState *stateToPush);
     void checkStateChanged();
     void popState();
@@ -45,7 +47,7 @@ private:
     SDL_Window *window;
     SDL_Renderer *renderer;
     GameStateMachine *gameStateMachine;
-    GameState* newState;
+    GameState *newState;
     std::unordered_map<std::string, Texture *> textures;
     std::unordered_map<std::string, TTF_Font *> fonts;
     std::unordered_map<std::string, Mix_Chunk *> sounds;

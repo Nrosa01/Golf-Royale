@@ -9,7 +9,7 @@ class Transform;
 class TextField : public Component
 {
 public:
-    TextField(Texture *buttonImg, std::string font, int maxLength = 4);
+    TextField(Texture *buttonImg, std::string font, int fontSize, int maxLength = 4);
     virtual ~TextField();
     virtual void init();
     virtual void update(float deltaTime);
@@ -19,6 +19,7 @@ public:
 private:
     Texture *texture;
     std::string font;
+    int fontSize;
     uint maxLength;
     Texture *textLine;
     std::string text;

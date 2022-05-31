@@ -4,8 +4,8 @@
 #include "../../SDLUtils/Texture.h"
 #include "../Entity.h"
 
-Button::Button(Texture *buttonImg, const char *text, std::string font, ButtonCallback callback) : Component("Button"), texture(buttonImg),
-                                                                                                  text(text), font(font), callback(callback), lerpAnimTime(0.1f) {}
+Button::Button(Texture *buttonImg, const char *text, std::string font, int fontSize, ButtonCallback callback) : Component("Button"), texture(buttonImg),
+                                                                                                                text(text), font(font), callback(callback), lerpAnimTime(0.1f), fontSize(fontSize) {}
 
 Button::~Button() {}
 
@@ -14,6 +14,7 @@ void Button::init()
     transform = this->ent->GetTransform();
     initialScale = transform->GetScale();
     wasOverLastFrame = false;
+    initialFontSize = fontSize;
 }
 
 void Button::update(float deltaTime)
@@ -49,6 +50,7 @@ void Button::update(float deltaTime)
 
     float scaleX = initialScale.x + (timer / lerpAnimTime) * 0.1f;
     float scaleY = initialScale.y + (timer / lerpAnimTime) * 0.1f;
+    fontSize = initialFontSize + (timer / lerpAnimTime) * 20.0f;
     transform->GetScale() = Vector2D(scaleX, scaleY);
 }
 
@@ -71,7 +73,7 @@ void Button::render()
         SDL_Color hoverColor = {255, 255, 255, 255};
         SDL_Color defaultColor = {255, 255, 255, 175};
         SDL_Color color = isMouseOver() ? hoverColor : defaultColor;
-        this->ent->GetGame()->renderText(textPosX, textPosY, text, font, color);
+        this->ent->GetGame()->renderText(textPosX, textPosY, text, font, fontSize, color);
     }
 }
 

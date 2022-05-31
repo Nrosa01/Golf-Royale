@@ -192,18 +192,15 @@ void SDLApp::loadFonts(const char *pathName)
                 filePath.append(fileName);
 
                 // Load font with size 12, 24, 36, 48, 60, 72, 84, 96, 108, 120
-                for(int i = 12; i <= 120; i += 12)
+                TTF_Font *font = TTF_OpenFont(filePath.c_str(), MAX_FONT_SIZE);
+                if (font == nullptr)
                 {
-                    TTF_Font *font = TTF_OpenFont(filePath.c_str(), i);
-                    if (font == nullptr)
-                    {
-                        std::cout << "Font could not be loaded! SDL_Error: " << SDL_GetError() << std::endl;
-                        return;
-                    }
-                    else
-                        std::cout << "Loaded font " << fileNameWithoutExt << " with size " << i << std::endl;
-                    fonts.insert(std::pair<std::string, TTF_Font *>(fileNameWithoutExt + "_" + std::to_string(i), font));
+                    std::cout << "Font could not be loaded! SDL_Error: " << SDL_GetError() << std::endl;
+                    return;
                 }
+                else
+                    std::cout << "Loaded font " << fileNameWithoutExt << " with size " << MAX_FONT_SIZE << std::endl;
+                fonts.insert(std::pair<std::string, TTF_Font *>(fileNameWithoutExt, font));
             }
         }
 
@@ -308,12 +305,12 @@ int SDLApp::getHeight() const
     return this->height;
 }
 
-void SDLApp::renderText(float p_x, float p_y, const char *p_text, std::string fontName, SDL_Color textColor)
+void SDLApp::renderText(float p_x, float p_y, const char *p_text, std::string fontName, int size, SDL_Color textColor)
 {
-    this->renderText(p_x, p_y, p_text, getFont(fontName), textColor);
+    this->renderText(p_x, p_y, p_text, getFont(fontName), size, textColor);
 }
 
-void SDLApp::renderText(float p_x, float p_y, const char *p_text, TTF_Font *font, SDL_Color textColor)
+void SDLApp::renderText(float p_x, float p_y, const char *p_text, TTF_Font *font, int size, SDL_Color textColor)
 {
     SDL_Surface *surfaceMessage = TTF_RenderText_Blended(font, p_text, textColor);
     SDL_Texture *message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
@@ -324,24 +321,27 @@ void SDLApp::renderText(float p_x, float p_y, const char *p_text, TTF_Font *font
     src.w = surfaceMessage->w;
     src.h = surfaceMessage->h;
 
+    float fontSize = (float)size / MAX_FONT_SIZE;
+    int fontSizeX = src.w * fontSize;
+    int fontSizeY = src.h * fontSize;
+
     SDL_Rect dst;
-    dst.x = p_x - src.w / 2;
-    dst.y = p_y - src.h / 2;
-    dst.w = src.w;
-    dst.h = src.h;
+    dst.x = p_x - fontSizeX / 2;
+    dst.y = p_y - fontSizeY / 2;
+    dst.w = fontSizeX;
+    dst.h = fontSizeY;
 
     SDL_RenderCopy(renderer, message, &src, &dst);
     SDL_FreeSurface(surfaceMessage);
     SDL_DestroyTexture(message);
 }
 
-
-void SDLApp::renderTextCenter(float p_x, float p_y, const char *p_text, std::string fontName, SDL_Color textColor)
+void SDLApp::renderTextCenter(float p_x, float p_y, const char *p_text, std::string fontName, int size, SDL_Color textColor)
 {
-    this->renderTextCenter(p_x, p_y, p_text, getFont(fontName), textColor);
+    this->renderTextCenter(p_x, p_y, p_text, getFont(fontName), size, textColor);
 }
 
-void SDLApp::renderTextCenter(float p_x, float p_y, const char *p_text, TTF_Font *font, SDL_Color textColor)
+void SDLApp::renderTextCenter(float p_x, float p_y, const char *p_text, TTF_Font *font, int size, SDL_Color textColor)
 {
     SDL_Surface *surfaceMessage = TTF_RenderText_Blended(font, p_text, textColor);
     SDL_Texture *message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
@@ -352,11 +352,15 @@ void SDLApp::renderTextCenter(float p_x, float p_y, const char *p_text, TTF_Font
     src.w = surfaceMessage->w;
     src.h = surfaceMessage->h;
 
+    int fontSize = size / MAX_FONT_SIZE;
+    int fontSizeX = src.w * fontSize;
+    int fontSizeY = src.h * fontSize;
+
     SDL_Rect dst;
-    dst.x = this->getWidth() / 2 - src.w / 2 + p_x;
-    dst.y = this->getHeight() / 2 - src.h / 2 + p_y;
-    dst.w = src.w;
-    dst.h = src.h;
+    dst.x = this->getWidth() / 2 - fontSizeX / 2 + p_x;
+    dst.y = this->getHeight() / 2 - fontSizeY / 2 + p_y;
+    dst.w = fontSizeX;
+    dst.h = fontSizeY;
 
     SDL_RenderCopy(renderer, message, &src, &dst);
     SDL_FreeSurface(surfaceMessage);
