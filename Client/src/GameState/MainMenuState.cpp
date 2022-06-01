@@ -9,60 +9,26 @@
 #include "LobbyState.h"
 #include <iostream>
 
-MainMenuState::MainMenuState(SDLApp *app) : GameState(app), startTransition(false), timer(0)
+MainMenuState::MainMenuState(SDLApp *app) : GameState(app)
 {
-    Entity *bg = new Entity(app->getWidth() / 2, app->getHeight() / 2, app);
-    bg->AddComponent(new Renderer(app->getTexture("menuBg")));
-    this->entities.push_back(bg);
+    createEntity(Vector2D(app->getWidth() / 2, app->getHeight() / 2), Vector2D(1, 1), "menuBg");
 
-    Entity *playButton = new Entity(app->getWidth() / 2, app->getHeight() / 2, app);
+    Entity *playButton = createEntity(Vector2D(app->getWidth() / 2, app->getHeight() / 2), Vector2D(0.5f, 1));
     playButton->AddComponent(new Button(app->getTexture("button"), "Jugar", "toonFont", 72, [this]()
-                                        { startTransitionTimer(); }));
-    this->entities.push_back(playButton);
-    playButton->GetTransform()->GetScale() = Vector2D(0.5f, 1.0f);
+                                        { startExitTransitionTimer(); }));
 
-    Entity *exitButton = new Entity(app->getWidth() / 2, app->getHeight() / 2 + 100, app);
+    Entity *exitButton = createEntity(Vector2D(app->getWidth() / 2, app->getHeight() / 2 + 100), Vector2D(0.5f, 1));
     exitButton->AddComponent(new Button(app->getTexture("button"), "Salir", "toonFont", 72, [app]()
                                         { app->quit(); }));
-    this->entities.push_back(exitButton);
-    exitButton->GetTransform()->GetScale() = Vector2D(0.5f, 1.0f);
 
-    Entity *title = new Entity(app->getWidth() / 2, app->getHeight() / 2 - 125, app);
+    Entity *title = createEntity(Vector2D(app->getWidth() / 2, app->getHeight() / 2 - 125), Vector2D(1, 1));
     title->AddComponent(new Renderer(app->getTexture("title")));
-    this->entities.push_back(title);
-    title->GetTransform()->GetScale() = Vector2D(1.15f, 1.15f);
 
-    Transitioner *transitioner = new Transitioner(TRANSITION_TIME);
-    playButton->AddComponent(transitioner);
-    this->transitioners.push_back(transitioner);
-
-    title->AddComponent(transitioner = new Transitioner(TRANSITION_TIME));
-    this->transitioners.push_back(transitioner);
-
-    exitButton->AddComponent(transitioner = new Transitioner(TRANSITION_TIME));
-    this->transitioners.push_back(transitioner);
+    addTransitioner(playButton);
+    addTransitioner(exitButton);
 }
 
-void MainMenuState::update(float deltaTime)
+void MainMenuState::onStateExit()
 {
-    GameState::update(deltaTime);
-
-    if (startTransition)
-    {
-        timer += deltaTime;
-        if (timer >= TRANSITION_TIME)
-        {
-            timer = 0;
-            startTransition = false;
-            app->pushState(new LobbyState(app));
-        }
-    }
-}
-
-void MainMenuState::startTransitionTimer()
-{
-    startTransition = true;
-
-    for (auto transitioner : transitioners)
-        transitioner->startFade();
+    app->pushState(new LobbyState(app));
 }

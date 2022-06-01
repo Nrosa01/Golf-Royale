@@ -8,6 +8,7 @@ class LobbyState : public GameState
 public:
     LobbyState(SDLApp* app);
     virtual ~LobbyState();
+    void onStateExit();
 };
 
 #endif

@@ -98,6 +98,8 @@ void SDLApp::pushState(GameState *stateToPush)
 void SDLApp::popState()
 {
     gameStateMachine->popState();
+    if (gameStateMachine->currentState() != nullptr)
+        gameStateMachine->currentState()->onStateEnter();
 }
 
 void SDLApp::update(float deltaTime)
@@ -111,6 +113,7 @@ void SDLApp::checkStateChanged()
     if (newState != nullptr)
     {
         gameStateMachine->pushState(newState);
+        newState->onStateEnter();
         newState = nullptr;
     }
 }

@@ -1,14 +1,31 @@
 #include "LobbyState.h"
 #include "../EC/Entity.h"
 #include "../EC/Components/Renderer.h"
-#include "../EC/Components/Ball.h"
+#include "../EC/Components/Transform.h"
 #include "../SDLUtils/SDLApp.h"
+#include "../EC/Components/Button.h"
+#include "../EC/Components/TextField.h"
+#include "../EC/Components/Transitioner.h"
+#include "MainMenuState.h"
+#include <iostream>
 
 LobbyState::LobbyState(SDLApp *app) : GameState(app)
 {
-    Entity *bg = new Entity(app->getWidth() / 2, app->getHeight() / 2, app);
-    bg->AddComponent(new Renderer(app->getTexture("menuBg")));
-    this->entities.push_back(bg);
+    createEntity(Vector2D(app->getWidth() / 2, app->getHeight() / 2), Vector2D(1, 1), "menuBg");
+
+    Entity *exitButton = createEntity(Vector2D(app->getWidth() / 2, app->getHeight() / 2 + 100), Vector2D(0.5f, 1));
+    exitButton->AddComponent(new Button(app->getTexture("button"), "Salir", "toonFont", 72, [this]()
+                                        { startExitTransitionTimer(); }));
+
+    Entity *title = createEntity(Vector2D(app->getWidth() / 2, app->getHeight() / 2 - 125), Vector2D(1, 1));
+    title->AddComponent(new Renderer(app->getTexture("title")));
+
+    addTransitioner(exitButton);
 }
 
-LobbyState::~LobbyState(){}
+LobbyState::~LobbyState() {}
+
+void LobbyState::onStateExit()
+{
+    app->popState();
+}
