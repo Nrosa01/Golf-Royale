@@ -20,6 +20,7 @@ private:
     Texture *texture;
     std::string font;
     int fontSize;
+    int initialFontSize;
     uint maxLength;
     Texture *textLine;
     std::string text;

@@ -24,6 +24,7 @@ void Texture::load(string filename, uint nRows, uint nCols)
 	fw = w / numCols;
 	fh = h / numRows;
 	SDL_FreeSurface(tempSurface);
+	this->filename = filename;
 }
 
 void Texture::render(const SDL_Rect& destRect, SDL_RendererFlip flip) const
@@ -50,4 +51,11 @@ void Texture::renderFrame(const SDL_Rect& destRect, int row, int col, int angle,
 	srcRect.w = fw;
 	srcRect.h = fh;
 	SDL_RenderCopyEx(renderer, texture, &srcRect, &destRect, angle, 0, flip);
+}
+
+Texture* Texture::getClone()
+{
+	Texture* t = new Texture(renderer);
+	t->load(filename, numRows, numCols);
+	return t;
 }

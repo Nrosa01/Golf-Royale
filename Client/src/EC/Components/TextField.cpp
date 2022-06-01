@@ -12,7 +12,10 @@ TextField::TextField(Texture *buttonImg, std::string font, int fontSize, int max
     selected = false;
 }
 
-TextField::~TextField() {}
+TextField::~TextField() 
+{
+    delete textLine;
+}
 
 void TextField::init()
 {
@@ -21,6 +24,11 @@ void TextField::init()
     this->textLine = this->ent->GetGame()->getTexture("textField");
     pulseSpeed = 0.75f;
     lineAlpha = 255;
+    initialFontSize = fontSize;
+
+    // Clone texture for text line
+    this->textLine = textLine->getClone();
+    
 }
 
 void TextField::update(float deltaTime)
@@ -61,6 +69,9 @@ void TextField::update(float deltaTime)
     lineAlpha = 255 * (sin(timer * 3.14f));
 
     textLine->setAlpha((int)this->lineAlpha);
+
+    float scaleRatio = transform->GetScale().Magnitude() / initialScale.Magnitude();
+    fontSize = initialFontSize * scaleRatio;
 }
 
 void TextField::render()
@@ -98,8 +109,10 @@ bool TextField::isMouseOver()
     Vector2D mousePos = Input()->GetMousePosition();
 
     // Check if mousePos is inside the button
-    if (mousePos.getX() > transform->GetPosition().getX() - texture->getW() / 2 && mousePos.getX() < transform->GetPosition().getX() + texture->getW() / 2 &&
-        mousePos.getY() > transform->GetPosition().getY() - texture->getH() / 2 && mousePos.getY() < transform->GetPosition().getY() + texture->getH() / 2)
+    int textW = texture->getW() * transform->GetScale().x;
+    int textH = texture->getH() * transform->GetScale().y;
+    if (mousePos.getX() > transform->GetPosition().getX() - textW / 2 && mousePos.getX() < transform->GetPosition().getX() + textW / 2 &&
+        mousePos.getY() > transform->GetPosition().getY() - textH / 2 && mousePos.getY() < transform->GetPosition().getY() + textH / 2)
     {
         return true;
     }

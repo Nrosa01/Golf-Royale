@@ -52,8 +52,6 @@ void Button::update(float deltaTime)
     float scaleY = initialScale.y + (timer / lerpAnimTime) * 0.1f;
     float scaleRatio = transform->GetScale().Magnitude() / initialScale.Magnitude();
 
-    if (scaleRatio > 1.0f)
-        scaleRatio = 1.0f;
     fontSize = initialFontSize + (timer / lerpAnimTime) * 20.0f;
     fontSize *= scaleRatio;
     transform->GetScale() = Vector2D(scaleX, scaleY);

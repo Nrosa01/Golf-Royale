@@ -21,6 +21,7 @@ private:
     uint fh = 0; // Frame height
     uint numCols = 1;
     uint numRows = 1;
+    string filename;
 
 public:
     Texture(SDL_Renderer *r) : renderer(r){};
@@ -28,6 +29,7 @@ public:
     ~Texture() { freeMemory(); };
     void freeMemory(); // destruir/liberar la textura
 
+    Texture* getClone(); // Crear una copia de la textura
     int getW() const { return w; };
     int getH() const { return h; };
     uint getNumCols() const { return numCols; };
