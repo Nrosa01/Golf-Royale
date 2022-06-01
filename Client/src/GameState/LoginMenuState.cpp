@@ -33,12 +33,7 @@ LoginMenuState::LoginMenuState(SDLApp *app) : GameState(app)
     gameCodeInputLabel->AddComponent(new TextRenderer("Codigo del juego:", "toonFont", 24));
 
     Entity *exitButton = createEntity(Vector2D(width / 2, height / 2 + 200), Vector2D(0.5f, 1));
-    exitButton->AddComponent(new Button(app->getTexture("button"), "Menu", "toonFont", 72,
-                                        [this]()
-                                        { 
-                                                if (this->errorLabel->GetTransform()->GetScale().x < 0.1f)
-                                                        errorLabel->GetComponent<Transitioner>()->disable();
-                                            startExitTransitionTimer(popState); }));
+    exitButton->AddComponent(new Button(app->getTexture("button"), "Menu", "toonFont", 72, exitStateCallback()));
 
     Entity *startButton = createEntity(Vector2D(width / 2, height / 2 + 100), Vector2D(0.5f, 1));
     startButton->AddComponent(new Button(app->getTexture("button"), "Jugar", "toonFont", 72, loginCallback()));
@@ -82,6 +77,17 @@ std::function<void()> LoginMenuState::loginCallback()
             lobby->setGameCode(gameCode);
             
             this->getApp()->pushState(lobby); });
+    };
+}
+
+std::function<void()> LoginMenuState::exitStateCallback()
+{
+    return [this]()
+    {
+        if (this->errorLabel->GetTransform()->GetScale().x < 0.1f)
+            errorLabel->GetComponent<Transitioner>()->disable();
+
+        startExitTransitionTimer(popState);
     };
 }
 

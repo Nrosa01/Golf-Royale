@@ -34,7 +34,7 @@ LobbyState::LobbyState(SDLApp *app) : GameState(app)
 
     Entity *startButton = createEntity(Vector2D(width / 2, height/ 2 + 100), Vector2D(0.5f, 1));
     startButton->AddComponent(new Button(app->getTexture("button"), "Jugar", "toonFont", 72, [this]()
-                                        { startExitTransitionTimer(); }));
+                                        { startExitTransitionTimer(exitGame); }));
 
 
     addTransitioner(exitButton);

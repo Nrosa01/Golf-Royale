@@ -14,8 +14,8 @@ public:
     Entity *gameCodeInputField;
     Entity* errorLabel;
 private:
-    std::function<void()>
-    loginCallback();
+    std::function<void()> loginCallback();
+    std::function<void()> exitStateCallback();
 };
 
 #endif

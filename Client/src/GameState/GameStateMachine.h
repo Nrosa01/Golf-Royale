@@ -19,6 +19,7 @@ public:
 	void pushState(GameState* stateToPush);
 	void changeState(GameState* stateToPush);
 	void popState();
+	uint getStateCount();
 };
 
 #endif

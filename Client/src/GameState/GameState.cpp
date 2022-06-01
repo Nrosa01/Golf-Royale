@@ -5,7 +5,7 @@
 #include "../EC/Components/Transform.h"
 #include "../EC/Components/Renderer.h"
 
-GameState::GameState(SDLApp *app) : app(app), startTransition(false) {}
+GameState::GameState(SDLApp *app) : app(app), startTransition(false), timer(0) {}
 
 GameState::~GameState()
 {

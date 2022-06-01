@@ -62,3 +62,8 @@ void GameStateMachine::popState()
     if (!states.empty())
         states.top()->onStateEnter();
 }
+
+uint GameStateMachine::getStateCount()
+{
+    return states.size();
+}
