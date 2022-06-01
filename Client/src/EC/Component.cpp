@@ -2,7 +2,7 @@
 #include "../SDLUtils/SDLApp.h"
 #include "Entity.h"
 
-Component::Component(std::string cmpName) : cmpName(cmpName) {}
+Component::Component(std::string cmpName) : cmpName(cmpName)  {}
 
 Component::~Component() {}
 

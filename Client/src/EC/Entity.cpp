@@ -56,12 +56,6 @@ void Entity::RemoveComponent(std::string name)
     }
 }
 
-template <typename T>
-T *Entity::GetComponent(std::string name)
-{
-    return dynamic_cast<T *>(GetComponent(name));
-}
-
 Component *Entity::GetComponent(std::string name)
 {
     // Find component

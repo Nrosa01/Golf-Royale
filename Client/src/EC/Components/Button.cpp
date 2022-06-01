@@ -4,7 +4,7 @@
 #include "../../SDLUtils/Texture.h"
 #include "../Entity.h"
 
-Button::Button(Texture *buttonImg, const char *text, std::string font, int fontSize, ButtonCallback callback) : Component("Button"), texture(buttonImg),
+Button::Button(Texture *buttonImg, const char *text, std::string font, int fontSize, ButtonCallback callback) : Component(typeid(Button).name()), texture(buttonImg),
                                                                                                                 text(text), font(font), callback(callback), lerpAnimTime(0.1f), fontSize(fontSize) {}
 
 Button::~Button() {}

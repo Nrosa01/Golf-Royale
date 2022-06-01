@@ -14,11 +14,9 @@ LobbyState::LobbyState(SDLApp *app) : GameState(app)
     createEntity(Vector2D(app->getWidth() / 2, app->getHeight() / 2), Vector2D(1, 1), "menuBg");
 
     Entity *exitButton = createEntity(Vector2D(app->getWidth() / 2, app->getHeight() / 2 + 100), Vector2D(0.5f, 1));
-    exitButton->AddComponent(new Button(app->getTexture("button"), "Salir", "toonFont", 72, [this]()
+    exitButton->AddComponent(new Button(app->getTexture("button"), "Menu", "toonFont", 72, [this]()
                                         { startExitTransitionTimer(); }));
 
-    Entity *title = createEntity(Vector2D(app->getWidth() / 2, app->getHeight() / 2 - 125), Vector2D(1, 1));
-    title->AddComponent(new Renderer(app->getTexture("title")));
 
     addTransitioner(exitButton);
 }

@@ -5,7 +5,7 @@
 #include "../../SDLUtils/SDLApp.h"
 #include <iostream>
 
-Ball::Ball(bool main) : Component("Ball")
+Ball::Ball(bool main) : Component(typeid(Ball).name())
 {
     state = BallState::IDLE;
     this->mainBall = main;
@@ -18,8 +18,7 @@ Ball::~Ball() {}
 void Ball::init()
 {
     transform = this->ent->GetTransform();
-    // renderer = this->ent->GetComponent<Renderer>("Renderer");
-    renderer = dynamic_cast<Renderer *>(this->ent->GetComponent("Renderer"));
+    renderer = this->ent->GetComponent<Renderer>();
     multiplicador = 10.0f;
 }
 

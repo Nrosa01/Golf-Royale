@@ -21,9 +21,9 @@ MainMenuState::MainMenuState(SDLApp *app) : GameState(app)
     exitButton->AddComponent(new Button(app->getTexture("button"), "Salir", "toonFont", 72, [app]()
                                         { app->quit(); }));
 
-    Entity *title = createEntity(Vector2D(app->getWidth() / 2, app->getHeight() / 2 - 125), Vector2D(1, 1));
-    title->AddComponent(new Renderer(app->getTexture("title")));
+    Entity *title = createEntity(Vector2D(app->getWidth() / 2, app->getHeight() / 2 - 125), Vector2D(1, 1), "title");
 
+    addTransitioner(title);
     addTransitioner(playButton);
     addTransitioner(exitButton);
 }

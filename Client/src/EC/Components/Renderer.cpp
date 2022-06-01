@@ -4,13 +4,20 @@
 #include "../../SDLUtils/Texture.h"
 #include <SDL2/SDL.h>
 
-Renderer::Renderer(Texture *texture) : Component("Renderer"), transform(nullptr), texture(texture){};
+Renderer::Renderer(Texture *texture) : Component(typeid(Renderer).name()), transform(nullptr), texture(texture){};
 
 Renderer::~Renderer(){};
 
 void Renderer::init()
 {
-    transform = this->ent->GetTransform();
+    transform = this->ent->GetComponent<Transform>();
+
+    if (transform == nullptr)
+    {
+        std::cout << "Renderer::init() - ERROR: Entity does not have a Transform component!" << std::endl;
+        return;
+    }
+    
 }
 
 void Renderer::render()

@@ -7,8 +7,8 @@
 class Transform : public Component
 {
 public:
-    Transform() : Component("Transform"), position(Vector2D(0,0)), scale(Vector2D(1,1)) {};
-    Transform(Vector2D position, float scale) : Component("Transform"), position(position), scale(Vector2D(scale, scale)) {};
+    Transform() : Component(typeid(Transform).name()), position(Vector2D(0,0)), scale(Vector2D(1,1)) {};
+    Transform(Vector2D position, float scale) : Component(typeid(Transform).name()), position(position), scale(Vector2D(scale, scale)) {};
     virtual ~Transform() {};
 
     Vector2D& GetPosition() { return position; }

@@ -3,6 +3,7 @@
 
 #include <string>
 #include "../SDLUtils/InputSytem.h"
+#include <typeinfo>
 
 class Entity;
 

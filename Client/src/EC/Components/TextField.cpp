@@ -4,7 +4,7 @@
 #include "../../SDLUtils/Texture.h"
 #include "../Entity.h"
 
-TextField::TextField(Texture *buttonImg, std::string font, int fontSize, int maxLength) : Component("TextField"), texture(buttonImg), font(font), fontSize(fontSize), maxLength(maxLength)
+TextField::TextField(Texture *buttonImg, std::string font, int fontSize, int maxLength) : Component(typeid(TextField).name()), texture(buttonImg), font(font), fontSize(fontSize), maxLength(maxLength)
 {
     this->text = "";
     this->transform = nullptr;

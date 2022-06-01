@@ -5,7 +5,7 @@
 
 using namespace MathUtils;
 
-Transitioner::Transitioner(float duration) : Component("Transitioner")
+Transitioner::Transitioner(float duration) : Component(typeid(Transitioner).name())
 {
     this->duration = duration;
     timer = 0.0f;
