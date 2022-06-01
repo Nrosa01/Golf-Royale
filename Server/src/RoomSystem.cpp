@@ -68,6 +68,7 @@ bool RoomSystem::removePlayer(Socket *player)
             NetworkMessage msg;
             msg.type = PLAYER_DISCONNECTED;
             server->send(msg, *other);
+            clients.erase(other->getHashId());
         }
 
         delete room;

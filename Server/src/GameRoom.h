@@ -7,6 +7,7 @@ class GameRoom
 {
 public:
     GameRoom(std::string code, Socket *player);
+    ~GameRoom();
     bool isRoomFull();
     bool isRoomEmpty();
     bool isPlayerInRoom(Socket *socket);

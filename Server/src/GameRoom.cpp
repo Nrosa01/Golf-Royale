@@ -6,6 +6,12 @@ GameRoom::GameRoom(std::string code, Socket *player)
     playerOne = player;
 }
 
+GameRoom::~GameRoom()
+{
+    playerOne = nullptr;
+    playerTwo = nullptr;
+}
+
 bool GameRoom::isRoomFull()
 {
     return playerTwo != nullptr && playerOne != nullptr;
