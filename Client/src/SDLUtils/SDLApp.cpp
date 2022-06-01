@@ -394,11 +394,6 @@ void SDLApp::sendNetworkMessage(NetworkMessage &message)
     this->client->send(message);
 }
 
-void SDLApp::sendNetworkMessage(NetworkMessage &&message)
-{
-    this->client->send(message);
-}
-
 void SDLApp::rcvNetMessage(NetworkMessage &message)
 {
     this->gameStateMachine->receiveNetworkMessage(message);

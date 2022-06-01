@@ -17,20 +17,18 @@ LobbyState::LobbyState(SDLApp *app) : GameState(app)
 
     createEntity(Vector2D(width / 2, height / 2), Vector2D(1, 1), "menuBg");
 
-    Entity* lobbyTittle = createEntity(Vector2D(width / 2, 75), Vector2D(1, 1), "button");
+    Entity *lobbyTittle = createEntity(Vector2D(width / 2, 75), Vector2D(1, 1), "button");
     lobbyTittle->AddComponent(new TextRenderer("Lobby", "toonFont", 72));
-    
-    nameLabel = createEntity(Vector2D(width / 2 - 125, height/ 2 - 100), Vector2D(0.4, 1), "button");
+
+    nameLabel = createEntity(Vector2D(width / 2 - 125, height / 2 - 100), Vector2D(0.4, 1), "button");
     nameLabel->AddComponent(new TextRenderer("Empty:", "toonFont", 72));
 
-    gameCodeLabel = createEntity(Vector2D(width / 2 + 125, height/ 2 - 100), Vector2D(0.4, 1), "button");
+    gameCodeLabel = createEntity(Vector2D(width / 2 + 125, height / 2 - 100), Vector2D(0.4, 1), "button");
     gameCodeLabel->AddComponent(new TextRenderer("Code:", "toonFont", 72));
 
-    Entity *exitButton = createEntity(Vector2D(width / 2, height/ 2 + 200), Vector2D(0.5f, 1));
+    Entity *exitButton = createEntity(Vector2D(width / 2, height / 2 + 200), Vector2D(0.5f, 1));
     exitButton->AddComponent(new Button(app->getTexture("button"), "Volver", "toonFont", 72, [this]()
-    {
-        startExitTransitionTimer(popState);
-    }));
+                                        { startExitTransitionTimer(popState); }));
 
     addTransitioner(exitButton);
     addTransitioner(nameLabel);
@@ -58,11 +56,14 @@ void LobbyState::onStateEnter()
     this->nameLabel->GetComponent<TextRenderer>()->setText(this->name);
     this->gameCodeLabel->GetComponent<TextRenderer>()->setText(this->gameCode);
 
-    this->sendNetworkMessage(LoginMessage(gameCode));
+    // El codigo no se envia bien, averiguar por que
+    LoginMessage login = LoginMessage(gameCode);
+    this->sendNetworkMessage(login);
 }
 
 void LobbyState::onStateExit()
 {
     GameState::onStateExit();
-    this->sendNetworkMessage(NetworkMessage(LOGOUT));
+    NetworkMessage logout = NetworkMessage(LOGOUT);
+    this->sendNetworkMessage(logout);
 }

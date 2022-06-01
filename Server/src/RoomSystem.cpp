@@ -19,7 +19,7 @@ bool RoomSystem::roomExists(std::string code)
 
 bool RoomSystem::isPlayerInRoom(Socket *player)
 {
-    return clients.find(player) != clients.end();
+    return clients.find(player->getHashId()) != clients.end();
 }
 
 bool RoomSystem::isRoomFull(std::string code)
@@ -32,13 +32,16 @@ bool RoomSystem::isRoomFull(std::string code)
 
 bool RoomSystem::addPlayer(Socket *player, std::string code)
 {
+    if (code.empty())
+        return logError("Error: Code is empty");
+
     if (roomExists(code))
     {
         GameRoom *room = rooms.at(code);
         if (room->isRoomFull() || isPlayerInRoom(player))
             return logError("Room is full or player is already in room");
 
-        clients.insert(std::pair<Socket *, GameRoom *>(player, room));
+        clients.insert(std::pair<SocketID, GameRoom *>(player->getHashId(), room));
         room->addPlayer(player);
         return true;
     }
@@ -46,7 +49,7 @@ bool RoomSystem::addPlayer(Socket *player, std::string code)
     {
         GameRoom *room = new GameRoom(code, player);
         rooms.insert(std::pair<std::string, GameRoom *>(code, room));
-        clients.insert(std::pair<Socket *, GameRoom *>(player, room));
+        clients.insert(std::pair<SocketID, GameRoom *>(player->getHashId(), room));
         return true;
     }
 }
@@ -55,8 +58,8 @@ bool RoomSystem::removePlayer(Socket *player)
 {
     if (isPlayerInRoom(player))
     {
-        GameRoom *room = clients.at(player);
-        clients.erase(player);
+        GameRoom *room = clients.at(player->getHashId());
+        clients.erase(player->getHashId());
         rooms.erase(room->getGameCode());
         delete room;
         return true;
@@ -69,7 +72,7 @@ bool RoomSystem::sendMessageToOtherPlayer(Socket *playerWhoSends, NetworkMessage
 {
     if (isPlayerInRoom(playerWhoSends))
     {
-        GameRoom *room = clients.at(playerWhoSends);
+        GameRoom *room = clients.at(playerWhoSends->getHashId());
         Socket *otherPlayer = room->getOtherPlayer(playerWhoSends);
         if (otherPlayer != nullptr)
         {
@@ -87,4 +90,9 @@ bool RoomSystem::logError(std::string msg)
 {
     std::cout << msg << std::endl;
     return false;
+}
+
+uint32_t RoomSystem::getPlayerCount()
+{
+    return clients.size();
 }

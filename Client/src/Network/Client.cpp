@@ -17,11 +17,6 @@ void Client::send(NetworkMessage &msg)
     socket.send(msg, socket);
 }
 
-void Client::send(NetworkMessage &&msg)
-{
-    socket.send(msg, socket);
-}
-
 void Client::setUsername(const char *username)
 {
     clientName = username;

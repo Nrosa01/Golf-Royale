@@ -19,10 +19,13 @@ public:
     bool addPlayer(Socket *player, std::string code);
     bool removePlayer(Socket *player);
     bool sendMessageToOtherPlayer(Socket *playerWhoSends, NetworkMessage &msg);
+    uint32_t getPlayerCount();
 private:
     Socket *server;
     unordered_map<string, GameRoom *> rooms;
-    unordered_map<Socket *, GameRoom *> clients;
+    unordered_map<SocketID, GameRoom *> clients;
+    //std::unordered_map<uint32_t, Socket*> clients;
+
     
     bool logError(std::string msg);
 };

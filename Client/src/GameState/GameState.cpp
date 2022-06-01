@@ -52,12 +52,7 @@ void GameState::onStateExit() {}
 
 void GameState::receiveNetworkMessage(NetworkMessage& msg) {}
 
-void GameState::sendNetworkMessage(NetworkMessage &msg) 
-{
-    this->app->sendNetworkMessage(msg);
-}
-
-void GameState::sendNetworkMessage(NetworkMessage &&msg) 
+void GameState::sendNetworkMessage(NetworkMessage& msg) 
 {
     this->app->sendNetworkMessage(msg);
 }

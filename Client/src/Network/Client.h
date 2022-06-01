@@ -11,7 +11,6 @@ public:
 
     void logout();
     void send(NetworkMessage &msg);
-    void send(NetworkMessage &&msg);
     void setUsername(const char *username);
 
 private:

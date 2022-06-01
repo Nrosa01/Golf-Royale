@@ -40,11 +40,14 @@ std::string GameRoom::getGameCode()
     return gameCode;
 }
 
-Socket* GameRoom::getOtherPlayer(Socket *socket)
+Socket *GameRoom::getOtherPlayer(Socket *socket)
 {
-    if (socket == playerOne)
+    if (!isRoomFull())
+        return nullptr;
+
+    if (*socket == *playerOne)
         return playerTwo;
-    else if (socket == playerTwo)
+    else if (*socket == *playerTwo)
         return playerOne;
     else
         return nullptr;

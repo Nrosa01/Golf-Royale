@@ -18,9 +18,6 @@ public:
     void removeClient(Socket* clientSocket);
 private:
     Socket socket;
-
-    // Hash to socket, to find connected clients
-    std::unordered_map<uint32_t, Socket*> clients;
     RoomSystem clientManager;
 };
 

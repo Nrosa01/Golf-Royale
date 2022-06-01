@@ -58,7 +58,7 @@ MessageType GameServer::getType(char *data)
 
 bool GameServer::isConnected(Socket *socket)
 {
-    return clients.count(socket->getHashId()) > 0;
+    return clientManager.isPlayerInRoom(socket);
 }
 
 void GameServer::addClient(Socket *clientSocket, char *msg)
@@ -71,10 +71,8 @@ void GameServer::addClient(Socket *clientSocket, char *msg)
 
     LoginMessage login;
     login.from_bin(msg);
-    clients.insert(std::pair<uint32_t, Socket *>(clientSocket->getHashId(), clientSocket));
 
     std::cout << "Recv: Mensaje de tipo LOGIN " << login.loginCode << "\n";
-    std::cout << "Recv: Clientes conectados: " << clients.size() << "\n";
 
     bool clientJoined = clientManager.addPlayer(clientSocket, login.loginCode);
     if (clientJoined)
@@ -86,16 +84,16 @@ void GameServer::addClient(Socket *clientSocket, char *msg)
         else
             std::cout << "Player joined to Room, waiting for other player\n";
     }
+    std::cout << "Recv: Clientes conectados: " << clientManager.getPlayerCount() << "\n";
     std::cout << "---------- Log end -----------\n";
 }
 
 void GameServer::removeClient(Socket *clientSocket)
 {
     std::cout << "Recv: Mensaje de tipo LOGOUT\n";
-    std::cout << "Recv: Clientes conectados: " << clients.size() << "\n";
 
-    clients.erase(clientSocket->getHashId());
     clientManager.removePlayer(clientSocket);
+    std::cout << "Recv: Clientes conectados: " << clientManager.getPlayerCount() << "\n";
 
     std::cout << "---------- Log end -----------\n";
 }

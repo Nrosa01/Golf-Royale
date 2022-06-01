@@ -15,6 +15,7 @@
 // -----------------------------------------------------------------------------
 class Socket;
 class Serializable;
+using SocketID = uint32_t;
 
 /**
  *  Esta función compara dos Socks, realizando la comparación de las structuras
