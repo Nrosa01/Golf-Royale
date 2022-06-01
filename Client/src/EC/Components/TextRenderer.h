@@ -10,13 +10,15 @@ class Texture;
 class TextRenderer : public Component
 {
 public:
-    TextRenderer(const char *text, std::string font, int fontSize, SDL_Color textColor = {255,255,255}, Vector2D offset = Vector2D(0, 0));
+    TextRenderer(std::string text, std::string font, int fontSize, SDL_Color textColor = {255,255,255}, Vector2D offset = Vector2D(0, 0));
     virtual ~TextRenderer();
     virtual void init();
     virtual void render();
+    void setText(const char *text);
+    void setText(std::string text);
 
 private:
-    const char *text;
+    std::string text;
     std::string font;
     int fontSize;
     SDL_Color textColor;

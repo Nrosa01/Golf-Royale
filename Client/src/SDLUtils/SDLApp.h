@@ -46,6 +46,10 @@ public:
     // Network
     void sendNetworkMessage(NetworkMessage &msg);
     void sendNetworkMessage(NetworkMessage &&msg);
+    
+    // Game
+    void setPlayerName(std::string name);
+    std::string getPlayerName() const;
 
 private:
     SDL_DisplayMode getDisplayMOde() const;
@@ -62,6 +66,7 @@ private:
     InputSystem *input;
     bool exitRequested;
     Client* client;
+    std::string playerName;
 };
 
 #endif

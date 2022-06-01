@@ -11,6 +11,8 @@ Transitioner::Transitioner(float duration) : Component(typeid(Transitioner).name
     timer = 0.0f;
     isFinished = false;
     isScaling = true;
+    adjusted = false;
+    disabled = false;
 }
 
 Transitioner::~Transitioner() {}
@@ -23,7 +25,16 @@ void Transitioner::init()
 
 void Transitioner::lateUpdate(float deltaTime)
 {
-    if (isFinished)
+    if (!adjusted)
+    {
+        adjusted = true;
+        if (isScaling)
+            transform->GetScale() = initialScale;
+        else
+            transform->GetScale() = Vector2D(0, 0);
+    }
+
+    if (isFinished || disabled)
         return;
 
     timer += deltaTime;
@@ -32,6 +43,7 @@ void Transitioner::lateUpdate(float deltaTime)
     {
         timer = duration;
         isFinished = true;
+        adjusted = true;
     }
 
     float lerpTime = timer / duration;
@@ -55,4 +67,22 @@ void Transitioner::startFade()
     isScaling = false;
     timer = 0.0f;
     isFinished = false;
+}
+
+void Transitioner::stop()
+{
+    if (transform != nullptr)
+        transform->GetScale() = initialScale;
+    isFinished = true;
+    adjusted = false;
+}
+
+void Transitioner::disable()
+{
+    disabled = true;
+}
+
+void Transitioner::enable()
+{
+    disabled = false;
 }

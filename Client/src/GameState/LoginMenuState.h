@@ -6,8 +6,16 @@
 class LoginMenuState : public GameState
 {
 public:
-    LoginMenuState(SDLApp* app);
+    LoginMenuState(SDLApp *app);
+    virtual void onStateEnter();
     virtual ~LoginMenuState();
+
+    Entity *inputField;
+    Entity *gameCodeInputField;
+    Entity* errorLabel;
+private:
+    std::function<void()>
+    loginCallback();
 };
 
 #endif

@@ -400,3 +400,13 @@ void SDLApp::sendNetworkMessage(NetworkMessage &&message)
 {
     this->client->send(message);
 }
+
+void SDLApp::setPlayerName(std::string name)
+{
+    this->playerName = name;
+}
+
+std::string SDLApp::getPlayerName() const
+{
+    return this->playerName;
+}

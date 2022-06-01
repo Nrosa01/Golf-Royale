@@ -15,6 +15,9 @@ public:
     virtual void lateUpdate(float deltaTime);
     void startScale();
     void startFade();
+    void stop();
+    void disable();
+    void enable();
 
 private:
     Transform *transform;
@@ -22,7 +25,9 @@ private:
     float timer;
     Vector2D initialScale;
     bool isFinished;
+    bool adjusted;
     bool isScaling;
+    bool disabled;
 };
 
 #endif

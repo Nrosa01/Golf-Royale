@@ -20,16 +20,16 @@ LobbyState::LobbyState(SDLApp *app) : GameState(app)
     Entity* lobbyTittle = createEntity(Vector2D(width / 2, 75), Vector2D(1, 1), "button");
     lobbyTittle->AddComponent(new TextRenderer("Lobby", "toonFont", 72));
     
-    Entity* inputLabel = createEntity(Vector2D(width / 2 - 125, height/ 2 - 100), Vector2D(0.4, 0.5), "button");
-    inputLabel->AddComponent(new TextRenderer("Ingrese su nombre:", "toonFont", 24));
+    nameLabel = createEntity(Vector2D(width / 2 - 125, height/ 2 - 100), Vector2D(0.4, 0.5), "button");
+    nameLabel->AddComponent(new TextRenderer("Empty:", "toonFont", 24));
 
-    Entity* gameCodeInputLabel = createEntity(Vector2D(width / 2 - 125, height/ 2), Vector2D(0.4, 0.5), "button");
-    gameCodeInputLabel->AddComponent(new TextRenderer("Codigo del juego:", "toonFont", 24));
+    gameCodeLabel = createEntity(Vector2D(width / 2 - 125, height/ 2), Vector2D(0.4, 0.5), "button");
+    gameCodeLabel->AddComponent(new TextRenderer("Code:", "toonFont", 24));
 
     Entity *exitButton = createEntity(Vector2D(width / 2, height/ 2 + 200), Vector2D(0.5f, 1));
     exitButton->AddComponent(new Button(app->getTexture("button"), "Menu", "toonFont", 72, [this]()
     {
-        startExitTransitionTimer();
+        startExitTransitionTimer(popState);
     }));
 
     Entity *startButton = createEntity(Vector2D(width / 2, height/ 2 + 100), Vector2D(0.5f, 1));
@@ -38,10 +38,29 @@ LobbyState::LobbyState(SDLApp *app) : GameState(app)
 
 
     addTransitioner(exitButton);
-    addTransitioner(inputLabel);
-    addTransitioner(gameCodeInputLabel);
+    addTransitioner(nameLabel);
+    addTransitioner(gameCodeLabel);
     addTransitioner(startButton);
     addTransitioner(lobbyTittle);
 }
 
 LobbyState::~LobbyState() {}
+
+void LobbyState::setGameCode(std::string gameCode)
+{
+    this->gameCode = gameCode;
+}
+
+std::string LobbyState::getGameCode()
+{
+    return gameCode;
+}
+
+void LobbyState::onStateEnter()
+{
+    GameState::onStateEnter();
+    this->name = this->app->getPlayerName();
+
+    this->nameLabel->GetComponent<TextRenderer>()->setText(this->name);
+    this->gameCodeLabel->GetComponent<TextRenderer>()->setText(this->gameCode);
+}

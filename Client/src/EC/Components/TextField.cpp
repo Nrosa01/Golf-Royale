@@ -124,3 +124,18 @@ bool TextField::isMouseOver()
     else
         return false;
 }
+
+uint TextField::getMaxLength()
+{
+    return maxLength;
+}
+
+std::string TextField::getText()
+{
+    return text;
+}
+
+void TextField::setText(std::string text)
+{
+    this->text = text;
+}

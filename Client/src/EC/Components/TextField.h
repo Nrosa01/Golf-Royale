@@ -14,8 +14,11 @@ public:
     virtual void init();
     virtual void update(float deltaTime);
     virtual void render();
+    std::string getText();
+    void setText(std::string text);
     bool isPressed();
     bool isMouseOver();
+    uint getMaxLength();
 private:
     Texture *texture;
     std::string font;
