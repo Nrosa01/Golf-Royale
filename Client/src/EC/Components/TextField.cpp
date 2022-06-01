@@ -12,7 +12,7 @@ TextField::TextField(Texture *buttonImg, std::string font, int fontSize, int max
     selected = false;
 }
 
-TextField::~TextField() 
+TextField::~TextField()
 {
     delete textLine;
 }
@@ -28,7 +28,6 @@ void TextField::init()
 
     // Clone texture for text line
     this->textLine = textLine->getClone();
-    
 }
 
 void TextField::update(float deltaTime)
@@ -43,7 +42,10 @@ void TextField::update(float deltaTime)
         if (Input()->keyWasPressed(SDLK_BACKSPACE))
         {
             if (text.length() > 0)
+            {
                 text.pop_back();
+                this->playSound("keyBack");
+            }
         }
         else
         {
@@ -51,7 +53,10 @@ void TextField::update(float deltaTime)
             if (c >= 'a' && c <= 'z')
             {
                 if (text.length() < maxLength)
+                {
                     text += c;
+                    this->playSound("key");
+                }
             }
         }
     }
