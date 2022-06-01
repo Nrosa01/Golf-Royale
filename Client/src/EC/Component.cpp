@@ -19,3 +19,7 @@ void Component::setOwner(Entity *owner) { ent = owner; }
 void Component::playSound(std::string soundName) { ent->GetGame()->playAudio(soundName); }
 
 std::string Component::getName() { return cmpName; }
+
+void Component::sendNetworkMessage(NetworkMessage &msg) { ent->GetGame()->sendNetworkMessage(msg); }
+
+void Component::sendNetworkMessage(NetworkMessage &&msg) { ent->GetGame()->sendNetworkMessage(msg); }

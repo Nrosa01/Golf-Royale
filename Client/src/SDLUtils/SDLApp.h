@@ -10,6 +10,8 @@
 #include <SDL2/SDL_mixer.h>
 
 class Texture;
+class Client;
+class NetworkMessage;
 
 class SDLApp
 #define MAX_FONT_SIZE 240
@@ -41,6 +43,10 @@ public:
 
     SDL_Renderer *getRenderer() const { return renderer; };
 
+    // Network
+    void sendNetworkMessage(NetworkMessage &msg);
+    void sendNetworkMessage(NetworkMessage &&msg);
+
 private:
     SDL_DisplayMode getDisplayMOde() const;
 
@@ -55,6 +61,7 @@ private:
     int height;
     InputSystem *input;
     bool exitRequested;
+    Client* client;
 };
 
 #endif

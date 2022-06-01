@@ -8,7 +8,6 @@ class MainMenuState : public GameState
 {
 public:
     MainMenuState(SDLApp *app);
-    void onStateExit();
     virtual ~MainMenuState(){};
 };
 

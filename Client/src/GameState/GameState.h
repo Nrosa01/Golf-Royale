@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include "../MathUtils/Vector2D.h"
+#include "Callbacks.h"
 using namespace std;
 
 class SDLApp;
@@ -24,17 +25,19 @@ protected:
 public:
 	virtual void update(float deltaTime);
 	virtual void render();
-	virtual void onStateEnter();
-	virtual void onStateExit();
+	virtual void onStateEnter(); // Called when state is pushed or when reached after popped other
+	virtual void onStateExit(); // Called when state is popped from stack
 	virtual ~GameState();
-	void startExitTransitionTimer();
+	void startExitTransitionTimer(GameStateCallback callback = nullptr, void* args = nullptr);
 	void addTransitioner(Entity* e);
 	Entity* createEntity(Vector2D pos, Vector2D scale = Vector2D(1,1), string textureName = "");
-
+	SDLApp* getApp();
 private:
 	vector<Transitioner *> transitioners;
+	GameStateCallback endExitTransitionFinishCallback;
 	bool startTransition;
 	float timer;
+	void* args;
 };
 
 #endif

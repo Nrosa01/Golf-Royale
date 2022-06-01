@@ -4,6 +4,7 @@
 #include <string>
 #include "../SDLUtils/InputSytem.h"
 #include <typeinfo>
+#include "../Network/NetworkMessage.h"
 
 class Entity;
 
@@ -18,9 +19,11 @@ public:
     virtual void render();
     std::string getName();
     void setOwner(Entity *owner);
-    void playSound(std::string soundName);
 
 protected:
+    void playSound(std::string soundName);
+    void sendNetworkMessage(NetworkMessage &msg);
+    void sendNetworkMessage(NetworkMessage &&msg);
     Entity *ent;
 
 private:

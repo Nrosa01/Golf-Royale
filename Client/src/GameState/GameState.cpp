@@ -29,7 +29,8 @@ void GameState::update(float deltaTime)
         {
             timer = 0;
             startTransition = false;
-            onStateExit();
+            if(endExitTransitionFinishCallback != nullptr)
+                endExitTransitionFinishCallback(this, this->args);
         }
     }
 }
@@ -48,9 +49,12 @@ void GameState::onStateEnter()
 
 void GameState::onStateExit() {}
 
-void GameState::startExitTransitionTimer()
+void GameState::startExitTransitionTimer(GameStateCallback callback, void* args)
 {
     startTransition = true;
+    this->endExitTransitionFinishCallback = callback;
+    this->args = args;
+
 
     for (auto transitioner : transitioners)
         transitioner->startFade();
@@ -72,4 +76,9 @@ Entity* GameState::createEntity(Vector2D pos, Vector2D scale, string textureName
     entities.push_back(e);
 
     return e;
+}
+
+SDLApp* GameState::getApp()
+{
+    return app;
 }

@@ -3,6 +3,8 @@
 #include <iostream>
 #include <dirent.h>
 #include "Texture.h"
+#include "../Network/Client.h"
+#include "../Network/NetworkMessage.h"
 
 SDLApp::SDLApp(int width, int height, const char *title)
 {
@@ -65,12 +67,17 @@ SDLApp::SDLApp(int width, int height, const char *title)
     input = new InputSystem();
     exitRequested = false;
     newState = nullptr;
+
+    client = new Client("0.0.0.0", "13000");
 }
 
 SDLApp::~SDLApp()
 {
+    client->logout();
+
     delete gameStateMachine;
     delete input;
+    delete client;
 
     // Free resources and close SDL
     for (auto &texture : textures)
@@ -85,8 +92,8 @@ SDLApp::~SDLApp()
     Mix_CloseAudio();
     TTF_Quit();
 
-    SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    SDL_DestroyRenderer(renderer);
     SDL_Quit();
 }
 
@@ -98,8 +105,6 @@ void SDLApp::pushState(GameState *stateToPush)
 void SDLApp::popState()
 {
     gameStateMachine->popState();
-    if (gameStateMachine->currentState() != nullptr)
-        gameStateMachine->currentState()->onStateEnter();
 }
 
 void SDLApp::update(float deltaTime)
@@ -113,7 +118,6 @@ void SDLApp::checkStateChanged()
     if (newState != nullptr)
     {
         gameStateMachine->pushState(newState);
-        newState->onStateEnter();
         newState = nullptr;
     }
 }
@@ -385,4 +389,14 @@ void SDLApp::quit()
 bool SDLApp::isExitRequested() const
 {
     return this->exitRequested;
+}
+
+void SDLApp::sendNetworkMessage(NetworkMessage &message)
+{
+    this->client->send(message);
+}
+
+void SDLApp::sendNetworkMessage(NetworkMessage &&message)
+{
+    this->client->send(message);
 }

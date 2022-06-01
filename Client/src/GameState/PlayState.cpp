@@ -4,8 +4,6 @@
 #include "../EC/Components/Ball.h"
 #include "../SDLUtils/SDLApp.h"
 
-#include "../Network/Client.h"
-
 PlayState::PlayState(SDLApp *app) : GameState(app)
 {
     Entity *bg = new Entity(app->getWidth() / 2, app->getHeight() / 2, app);
@@ -21,11 +19,4 @@ PlayState::PlayState(SDLApp *app) : GameState(app)
     enemyBall->AddComponent(new Renderer(app->getTexture("ball")));
     enemyBall->AddComponent(new Ball(false));
     this->entities.push_back(enemyBall);
-
-    Client* client = new Client("0.0.0.0", "13000");
-    //client->login();
-    //client->logout();
-    client->test();
-    client->test();
-    delete client;
 }

@@ -2,7 +2,7 @@
 
 GameStateMachine::GameStateMachine(GameState *state)
 {
-    states.push(state);
+    pushState(state);
 }
 
 GameStateMachine::GameStateMachine() {}
@@ -30,13 +30,24 @@ void GameStateMachine::render()
 
 void GameStateMachine::pushState(GameState *stateToPush)
 {
+    if (!states.empty())
+        states.top()->onStateExit();
+
     states.push(stateToPush);
+    stateToPush->onStateEnter();
 }
 
 void GameStateMachine::changeState(GameState *stateToPush)
 {
-    popState();
+    if (!states.empty())
+    {
+        states.top()->onStateExit();
+        delete states.top();
+        states.pop();
+    }
+
     states.push(stateToPush);
+    stateToPush->onStateEnter();
 }
 
 void GameStateMachine::popState()
@@ -44,6 +55,10 @@ void GameStateMachine::popState()
     if (states.empty())
         return;
 
+    states.top()->onStateExit();
     delete states.top();
     states.pop();
+
+    if (!states.empty())
+        states.top()->onStateEnter();
 }

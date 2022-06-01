@@ -5,13 +5,6 @@
 Client::Client(const char *address, const char *port) : socket(address, port)
 {}
 
-void Client::login()
-{
-    NetworkMessage msg;
-    msg.type = MessageType::LOGIN;
-    socket.send(msg, socket);
-}
-
 void Client::logout()
 {
     NetworkMessage msg;
@@ -19,10 +12,17 @@ void Client::logout()
     socket.send(msg, socket);
 }
 
-void Client::test()
+void Client::send(NetworkMessage &msg)
 {
-    LoginMessage msg;
-    msg.type = MessageType::LOGIN;
-    msg.loginCode = "riol";
     socket.send(msg, socket);
+}
+
+void Client::send(NetworkMessage &&msg)
+{
+    socket.send(msg, socket);
+}
+
+void Client::setUsername(const char *username)
+{
+    clientName = username;
 }
