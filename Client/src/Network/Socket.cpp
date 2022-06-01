@@ -35,7 +35,7 @@ Socket::Socket(const char *address, const char *port) : sd(-1)
 
 Socket::~Socket()
 {
-    close(sd);
+    ::close(sd);
 }
 
 char* Socket::recv(Socket *&sock)
@@ -93,3 +93,9 @@ std::ostream &operator<<(std::ostream &os, const Socket &s)
 
     return os;
 };
+
+void Socket::close()
+{
+    ::shutdown(sd, SHUT_RDWR);
+    ::close(sd);
+}

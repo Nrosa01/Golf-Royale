@@ -11,6 +11,7 @@ Client::Client(const char *address, const char *port) : socket(address, port), c
 Client::~Client()
 {
     terminated = true;
+    socket.close();
     net_thread.join();
 
     while (!messages.empty())
@@ -46,7 +47,7 @@ void Client::net_thread_f()
 
         msg = socket.recv();
 
-        if (msg == nullptr)
+        if (msg == nullptr && !terminated)
         {
             std::cerr << "Recv Client: Error al recibir mensaje\n";
             continue;
