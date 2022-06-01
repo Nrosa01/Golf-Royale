@@ -73,8 +73,6 @@ SDLApp::SDLApp(int width, int height, const char *title)
 
 SDLApp::~SDLApp()
 {
-    client->logout();
-
     delete gameStateMachine;
     delete input;
     delete client;

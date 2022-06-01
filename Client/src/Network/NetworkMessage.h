@@ -7,16 +7,18 @@
 
 enum MessageType : uint8_t
 {
+    ERROR_MESSAGE,
     LOGIN,
     LOGOUT,
     LEVEL_END,
-    BALL_HIT
+    BALL_HIT,
 };
 
 struct NetworkMessage : public Serializable
 {
 public:
     NetworkMessage(MessageType type) : type(type) {}
+    NetworkMessage() : type(ERROR_MESSAGE) {}
     uint8_t type;
 
     inline void to_bin()
@@ -44,6 +46,7 @@ struct LoginMessage : public NetworkMessage
     std::string loginCode;
 
     LoginMessage(std::string loginCode) : NetworkMessage(LOGIN), loginCode(loginCode) {}
+    LoginMessage() : NetworkMessage(LOGIN) {}
 
     inline void to_bin()
     {

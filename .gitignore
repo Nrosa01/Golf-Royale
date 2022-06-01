@@ -6,3 +6,5 @@ Client/bin/
 Server/bin/
 
 .vscode/
+NetworkMessage.h
+updateNet.bash
