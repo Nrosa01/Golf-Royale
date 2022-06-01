@@ -12,7 +12,19 @@ enum MessageType : uint8_t
     LOGOUT,
     LEVEL_END,
     BALL_HIT,
+    PLAYER_DISCONNECTED
 };
+
+inline MessageType getType(char *data)
+{
+    if (data == nullptr || strlen(data) < sizeof(uint8_t))
+        return ERROR_MESSAGE;
+
+    uint8_t type;
+    memcpy(&type, data, sizeof(uint8_t));
+
+    return (MessageType)type;
+}
 
 struct NetworkMessage : public Serializable
 {

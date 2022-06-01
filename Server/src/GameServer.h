@@ -12,7 +12,6 @@ public:
     GameServer(const char *address, const char *port);
 
     void run();
-    MessageType getType(char* data);
     bool isConnected(Socket* socket);
     void addClient(Socket* clientSocket, char *msg);
     void removeClient(Socket* clientSocket);

@@ -61,6 +61,12 @@ void LobbyState::onStateEnter()
     this->sendNetworkMessage(login);
 }
 
+void LobbyState::receiveNetworkMessage(NetworkMessage &msg)
+{
+    if (msg.type == PLAYER_DISCONNECTED)
+        startExitTransitionTimer(popState);
+}
+
 void LobbyState::onStateExit()
 {
     GameState::onStateExit();

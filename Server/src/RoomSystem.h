@@ -24,8 +24,6 @@ private:
     Socket *server;
     unordered_map<string, GameRoom *> rooms;
     unordered_map<SocketID, GameRoom *> clients;
-    //std::unordered_map<uint32_t, Socket*> clients;
-
     
     bool logError(std::string msg);
 };

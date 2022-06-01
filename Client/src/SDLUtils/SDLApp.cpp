@@ -107,6 +107,7 @@ void SDLApp::popState()
 
 void SDLApp::update(float deltaTime)
 {
+    checkPendingNetworkMessage();
     checkStateChanged();
     gameStateMachine->update(deltaTime);
 }
@@ -397,6 +398,16 @@ void SDLApp::sendNetworkMessage(NetworkMessage &message)
 void SDLApp::rcvNetMessage(NetworkMessage &message)
 {
     this->gameStateMachine->receiveNetworkMessage(message);
+}
+
+void SDLApp::checkPendingNetworkMessage()
+{
+    NetworkMessage* message = client->consumeMessage();
+    if (message != nullptr)
+    {
+        this->rcvNetMessage(*message);
+        delete message;
+    }
 }
 
 void SDLApp::setPlayerName(std::string name)

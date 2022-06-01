@@ -61,6 +61,15 @@ bool RoomSystem::removePlayer(Socket *player)
         GameRoom *room = clients.at(player->getHashId());
         clients.erase(player->getHashId());
         rooms.erase(room->getGameCode());
+
+        Socket* other = room->getOtherPlayer(player);
+        if(other != nullptr)
+        {
+            NetworkMessage msg;
+            msg.type = PLAYER_DISCONNECTED;
+            server->send(msg, *other);
+        }
+
         delete room;
         return true;
     }

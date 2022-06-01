@@ -46,6 +46,7 @@ public:
     // Network
     void sendNetworkMessage(NetworkMessage &msg);
     void rcvNetMessage(NetworkMessage &msg);
+    void checkPendingNetworkMessage();
     
     // Game
     void setPlayerName(std::string name);

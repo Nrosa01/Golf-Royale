@@ -45,17 +45,6 @@ void GameServer::run()
     }
 }
 
-MessageType GameServer::getType(char *data)
-{
-    if (data == nullptr || strlen(data) < sizeof(uint8_t))
-        return ERROR_MESSAGE;
-
-    uint8_t type;
-    memcpy(&type, data, sizeof(uint8_t));
-
-    return (MessageType)type;
-}
-
 bool GameServer::isConnected(Socket *socket)
 {
     return clientManager.isPlayerInRoom(socket);
