@@ -16,6 +16,7 @@ enum MessageType : uint8_t
 struct NetworkMessage : public Serializable
 {
 public:
+    NetworkMessage(MessageType type) : type(type) {}
     uint8_t type;
 
     inline void to_bin()
@@ -41,6 +42,8 @@ struct LoginMessage : public NetworkMessage
 {
     #define loginCodeMaxSize 5 * sizeof(char)
     std::string loginCode;
+
+    LoginMessage(std::string loginCode) : NetworkMessage(LOGIN), loginCode(loginCode) {}
 
     inline void to_bin()
     {

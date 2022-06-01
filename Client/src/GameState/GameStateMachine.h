@@ -3,6 +3,7 @@
 
 #include <stack>
 #include "GameState.h"
+
 using namespace std;
 
 class GameStateMachine
@@ -16,6 +17,7 @@ public:
 	GameState* currentState();
     void update(float deltaTime);
     void render();
+	void receiveNetworkMessage(NetworkMessage& msg);
 	void pushState(GameState* stateToPush);
 	void changeState(GameState* stateToPush);
 	void popState();

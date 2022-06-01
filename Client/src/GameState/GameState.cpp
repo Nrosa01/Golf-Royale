@@ -4,6 +4,7 @@
 #include "../EC/Components/Transitioner.h"
 #include "../EC/Components/Transform.h"
 #include "../EC/Components/Renderer.h"
+#include "../Network/NetworkMessage.h"
 
 GameState::GameState(SDLApp *app) : app(app), startTransition(false), timer(0) {}
 
@@ -48,6 +49,18 @@ void GameState::onStateEnter()
 }
 
 void GameState::onStateExit() {}
+
+void GameState::receiveNetworkMessage(NetworkMessage& msg) {}
+
+void GameState::sendNetworkMessage(NetworkMessage &msg) 
+{
+    this->app->sendNetworkMessage(msg);
+}
+
+void GameState::sendNetworkMessage(NetworkMessage &&msg) 
+{
+    this->app->sendNetworkMessage(msg);
+}
 
 void GameState::startExitTransitionTimer(GameStateCallback callback, void* args)
 {

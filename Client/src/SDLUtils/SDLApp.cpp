@@ -401,6 +401,11 @@ void SDLApp::sendNetworkMessage(NetworkMessage &&message)
     this->client->send(message);
 }
 
+void SDLApp::rcvNetMessage(NetworkMessage &message)
+{
+    this->gameStateMachine->receiveNetworkMessage(message);
+}
+
 void SDLApp::setPlayerName(std::string name)
 {
     this->playerName = name;

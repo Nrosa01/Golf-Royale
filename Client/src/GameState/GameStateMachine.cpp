@@ -28,6 +28,11 @@ void GameStateMachine::render()
     states.top()->render();
 }
 
+void GameStateMachine::receiveNetworkMessage(NetworkMessage &msg)
+{
+    states.top()->receiveNetworkMessage(msg);
+}
+
 void GameStateMachine::pushState(GameState *stateToPush)
 {
     if (!states.empty())

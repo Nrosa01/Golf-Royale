@@ -10,6 +10,7 @@ public:
     LobbyState(SDLApp *app);
     virtual ~LobbyState();
     virtual void onStateEnter();
+    virtual void onStateExit();
     void setGameCode(std::string gameCode);
     std::string getGameCode();
 
