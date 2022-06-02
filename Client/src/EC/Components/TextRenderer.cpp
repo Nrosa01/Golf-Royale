@@ -5,7 +5,7 @@
 #include "../Entity.h"
 
 TextRenderer::TextRenderer(std::string text, std::string font, int fontSize, SDL_Color textColor, Vector2D offset) : Component(typeid(TextRenderer).name()), text(text),
-                                                                                                                                 font(font), fontSize(fontSize), textColor(textColor), offset(offset) {}
+                                                                                                                     font(font), fontSize(fontSize), textColor(textColor), offset(offset) {}
 TextRenderer::~TextRenderer() {}
 
 void TextRenderer::init()
@@ -16,6 +16,9 @@ void TextRenderer::init()
 
 void TextRenderer::render()
 {
+    if (text.empty())
+        return;
+
     Transform *transform = this->ent->GetTransform();
     float scaleRatio = transform->GetScale().Magnitude() / initialScale.Magnitude();
 

@@ -34,10 +34,14 @@ LobbyState::LobbyState(SDLApp *app) : GameState(app)
                                             this->sendNetworkMessage(logout);
                                             startExitTransitionTimer(popState); }));
 
+    Entity* waitForPlayerLabel = createEntity(Vector2D(width / 2, height / 2 + 50), Vector2D(1.35f, 1), "button");
+    waitForPlayerLabel->AddComponent(new TextRenderer("Esperando jugadores...", "toonFont", 72));
+
     addTransitioner(exitButton);
     addTransitioner(nameLabel);
     addTransitioner(gameCodeLabel);
     addTransitioner(lobbyTittle);
+    addTransitioner(waitForPlayerLabel);
 }
 
 LobbyState::~LobbyState() {}
@@ -68,14 +72,10 @@ void LobbyState::onStateEnter()
 void LobbyState::receiveNetworkMessage(NetworkMessage &msg)
 {
     if (msg.type == PLAYER_DISCONNECTED)
-    {
-        std::cout << "Player disconnected" << std::endl;
         startExitTransitionTimer(popState);
-    }
     else if (msg.type == PLAYER_JOINED)
     {
         PlayerJoinedMessage *message = &static_cast<PlayerJoinedMessage &>(msg);
-        std::cout << "Player joined: " << message->playerNick << std::endl;
-        startExitTransitionTimer(changeState, new PlayState(app));
+        startExitTransitionTimer(changeState, new PlayState(app, message->playerNick));
     }
 }

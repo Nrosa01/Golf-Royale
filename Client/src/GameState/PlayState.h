@@ -6,8 +6,11 @@
 class PlayState : public GameState
 {
 public:
-    PlayState(SDLApp* app);
+    PlayState(SDLApp *app, std::string enemyNick = "Test");
     virtual ~PlayState(){};
+    virtual void receiveNetworkMessage(NetworkMessage& msg);
+    virtual void onStateExit();
+private:
 };
 
 #endif
