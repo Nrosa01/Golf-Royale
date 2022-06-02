@@ -30,6 +30,22 @@ bool RoomSystem::isRoomFull(std::string code)
         return rooms.at(code)->isRoomFull();
 }
 
+std::string RoomSystem::getGameCode(Socket *player)
+{
+    if (!isPlayerInRoom(player))
+        return "Player is not in a room\n";
+    else
+        return clients.at(player->getHashId())->getGameCode();
+}
+
+std::string RoomSystem::getClientName(Socket *player)
+{
+    if (!isPlayerInRoom(player))
+        return "Player is not in a room\n";
+    else
+        return clients.at(player->getHashId())->getClientName(player);
+}
+
 bool RoomSystem::addPlayer(Socket *player, std::string code, std::string playerNick)
 {
     if (code.empty())
@@ -49,6 +65,8 @@ bool RoomSystem::addPlayer(Socket *player, std::string code, std::string playerN
         GameRoom *room = new GameRoom(server, code, player, playerNick);
         rooms.insert(std::pair<std::string, GameRoom *>(code, room));
         clients.insert(std::pair<SocketID, GameRoom *>(player->getHashId(), room));
+        NetworkMessage youAreMaster(YOU_ARE_MASTER);
+        server->send(youAreMaster, *player);
     }
 
     return true;

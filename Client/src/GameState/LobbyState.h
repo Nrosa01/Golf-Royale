@@ -19,6 +19,7 @@ public:
 private:
     std::string gameCode;
     std::string name;
+    bool isMaster;
 };
 
 #endif

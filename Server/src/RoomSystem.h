@@ -14,6 +14,8 @@ public:
     bool roomExists(std::string code);
     bool isPlayerInRoom(Socket *player);
     bool isRoomFull(std::string code);
+    std::string getGameCode(Socket *player);
+    std::string getClientName(Socket *player);
 
     // Estas operaciones pueden fallar, por eso son bool
     bool addPlayer(Socket *player, std::string code, std::string playerNick);

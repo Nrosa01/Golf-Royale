@@ -11,7 +11,7 @@
 #include "PlayState.h"
 #include <iostream>
 
-LobbyState::LobbyState(SDLApp *app) : GameState(app)
+LobbyState::LobbyState(SDLApp *app) : GameState(app), isMaster(false)
 {
     int width = app->getWidth();
     int height = app->getHeight();
@@ -34,7 +34,7 @@ LobbyState::LobbyState(SDLApp *app) : GameState(app)
                                             this->sendNetworkMessage(logout);
                                             startExitTransitionTimer(popState); }));
 
-    Entity* waitForPlayerLabel = createEntity(Vector2D(width / 2, height / 2 + 50), Vector2D(1.35f, 1), "button");
+    Entity *waitForPlayerLabel = createEntity(Vector2D(width / 2, height / 2 + 50), Vector2D(1.35f, 1), "button");
     waitForPlayerLabel->AddComponent(new TextRenderer("Esperando jugadores...", "toonFont", 72));
 
     addTransitioner(exitButton);
@@ -74,9 +74,14 @@ void LobbyState::receiveNetworkMessage(NetworkMessage &msg)
 
     if (msg.type == PLAYER_DISCONNECTED)
         startExitTransitionTimer(popState);
+    else if (msg.type == YOU_ARE_MASTER)
+    {
+        std::cout << "Master\n";
+        isMaster = true;
+    }
     else if (msg.type == PLAYER_JOINED)
     {
         PlayerJoinedMessage *message = &static_cast<PlayerJoinedMessage &>(msg);
-        startExitTransitionTimer(changeState, new PlayState(app, message->playerNick));
+        startExitTransitionTimer(changeState, new PlayState(app, message->playerNick, isMaster));
     }
 }

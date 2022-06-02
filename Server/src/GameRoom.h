@@ -16,6 +16,7 @@ public:
     void sendBroadcast(NetworkMessage &msg);
     void sendToOtherPlayer(Socket* player, NetworkMessage &msg);
     std::string getGameCode();
+    std::string getClientName(Socket *socket);
     Socket* getOtherPlayer(Socket *socket);
 
 private:

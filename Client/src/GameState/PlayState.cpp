@@ -5,16 +5,16 @@
 #include "../EC/Components/TextRenderer.h"
 #include "../SDLUtils/SDLApp.h"
 
-PlayState::PlayState(SDLApp *app, std::string enemyNick) : GameState(app)
+PlayState::PlayState(SDLApp *app, std::string enemyNick, bool isMaster) : GameState(app)
 {
     createEntity(Vector2D(app->getWidth() / 2, app->getHeight() / 2), Vector2D(1, 1), "menuBg");
     Entity *fg = createEntity(Vector2D(app->getWidth() / 2, app->getHeight() / 2), Vector2D(1, 1), "GolfRoyaleBg");
 
     Entity *ball = createEntity(Vector2D(app->getWidth() / 4, app->getHeight() - (app->getHeight() / 15)), Vector2D(1, 1), "ball");
-    ball->AddComponent(new Ball(true));
+    ball->AddComponent(new Ball(true, isMaster));
 
     Entity *enemyBall = createEntity(Vector2D(app->getWidth() - (app->getWidth() / 4), app->getHeight() - (app->getHeight() / 15)), Vector2D(1, 1), "ball");
-    enemyBall->AddComponent(new Ball(false));
+    enemyBall->AddComponent(new Ball(false, !isMaster));
 
     // UI
     Entity *playerNick = createEntity(Vector2D(app->getWidth() / 2 - 50, 50), Vector2D(0.15f, 0.4f), "button");

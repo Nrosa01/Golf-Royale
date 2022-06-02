@@ -17,7 +17,7 @@ class Texture;
 class Ball : public Component
 {
 public:
-    Ball(bool main = true);
+    Ball(bool main, bool playerTurn);
     virtual ~Ball();
     virtual void init();
     virtual void update(float deltaTime);

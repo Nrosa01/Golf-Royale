@@ -64,6 +64,16 @@ std::string GameRoom::getGameCode()
     return gameCode;
 }
 
+std::string GameRoom::getClientName(Socket *socket)
+{
+    if (playerOne != nullptr && *socket == *playerOne)
+        return playerOneNick;
+    else if (playerTwo != nullptr && *socket == *playerTwo)
+        return playerTwoNick;
+    else
+        return "Client name not found";
+}
+
 Socket *GameRoom::getOtherPlayer(Socket *socket)
 {
     if (!isRoomFull())

@@ -13,6 +13,7 @@ enum MessageType : uint8_t
     LEVEL_END,
     BALL_HIT,
     TURN_END,
+    YOU_ARE_MASTER,
     PLAYER_JOINED,
     PLAYER_DISCONNECTED
 };

@@ -5,12 +5,13 @@
 #include "../../SDLUtils/SDLApp.h"
 #include <iostream>
 
-Ball::Ball(bool main) : Component(typeid(Ball).name())
+Ball::Ball(bool main, bool playerTurn) : Component(typeid(Ball).name())
 {
     state = BallState::IDLE;
     this->mainBall = main;
     friction = 0.9995f;
     mininumThreshold = 1.5f;
+    this->playerTurn = playerTurn;
 }
 
 Ball::~Ball() {}
@@ -59,6 +60,8 @@ void Ball::update(float deltaTime)
         velocity.y = 0.0f;
         state = BallState::IDLE;
 
+        if (!mainBall)
+            return;
         playerTurn = false;
         NetworkMessage msg(TURN_END);
         sendNetworkMessage(msg);
@@ -132,15 +135,15 @@ void Ball::setVelocity(Vector2D startPoint, Vector2D endPoint)
     velocity = dir;
 }
 
-void Ball::receiveNetworkMessage(NetworkMessage& msg)
+void Ball::receiveNetworkMessage(NetworkMessage &msg)
 {
-    if (msg.type == BALL_HIT)
+    if (msg.type == BALL_HIT && !mainBall)
     {
         BallHitMessage *hitMsg = &static_cast<BallHitMessage &>(msg);
         velocity.x = hitMsg->xForce;
         velocity.y = hitMsg->yForce;
         state = BallState::MOVING;
     }
-    else if(msg.type == TURN_END) //Esto significa que el otro jugador ha acabado su turno
+    else if (msg.type == TURN_END) // Esto significa que el otro jugador ha acabado su turno
         playerTurn = true;
 }
