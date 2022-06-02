@@ -24,26 +24,7 @@ void Ball::init()
 
 void Ball::update(float deltaTime)
 {
-    if (!this->mainBall)
-        return;
-
-    if (Input()->IsMouseButtonDown(0) && state == BallState::IDLE)
-    {
-        state = BallState::PRESSED;
-        startPressPoint = Input()->GetMousePosition();
-        // std::cout << "startPressPoint: " << startPressPoint.x << " " << startPressPoint.y << std::endl;
-    }
-
-    if (!Input()->IsMouseButtonDown(0) && state == BallState::PRESSED)
-    {
-        state = BallState::MOVING;
-        setVelocity(startPressPoint, Input()->GetMousePosition());
-
-        if (velocity.Magnitude() > mininumThreshold)
-            this->playSound("swing");
-        // std::cout << "endPressPoint: " << Input()->GetMousePosition().x << " " << Input()->GetMousePosition().y << std::endl;
-        // std::cout << "setVelocity: " << velocity.x << " " << velocity.y << std::endl;
-    }
+    handleMain();
 
     if (state != BallState::MOVING)
         return;
@@ -77,35 +58,41 @@ void Ball::update(float deltaTime)
         velocity.x = 0.0f;
         velocity.y = 0.0f;
         state = BallState::IDLE;
+
+        playerTurn = false;
+        NetworkMessage msg(TURN_END);
+        sendNetworkMessage(msg);
     }
 
     // handleBallScale();
 }
 
-void Ball::handleBallScale()
+void Ball::handleMain()
 {
-    // Set transform scale between 1 and 2 based on velocity
-    // Scale in x and y is relative to velocity in x and y
-    // Extra scale is between 0 and 1
-    // As this is squach and stretch, if extra scale in x is big, then it will be less in y
-    Vector2D &scale = transform->GetScale();
-    float ratioBetweenXAndY;
+    if (!this->mainBall || !playerTurn)
+        return;
 
-    // Take care with 0s
-    if (velocity.x == 0.0f)
-        ratioBetweenXAndY = 0.0f;
-    else
-        ratioBetweenXAndY = velocity.y / velocity.x;
+    if (Input()->IsMouseButtonDown(0) && state == BallState::IDLE)
+    {
+        state = BallState::PRESSED;
+        startPressPoint = Input()->GetMousePosition();
+        // std::cout << "startPressPoint: " << startPressPoint.x << " " << startPressPoint.y << std::endl;
+    }
 
-    float extraScaleX = (SDL_abs(velocity.x) / maxSpeed);
-    float extraScaleY = (SDL_abs(velocity.y) / maxSpeed);
-    scale.x = 1.0f * (1.0f - ratioBetweenXAndY) + extraScaleX;
-    scale.y = 1.0f * ratioBetweenXAndY + extraScaleY;
+    if (!Input()->IsMouseButtonDown(0) && state == BallState::PRESSED)
+    {
+        state = BallState::MOVING;
+        setVelocity(startPressPoint, Input()->GetMousePosition());
 
-    scale.x = SDL_max(scale.x, 0.5f);
-    scale.y = SDL_max(scale.y, 0.5f);
-    scale.x = SDL_min(scale.x, 1.5f);
-    scale.y = SDL_min(scale.y, 1.5f);
+        if (velocity.Magnitude() > mininumThreshold)
+        {
+            this->playSound("swing");
+            BallHitMessage hitMsg(velocity.x, velocity.y);
+            sendNetworkMessage(hitMsg);
+        }
+        // std::cout << "endPressPoint: " << Input()->GetMousePosition().x << " " << Input()->GetMousePosition().y << std::endl;
+        // std::cout << "setVelocity: " << velocity.x << " " << velocity.y << std::endl;
+    }
 }
 
 bool Ball::isOutOfBoundsX(float deltaTime)
@@ -143,4 +130,17 @@ void Ball::setVelocity(Vector2D startPoint, Vector2D endPoint)
     Vector2D dir = (endPoint - startPoint).Normalized();
     dir *= -distance;
     velocity = dir;
+}
+
+void Ball::receiveNetworkMessage(NetworkMessage& msg)
+{
+    if (msg.type == BALL_HIT)
+    {
+        BallHitMessage *hitMsg = &static_cast<BallHitMessage &>(msg);
+        velocity.x = hitMsg->xForce;
+        velocity.y = hitMsg->yForce;
+        state = BallState::MOVING;
+    }
+    else if(msg.type == TURN_END) //Esto significa que el otro jugador ha acabado su turno
+        playerTurn = true;
 }

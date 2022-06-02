@@ -10,6 +10,7 @@
 class Transform;
 class Component;
 class SDLApp;
+class NetworkMessage;
 
 class Entity
 {
@@ -26,6 +27,7 @@ public:
     void update(float deltaTime);
     void lateUpdate(float deltaTime);
     void render();
+	void receiveNetworkMessage(NetworkMessage& msg);
 
     Transform *GetTransform();
     void SetGame(SDLApp *app);

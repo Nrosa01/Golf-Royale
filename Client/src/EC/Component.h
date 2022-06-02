@@ -16,6 +16,7 @@ public:
     virtual void init();
     virtual void update(float deltaTime);
     virtual void lateUpdate(float deltaTime);
+	virtual void receiveNetworkMessage(NetworkMessage& msg);
     virtual void render();
     std::string getName();
     void setOwner(Entity *owner);
@@ -23,7 +24,6 @@ public:
 protected:
     void playSound(std::string soundName);
     void sendNetworkMessage(NetworkMessage &msg);
-    void sendNetworkMessage(NetworkMessage &&msg);
     Entity *ent;
 
 private:

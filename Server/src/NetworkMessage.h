@@ -12,6 +12,7 @@ enum MessageType : uint8_t
     LOGOUT,
     LEVEL_END,
     BALL_HIT,
+    TURN_END,
     PLAYER_JOINED,
     PLAYER_DISCONNECTED
 };
@@ -140,6 +141,47 @@ public:
         char tempLoginCode[nickPlayerMaxSize];
         memcpy(&tempLoginCode, tmp, nickPlayerMaxSize);
         playerNick = tempLoginCode;
+
+        return 0;
+    };
+};
+
+struct BallHitMessage : public NetworkMessage
+{
+public:
+    float xForce, yForce;
+
+    BallHitMessage(float xForce, float yForce) : NetworkMessage(BALL_HIT), xForce(xForce), yForce(yForce) {}
+
+    inline void to_bin()
+    {
+        uint16_t dataSize = sizeof(type) + sizeof(xForce) + sizeof(yForce);
+        alloc_data(dataSize);
+        memset(_data, 0, dataSize);
+
+        char *tmp = _data;
+        memcpy(tmp, &type, sizeof(type));
+
+        tmp += sizeof(type);
+        memcpy(tmp, &xForce, sizeof(xForce));
+
+        tmp += sizeof(xForce);
+        memcpy(tmp, &yForce, sizeof(yForce));
+    };
+
+    inline int from_bin(char *data)
+    {
+        alloc_data(sizeof(type) + sizeof(xForce) + sizeof(yForce));
+        memcpy(static_cast<void *>(_data), data, _size);
+
+        char *tmp = _data;
+        memcpy(&type, tmp, sizeof(type));
+
+        tmp += sizeof(type);
+        memcpy(&xForce, tmp, sizeof(xForce));
+
+        tmp += sizeof(xForce);
+        memcpy(&yForce, tmp, sizeof(yForce));
 
         return 0;
     };

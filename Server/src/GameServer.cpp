@@ -33,8 +33,13 @@ void GameServer::run()
             std::cout << "Recv: Mensaje de tipo LEVEL_END\n";
             break;
         case MessageType::BALL_HIT:
+        {
+            BallHitMessage ballHitMessage(0, 0);
+            ballHitMessage.from_bin(msg);
+            clientManager.sendMessageToOtherPlayer(clientSocket, ballHitMessage);
             std::cout << "Recv: Mensaje de tipo BALL_HIT\n";
-            break;
+        }
+        break;
         case MessageType::ERROR_MESSAGE:
             std::cout << "Recv: Mensaje de tipo ERROR_MESSAGE\n";
             break;
@@ -42,6 +47,7 @@ void GameServer::run()
             std::cerr << "Recv: Mensaje de tipo desconocido\n";
             break;
         }
+        delete msg;
     }
 }
 

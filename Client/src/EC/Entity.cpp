@@ -3,6 +3,7 @@
 #include "Component.h"
 #include "Components/Transform.h"
 #include "../SDLUtils/SDLApp.h"
+#include "../Network/NetworkMessage.h"
 #include <string>
 
 Entity::Entity(int x, int y, SDLApp *app)
@@ -87,6 +88,12 @@ void Entity::render()
 {
     for (auto component : componentArray)
         component->render();
+}
+
+void Entity::receiveNetworkMessage(NetworkMessage &msg)
+{
+    for (auto component : componentArray)
+        component->receiveNetworkMessage(msg);
 }
 
 Transform *Entity::GetTransform()

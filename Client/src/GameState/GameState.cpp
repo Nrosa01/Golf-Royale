@@ -56,7 +56,11 @@ void GameState::onStateEnter()
 
 void GameState::onStateExit() {}
 
-void GameState::receiveNetworkMessage(NetworkMessage& msg) {}
+void GameState::receiveNetworkMessage(NetworkMessage& msg) 
+{
+    for (auto it = entities.begin(); it != entities.end(); ++it)
+        (*it)->receiveNetworkMessage(msg);
+}
 
 void GameState::sendNetworkMessage(NetworkMessage& msg) 
 {

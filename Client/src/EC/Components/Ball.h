@@ -21,11 +21,12 @@ public:
     virtual ~Ball();
     virtual void init();
     virtual void update(float deltaTime);
+    virtual void receiveNetworkMessage(NetworkMessage& msg);
     bool isOutOfBoundsX(float deltaTime);
     bool isOutOfBoundsY(float deltaTime);
     float getDistance(Vector2D startPoint, Vector2D endPoint);
     void setVelocity(Vector2D startPoint, Vector2D endPoint);
-    void handleBallScale();
+    void handleMain();
 
 private:
     Vector2D velocity;
@@ -38,6 +39,7 @@ private:
     BallState state;
     float mininumThreshold;
     float multiplicador;
+    bool playerTurn;
 };
 
 #endif

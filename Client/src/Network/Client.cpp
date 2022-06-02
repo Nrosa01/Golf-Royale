@@ -65,6 +65,18 @@ void Client::net_thread_f()
             messages_mutex.lock();
             messages.push(playerJoinedMessage);
             messages_mutex.unlock();
+            std::cout << "Recv Client: Mensaje de tipo PLAYER_JOINED\n";
+            break;
+        }
+        case BALL_HIT:
+        {
+            BallHitMessage *ballHitMessage = new BallHitMessage(0,0);
+            ballHitMessage->from_bin(msg);
+
+            messages_mutex.lock();
+            messages.push(ballHitMessage);
+            messages_mutex.unlock();
+            std::cout << "Recv Client: Mensaje de tipo BALL_HIT\n";
         }
         break;
         default:
@@ -74,6 +86,7 @@ void Client::net_thread_f()
             messages_mutex.lock();
             messages.push(netMsg);
             messages_mutex.unlock();
+            std::cout << "Recv Client: Mensaje de tipo desconocido\n";
         }
         break;
         }

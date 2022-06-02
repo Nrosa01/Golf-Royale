@@ -47,6 +47,7 @@ void PlayState::onStateExit()
 
 void PlayState::receiveNetworkMessage(NetworkMessage &msg)
 {
+    GameState::receiveNetworkMessage(msg);
     if (msg.type == PLAYER_DISCONNECTED)
         startExitTransitionTimer(popState);
 }

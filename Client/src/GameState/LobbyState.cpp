@@ -64,13 +64,14 @@ void LobbyState::onStateEnter()
     this->nameLabel->GetComponent<TextRenderer>()->setText(this->name);
     this->gameCodeLabel->GetComponent<TextRenderer>()->setText(this->gameCode);
 
-    // El codigo no se envia bien, averiguar por que
     LoginMessage login = LoginMessage(gameCode, name);
     this->sendNetworkMessage(login);
 }
 
 void LobbyState::receiveNetworkMessage(NetworkMessage &msg)
 {
+    GameState::receiveNetworkMessage(msg);
+
     if (msg.type == PLAYER_DISCONNECTED)
         startExitTransitionTimer(popState);
     else if (msg.type == PLAYER_JOINED)
