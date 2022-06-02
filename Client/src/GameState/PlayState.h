@@ -9,7 +9,7 @@ class Renderer;
 class PlayState : public GameState
 {
 public:
-    PlayState(SDLApp *app, std::string enemyNick = "Test", bool isMaster = true);
+    PlayState(SDLApp *app, std::string enemyNick = "", bool isMaster = true);
     virtual ~PlayState();
     virtual void init();
     virtual void update(float dt);

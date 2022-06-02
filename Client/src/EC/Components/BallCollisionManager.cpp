@@ -13,6 +13,7 @@ void BallCollisionManager::init()
     transform = this->ent->GetComponent<Transform>();
     renderer = this->ent->GetComponent<Renderer>();
     ball = this->ent->GetComponent<Ball>();
+    main = ball->isMainBall();
 
     if (transform == nullptr)
     {
@@ -34,46 +35,80 @@ void BallCollisionManager::update(float deltaTime)
 
     for (auto obstacle : *obstacles)
     {
-        if (checkSideCollision(renderer, obstacle, deltaTime))
-            ball->sideCollision();
-
-        if (checkTopDownCollision(renderer, obstacle, deltaTime))
-            ball->topDownCollision();
+        if (checkIntersection(renderer, obstacle))
+        {
+            Vector2D normal =  getCollisionNormal(renderer, obstacle, ball->getVelocity());
+            takeBodyOutOfCollision(renderer, obstacle, normal);
+            notifyCollision(normal);
+            //this->ball->setVelocity(Vector2D());
+        }
     }
 }
 
-bool BallCollisionManager::checkIntersection(Renderer *ball, Renderer *obstacle, float deltaTime)
+bool BallCollisionManager::checkIntersection(Renderer *ball, Renderer *obstacle)
 {
-    SDL_Rect ballRect = ball->getDestRectAt(this->ball->getNextPosition(deltaTime));
-    SDL_Rect obstacleRect = obstacle->getDestRect();
+    SDL_Rect ballRect = ball->getDestRectCentered();
+    SDL_Rect obstacleRect = obstacle->getDestRectCentered();
 
     return SDL_HasIntersection(&ballRect, &obstacleRect);
 }
 
-bool BallCollisionManager::checkSideCollision(Renderer *ball, Renderer *obstacle, float deltaTime)
+Vector2D BallCollisionManager::getCollisionNormal(Renderer *ball, Renderer *obstacle, Vector2D ballVelocity)
 {
-    SDL_Rect ballRect = ball->getDestRectAt(this->ball->getNextPosition(deltaTime));
+    SDL_Rect ballRect = ball->getDestRect();
     SDL_Rect obstacleRect = obstacle->getDestRect();
 
-    if (checkIntersection(ball, obstacle, deltaTime))
-    {
-        if (ballRect.x + ballRect.w >= obstacleRect.x && ballRect.x <= obstacleRect.x + obstacleRect.w)
-            return true;
-    }
+    Vector2D ballCenter = Vector2D(ballRect.x, ballRect.y);
+    Vector2D obstacleCenter = Vector2D(obstacleRect.x, obstacleRect.y);
 
-    return false;
+    // Normal can be c1,0 -1,0 or 0,1 or 0,-1
+    Vector2D collisionDir = obstacleCenter - ballCenter;
+
+    return makeUnitary(collisionDir);
 }
 
-bool BallCollisionManager::checkTopDownCollision(Renderer *ball, Renderer *obstacle, float deltaTime)
+Vector2D BallCollisionManager::makeUnitary(Vector2D vector)
 {
-    SDL_Rect ballRect = ball->getDestRectAt(this->ball->getNextPosition(deltaTime));
-    SDL_Rect obstacleRect = obstacle->getDestRect();
+    Vector2D unitary;
 
-    if (checkIntersection(ball, obstacle, deltaTime))
+    // We take the biggest value of the vector in absolute value and make it 1 in that direction
+    // The other value will be 0.
+
+    if (abs(vector.x) > abs(vector.y))
+        unitary.x = vector.x > 0 ? 1 : -1;
+    else
+        unitary.y = vector.y > 0 ? 1 : -1;
+
+    return unitary;
+}
+
+void BallCollisionManager::takeBodyOutOfCollision(Renderer *ball, Renderer *obstacle, Vector2D collisionNormal)
+{
+    SDL_Rect ballRect = ball->getDestRectCentered();
+    SDL_Rect obstacleRect = obstacle->getDestRectCentered();
+    Vector2D &ballPos = transform->GetPosition();
+
+    // We need to move the ball to the side of the obstacle.
+    if (abs(collisionNormal.x) > 0.1)
     {
-        if (ballRect.y + ballRect.h >= obstacleRect.y && ballRect.y <= obstacleRect.y + obstacleRect.h)
-            return true;
+       if(collisionNormal.x > 0)
+            ballPos.x = obstacleRect.x - ballRect.w / 2 - 1;
+        else
+            ballPos.x = obstacleRect.x + obstacleRect.w + ballRect.w / 2 + 1;
     }
+    else if (abs(collisionNormal.y) > 0.1)
+    {
+        if(collisionNormal.y > 0)
+            ballPos.y = obstacleRect.y - ballRect.h / 2 - 1;
+        else
+            ballPos.y = obstacleRect.y + obstacleRect.h + ballRect.h / 2 + 1;
+    }
+}
 
-    return false;
+void BallCollisionManager::notifyCollision(Vector2D collisionNormal)
+{
+    if (abs(collisionNormal.x) > 0.1)
+        this->ball->sideCollision();
+    else if (abs(collisionNormal.y) > 0.1)
+        this->ball->topDownCollision();
 }

@@ -11,7 +11,7 @@
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 #define TARGET_FRAME_RATE 60
-constexpr uint32_t FRAME_TIME_MS = (uint32_t)floor((1.0f / TARGET_FRAME_RATE) * 1000);
+constexpr uint32_t FRAME_TIME_MS = 1000 / TARGET_FRAME_RATE;
 
 int main()
 {

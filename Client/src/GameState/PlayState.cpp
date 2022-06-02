@@ -20,9 +20,9 @@ PlayState::PlayState(SDLApp *app, std::string enemyNick, bool isMaster) : GameSt
     ball->AddComponent(new Ball(true, isMaster));
     ball->AddComponent(new BallDirection(app->getTexture("arrow")));
 
-    Entity *enemyBall = createEntity(Vector2D(app->getWidth() - (app->getWidth() / 4), app->getHeight() - (app->getHeight() / 15)), Vector2D(1, 1), "ball");
-    enemyBall->AddComponent(new BallCollisionManager(&this->obstacles));
-    enemyBall->AddComponent(new Ball(false, !isMaster));
+    //Entity *enemyBall = createEntity(Vector2D(app->getWidth() - (app->getWidth() / 4), app->getHeight() - (app->getHeight() / 15)), Vector2D(1, 1), "ball");
+    // enemyBall->AddComponent(new BallCollisionManager(&this->obstacles));
+    // enemyBall->AddComponent(new Ball(false, !isMaster));
 
     // UI
     Entity *playerNick = addUI(Vector2D(app->getWidth() / 2 - 50, 50), Vector2D(0.15f, 0.4f), "button");
@@ -40,7 +40,7 @@ PlayState::PlayState(SDLApp *app, std::string enemyNick, bool isMaster) : GameSt
     // Transitioners
     addTransitioner(fg);
     addTransitioner(ball);
-    addTransitioner(enemyBall);
+    //addTransitioner(enemyBall);
     addTransitioner(playerNick);
     addTransitioner(enemyNickEnt);
     addTransitioner(playerScore);

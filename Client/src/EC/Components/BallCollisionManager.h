@@ -15,15 +15,17 @@ public:
     virtual ~BallCollisionManager();
     virtual void init();
     virtual void update(float deltaTime);
-    bool checkIntersection(Renderer *ball, Renderer *obstacle, float dt);
-    bool checkSideCollision(Renderer *ball, Renderer *obstacle, float dt);
-    bool checkTopDownCollision(Renderer *ball, Renderer *obstacle, float dt);
-
+    bool checkIntersection(Renderer *ball, Renderer *obstacle);
+    Vector2D getCollisionNormal(Renderer *ball, Renderer *obstacle, Vector2D ballVelocity);
+    void takeBodyOutOfCollision(Renderer *ball, Renderer *obstacle, Vector2D collisionNormal);
+    void notifyCollision(Vector2D collisionNormal);
+    Vector2D makeUnitary(Vector2D vector);
 private:
     Transform *transform;
     Renderer *renderer;
     Ball* ball;
     std::vector<Renderer *> *obstacles;
+    bool main;
 };
 
 #endif

@@ -34,14 +34,6 @@ void Ball::update(float deltaTime)
     if (state != BallState::MOVING)
         return;
 
-    if (isOutOfBoundsX(deltaTime))
-        sideCollision();
-    if (isOutOfBoundsY(deltaTime))
-        topDownCollision();
-
-    if (state != BallState::MOVING)
-        return;
-
     // Update position
     transform->GetPosition().x += velocity.x * deltaTime;
     transform->GetPosition().y += velocity.y * deltaTime;
@@ -106,38 +98,6 @@ void Ball::handleMain()
     }
 }
 
-bool Ball::isOutOfBoundsX(float deltaTime)
-{
-    int screenWidth = this->ent->GetGame()->getWidth();
-    int posToCheck = transform->GetPosition().x + velocity.x * deltaTime;
-    int posToCheckRight = posToCheck + renderer->getWidth() / 2 * transform->GetScale().x;
-    int posToCheckLeft = posToCheck - renderer->getWidth() / 2 * transform->GetScale().x;
-
-    int postToCheckOtherRight = posToCheck - renderer->getWidth() / 2 * transform->GetScale().x;
-    int postToCheckOtherLeft = posToCheck + renderer->getWidth() / 2 * transform->GetScale().x;
-
-    // If we are mainBall, we are retriscted to the left half of the screen
-    if (mainBall)
-        return posToCheckRight > screenWidth / 2 || posToCheckLeft < 0;
-    else
-        return postToCheckOtherRight < screenWidth / 2 || postToCheckOtherLeft > screenWidth;
-}
-
-Vector2D Ball::getNextPosition(float deltaTime)
-{
-    Vector2D nextPos = transform->GetPosition() + velocity * deltaTime;
-    return nextPos;
-}
-
-bool Ball::isOutOfBoundsY(float deltaTime)
-{
-    int screenHeight = this->ent->GetGame()->getHeight();
-    int posToCheck = transform->GetPosition().y + velocity.y * deltaTime;
-    int posToCheckUP = posToCheck - transform->GetScale().y * renderer->getHeight() / 2;
-    int posToCheckDOWN = posToCheck + transform->GetScale().y * renderer->getHeight() / 2;
-
-    return posToCheckDOWN > screenHeight || posToCheckUP < 0;
-}
 
 float Ball::getDistance(Vector2D startPoint, Vector2D endPoint)
 {
@@ -158,6 +118,11 @@ void Ball::setVelocity(Vector2D startPoint, Vector2D endPoint)
     Vector2D dir = (startPoint - endPoint).Normalized();
     dir *= force;
     velocity = dir;
+}
+
+void Ball::setVelocity(Vector2D vel)
+{
+    velocity = vel;
 }
 
 void Ball::receiveNetworkMessage(NetworkMessage &msg)
@@ -203,4 +168,14 @@ void Ball::topDownCollision()
 {
     velocity.y = -velocity.y;
     this->playSound("collision");
+}
+
+bool Ball::isMainBall() const
+{
+    return mainBall;
+}
+
+Vector2D Ball::getVelocity() const
+{
+    return velocity;
 }

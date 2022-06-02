@@ -22,13 +22,12 @@ public:
     virtual void init();
     virtual void update(float deltaTime);
     virtual void receiveNetworkMessage(NetworkMessage &msg);
-    bool isOutOfBoundsX(float deltaTime);
-    bool isOutOfBoundsY(float deltaTime);
     float getDistance(Vector2D startPoint, Vector2D endPoint);
     float getLaunchStrength(Vector2D startPoint, Vector2D endPoint);
     void setVelocity(Vector2D startPoint, Vector2D endPoint);
+    void setVelocity(Vector2D velocity);
+    Vector2D getVelocity() const;
     void handleMain();
-    Vector2D getNextPosition(float dt);
 
     float getCurrentLaunchForce() const;
     Vector2D getCurrentLaunchDirection() const;
@@ -37,6 +36,8 @@ public:
 
     void sideCollision();
     void topDownCollision();
+
+    bool isMainBall() const;
 
 private:
     Vector2D velocity;
