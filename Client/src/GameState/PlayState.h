@@ -4,6 +4,7 @@
 #include "GameState.h"
 #include <vector>
 class Entity;
+class Renderer;
 
 class PlayState : public GameState
 {
@@ -20,7 +21,7 @@ public:
 
 private:
     int currentLevel;
-    std::vector<Entity *> obstacles;
+    std::vector<Renderer *> obstacles;
     std::vector<Entity *> ui;
     void loadLevel(int level);
     Entity *addObstacle(Vector2D pos, Vector2D scale, string textureName);

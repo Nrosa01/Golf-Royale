@@ -6,6 +6,7 @@
 #include "../EC/Components/BallDirection.h"
 #include "../EC/Components/Transitioner.h"
 #include "../EC/Components/TextRenderer.h"
+#include "../EC/Components/BallCollisionManager.h"
 #include "../SDLUtils/SDLApp.h"
 #include <sstream>
 
@@ -15,10 +16,12 @@ PlayState::PlayState(SDLApp *app, std::string enemyNick, bool isMaster) : GameSt
     Entity *fg = createEntity(Vector2D(app->getWidth() / 2, app->getHeight() / 2), Vector2D(1, 1), "GolfRoyaleBg");
 
     Entity *ball = createEntity(Vector2D(app->getWidth() / 4, app->getHeight() - (app->getHeight() / 15)), Vector2D(1, 1), "ball");
+    ball->AddComponent(new BallCollisionManager(&this->obstacles));
     ball->AddComponent(new Ball(true, isMaster));
     ball->AddComponent(new BallDirection(app->getTexture("arrow")));
 
     Entity *enemyBall = createEntity(Vector2D(app->getWidth() - (app->getWidth() / 4), app->getHeight() - (app->getHeight() / 15)), Vector2D(1, 1), "ball");
+    enemyBall->AddComponent(new BallCollisionManager(&this->obstacles));
     enemyBall->AddComponent(new Ball(false, !isMaster));
 
     // UI
@@ -112,9 +115,9 @@ Entity *PlayState::addObstacle(Vector2D pos, Vector2D scale, string textureName)
 {
     Entity *e = new Entity(pos.x, pos.y, app);
     e->GetTransform()->GetScale() = scale;
-    if (!textureName.empty())
-        e->AddComponent(new Renderer(app->getTexture(textureName)));
-    obstacles.push_back(e);
+    Renderer *rend = new Renderer(app->getTexture(textureName));
+    e->AddComponent(rend);
+    obstacles.push_back(rend);
 
     return e;
 }
@@ -144,7 +147,7 @@ void PlayState::render()
 void PlayState::deleteObstacles()
 {
     for (auto &o : obstacles)
-        delete o;
+        delete o->getOwner();
     obstacles.clear();
 }
 

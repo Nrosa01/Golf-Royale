@@ -20,6 +20,7 @@ public:
     virtual void render();
     std::string getName();
     void setOwner(Entity *owner);
+    Entity *getOwner();
 
 protected:
     void playSound(std::string soundName);

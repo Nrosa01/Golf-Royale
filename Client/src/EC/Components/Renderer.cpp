@@ -2,7 +2,6 @@
 #include "../Entity.h"
 #include "Transform.h"
 #include "../../SDLUtils/Texture.h"
-#include <SDL2/SDL.h>
 
 Renderer::Renderer(Texture *texture) : Component(typeid(Renderer).name()), transform(nullptr), texture(texture){};
 
@@ -22,15 +21,7 @@ void Renderer::init()
 
 void Renderer::render()
 {
-    SDL_Rect destRect;
-    int textW = texture->getW() * transform->GetScale().x;
-    int textH = texture->getH() * transform->GetScale().y;
-    destRect.x = transform->GetPosition().getX() - textW / 2;
-    destRect.y = transform->GetPosition().getY() - textH / 2;
-    destRect.w = textW;
-    destRect.h = textH;
-
-    texture->render(destRect);
+    texture->render(getDestRect());
 }
 
 int Renderer::getWidth()
@@ -41,4 +32,30 @@ int Renderer::getWidth()
 int Renderer::getHeight()
 {
     return texture->getH();
+}
+
+SDL_Rect Renderer::getDestRect()
+{
+    SDL_Rect destRect;
+    int textW = texture->getW() * transform->GetScale().x;
+    int textH = texture->getH() * transform->GetScale().y;
+    destRect.x = transform->GetPosition().getX() - textW / 2;
+    destRect.y = transform->GetPosition().getY() - textH / 2;
+    destRect.w = textW;
+    destRect.h = textH;
+
+    return destRect;
+}
+
+SDL_Rect Renderer::getDestRectAt(Vector2D position)
+{
+    SDL_Rect destRect;
+    int textW = texture->getW() * transform->GetScale().x;
+    int textH = texture->getH() * transform->GetScale().y;
+    destRect.x = position.getX() - textW / 2;
+    destRect.y = position.getY() - textH / 2;
+    destRect.w = textW;
+    destRect.h = textH;
+
+    return destRect;
 }

@@ -28,11 +28,15 @@ public:
     float getLaunchStrength(Vector2D startPoint, Vector2D endPoint);
     void setVelocity(Vector2D startPoint, Vector2D endPoint);
     void handleMain();
+    Vector2D getNextPosition(float dt);
 
     float getCurrentLaunchForce() const;
     Vector2D getCurrentLaunchDirection() const;
     float getMaxLaunchForce() const;
     float getMininumThreshold() const;
+
+    void sideCollision();
+    void topDownCollision();
 
 private:
     Vector2D velocity;

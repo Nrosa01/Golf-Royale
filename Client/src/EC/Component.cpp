@@ -16,6 +16,8 @@ void Component::render() {}
 
 void Component::setOwner(Entity *owner) { ent = owner; }
 
+Entity* Component::getOwner() { return ent; }
+
 void Component::playSound(std::string soundName) { ent->GetGame()->playAudio(soundName); }
 
 std::string Component::getName() { return cmpName; }

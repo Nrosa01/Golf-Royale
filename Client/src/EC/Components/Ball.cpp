@@ -35,15 +35,9 @@ void Ball::update(float deltaTime)
         return;
 
     if (isOutOfBoundsX(deltaTime))
-    {
-        velocity.x = -velocity.x;
-        this->playSound("collision");
-    }
+        sideCollision();
     if (isOutOfBoundsY(deltaTime))
-    {
-        velocity.y = -velocity.y;
-        this->playSound("collision");
-    }
+        topDownCollision();
 
     if (state != BallState::MOVING)
         return;
@@ -129,6 +123,12 @@ bool Ball::isOutOfBoundsX(float deltaTime)
         return postToCheckOtherRight < screenWidth / 2 || postToCheckOtherLeft > screenWidth;
 }
 
+Vector2D Ball::getNextPosition(float deltaTime)
+{
+    Vector2D nextPos = transform->GetPosition() + velocity * deltaTime;
+    return nextPos;
+}
+
 bool Ball::isOutOfBoundsY(float deltaTime)
 {
     int screenHeight = this->ent->GetGame()->getHeight();
@@ -191,4 +191,16 @@ float Ball::getMaxLaunchForce() const
 float Ball::getMininumThreshold() const
 {
     return mininumThreshold;
+}
+
+void Ball::sideCollision()
+{
+    velocity.x = -velocity.x;
+    this->playSound("collision");
+}
+
+void Ball::topDownCollision()
+{
+    velocity.y = -velocity.y;
+    this->playSound("collision");
 }
