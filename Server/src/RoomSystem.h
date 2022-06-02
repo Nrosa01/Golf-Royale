@@ -16,7 +16,7 @@ public:
     bool isRoomFull(std::string code);
 
     // Estas operaciones pueden fallar, por eso son bool
-    bool addPlayer(Socket *player, std::string code);
+    bool addPlayer(Socket *player, std::string code, std::string playerNick);
     bool removePlayer(Socket *player);
     bool sendMessageToOtherPlayer(Socket *playerWhoSends, NetworkMessage &msg);
     uint32_t getPlayerCount();

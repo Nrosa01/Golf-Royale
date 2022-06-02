@@ -8,6 +8,7 @@
 #include "../EC/Components/Transitioner.h"
 #include "../EC/Components/TextRenderer.h"
 #include "MainMenuState.h"
+#include "PlayState.h"
 #include <iostream>
 
 LobbyState::LobbyState(SDLApp *app) : GameState(app)
@@ -60,7 +61,7 @@ void LobbyState::onStateEnter()
     this->gameCodeLabel->GetComponent<TextRenderer>()->setText(this->gameCode);
 
     // El codigo no se envia bien, averiguar por que
-    LoginMessage login = LoginMessage(gameCode);
+    LoginMessage login = LoginMessage(gameCode, name);
     this->sendNetworkMessage(login);
 }
 
@@ -68,8 +69,13 @@ void LobbyState::receiveNetworkMessage(NetworkMessage &msg)
 {
     if (msg.type == PLAYER_DISCONNECTED)
     {
-        LoginMessage* message = &static_cast<LoginMessage&>(msg);
-        std::cout << "Player disconnected: " << message->loginCode << std::endl;
+        std::cout << "Player disconnected" << std::endl;
         startExitTransitionTimer(popState);
+    }
+    else if (msg.type == PLAYER_JOINED)
+    {
+        PlayerJoinedMessage *message = &static_cast<PlayerJoinedMessage &>(msg);
+        std::cout << "Player joined: " << message->playerNick << std::endl;
+        startExitTransitionTimer(changeState, new PlayState(app));
     }
 }

@@ -30,7 +30,7 @@ bool RoomSystem::isRoomFull(std::string code)
         return rooms.at(code)->isRoomFull();
 }
 
-bool RoomSystem::addPlayer(Socket *player, std::string code)
+bool RoomSystem::addPlayer(Socket *player, std::string code, std::string playerNick)
 {
     if (code.empty())
         return logError("Error: Code is empty");
@@ -42,12 +42,12 @@ bool RoomSystem::addPlayer(Socket *player, std::string code)
             return logError("Room is full or player is already in room");
 
         clients.insert(std::pair<SocketID, GameRoom *>(player->getHashId(), room));
-        room->addPlayer(player);
+        room->addPlayer(player, playerNick);
         return true;
     }
     else
     {
-        GameRoom *room = new GameRoom(code, player);
+        GameRoom *room = new GameRoom(server, code, player, playerNick);
         rooms.insert(std::pair<std::string, GameRoom *>(code, room));
         clients.insert(std::pair<SocketID, GameRoom *>(player->getHashId(), room));
         return true;
@@ -62,14 +62,9 @@ bool RoomSystem::removePlayer(Socket *player)
         clients.erase(player->getHashId());
         rooms.erase(room->getGameCode());
 
-        Socket* other = room->getOtherPlayer(player);
-        if(other != nullptr)
-        {
-            NetworkMessage msg;
-            msg.type = PLAYER_DISCONNECTED;
-            server->send(msg, *other);
+        Socket *other = room->getOtherPlayer(player);
+        if (other != nullptr)
             clients.erase(other->getHashId());
-        }
 
         delete room;
         return true;

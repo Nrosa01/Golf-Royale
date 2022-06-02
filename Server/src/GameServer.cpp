@@ -63,15 +63,15 @@ void GameServer::addClient(Socket *clientSocket, char *msg)
 
     std::cout << "Recv: Mensaje de tipo LOGIN " << login.loginCode << "\n";
 
-    bool clientJoined = clientManager.addPlayer(clientSocket, login.loginCode);
+    bool clientJoined = clientManager.addPlayer(clientSocket, login.loginCode, login.playerNick);
     if (clientJoined)
     {
         bool fullRoom = clientManager.isRoomFull(login.loginCode);
 
         if (fullRoom)
-            std::cout << "Player joined to Room, now is full\n";
+            std::cout << "Player " << login.playerNick << " joined to Room, now is full\n";
         else
-            std::cout << "Player joined to Room, waiting for other player\n";
+            std::cout << "Player " << login.playerNick << " joined to Room, waiting for other player\n";
     }
     std::cout << "Recv: Clientes conectados: " << clientManager.getPlayerCount() << "\n";
     std::cout << "---------- Log end -----------\n";

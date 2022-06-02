@@ -57,19 +57,25 @@ void Client::net_thread_f()
 
         switch (msgType)
         {
-        case MessageType::PLAYER_DISCONNECTED:
+        case PLAYER_JOINED:
         {
-            NetworkMessage *netMsg = new NetworkMessage(PLAYER_DISCONNECTED);
+            PlayerJoinedMessage *playerJoinedMessage = new PlayerJoinedMessage();
+            playerJoinedMessage->from_bin(msg);
+
+            messages_mutex.lock();
+            messages.push(playerJoinedMessage);
+            messages_mutex.unlock();
+        }
+        break;
+        default:
+        {
+            NetworkMessage *netMsg = new NetworkMessage(msgType);
 
             messages_mutex.lock();
             messages.push(netMsg);
             messages_mutex.unlock();
         }
         break;
-        case MessageType::LOGOUT:
-            break;
-        default:
-            break;
         }
     }
 }
