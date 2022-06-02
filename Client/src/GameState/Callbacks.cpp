@@ -8,6 +8,12 @@ void popState(GameState *state, void *args)
     state->getApp()->popState();
 }
 
+void changeState(GameState *state, void *args)
+{
+    GameState *newState = reinterpret_cast<GameState *>(args);
+    state->getApp()->changeState(newState);
+}
+
 void pushState(GameState *state, void *args)
 {
     GameState *newState = reinterpret_cast<GameState *>(args);

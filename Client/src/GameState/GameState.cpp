@@ -15,6 +15,12 @@ GameState::~GameState()
     entities.clear();
 }
 
+void GameState::init()
+{
+    for (auto it = entities.begin(); it != entities.end(); it++)
+        (*it)->init();
+}
+
 void GameState::update(float deltaTime)
 {
     for (auto it = entities.begin(); it != entities.end(); ++it)

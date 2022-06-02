@@ -84,9 +84,7 @@ std::function<void()> LoginMenuState::exitStateCallback()
 {
     return [this]()
     {
-        if (this->errorLabel->GetTransform()->GetScale().x < 0.1f)
-            errorLabel->GetComponent<Transitioner>()->disable();
-
+        errorLabel->GetComponent<Transitioner>()->disable();
         startExitTransitionTimer(popState);
     };
 }
@@ -94,7 +92,6 @@ std::function<void()> LoginMenuState::exitStateCallback()
 void LoginMenuState::onStateEnter()
 {
     GameState::onStateEnter();
-    errorLabel->GetComponent<Transitioner>()->startFade();
     errorLabel->GetComponent<Transitioner>()->stop();
     errorLabel->GetComponent<Transitioner>()->enable();
 

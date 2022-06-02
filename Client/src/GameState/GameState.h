@@ -25,6 +25,7 @@ protected:
 	GameState(SDLApp *g);
 
 public:
+	virtual void init(); // Called when the state is entered first time
 	virtual void update(float deltaTime);
 	virtual void render();
 	virtual void onStateEnter(); // Called when state is pushed or when reached after popped other

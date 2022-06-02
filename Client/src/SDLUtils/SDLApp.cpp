@@ -97,7 +97,12 @@ SDLApp::~SDLApp()
 
 void SDLApp::pushState(GameState *stateToPush)
 {
-    newState = stateToPush;
+    gameStateMachine->pushState(stateToPush);
+}
+
+void SDLApp::changeState(GameState *stateToPush)
+{
+    gameStateMachine->changeState(stateToPush);
 }
 
 void SDLApp::popState()
@@ -108,17 +113,7 @@ void SDLApp::popState()
 void SDLApp::update(float deltaTime)
 {
     checkPendingNetworkMessage();
-    checkStateChanged();
     gameStateMachine->update(deltaTime);
-}
-
-void SDLApp::checkStateChanged()
-{
-    if (newState != nullptr)
-    {
-        gameStateMachine->pushState(newState);
-        newState = nullptr;
-    }
 }
 
 void SDLApp::render()
@@ -402,7 +397,7 @@ void SDLApp::rcvNetMessage(NetworkMessage &message)
 
 void SDLApp::checkPendingNetworkMessage()
 {
-    NetworkMessage* message = client->consumeMessage();
+    NetworkMessage *message = client->consumeMessage();
     if (message != nullptr)
     {
         this->rcvNetMessage(*message);

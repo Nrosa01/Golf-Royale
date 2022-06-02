@@ -28,7 +28,10 @@ LobbyState::LobbyState(SDLApp *app) : GameState(app)
 
     Entity *exitButton = createEntity(Vector2D(width / 2, height / 2 + 200), Vector2D(0.5f, 1));
     exitButton->AddComponent(new Button(app->getTexture("button"), "Volver", "toonFont", 72, [this]()
-                                        { startExitTransitionTimer(popState); }));
+                                        { 
+                                            NetworkMessage logout = NetworkMessage(LOGOUT);
+                                            this->sendNetworkMessage(logout);
+                                            startExitTransitionTimer(popState); }));
 
     addTransitioner(exitButton);
     addTransitioner(nameLabel);
@@ -64,12 +67,9 @@ void LobbyState::onStateEnter()
 void LobbyState::receiveNetworkMessage(NetworkMessage &msg)
 {
     if (msg.type == PLAYER_DISCONNECTED)
+    {
+        LoginMessage* message = &static_cast<LoginMessage&>(msg);
+        std::cout << "Player disconnected: " << message->loginCode << std::endl;
         startExitTransitionTimer(popState);
-}
-
-void LobbyState::onStateExit()
-{
-    GameState::onStateExit();
-    NetworkMessage logout = NetworkMessage(LOGOUT);
-    this->sendNetworkMessage(logout);
+    }
 }

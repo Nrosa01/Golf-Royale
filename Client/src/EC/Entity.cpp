@@ -29,7 +29,6 @@ void Entity::AddComponent(Component *component)
 {
     components[component->getName()] = component;
     component->setOwner(this);
-    this->unitializedComponents.push_back(component);
     this->componentArray.push_back(component);
 }
 
@@ -66,14 +65,14 @@ Component *Entity::GetComponent(std::string name)
         return nullptr;
 }
 
+void Entity::init()
+{
+    for (auto component : componentArray)
+        component->init();
+}
+
 void Entity::update(float deltaTime)
 {
-    // Init unitialized components
-    for (auto component : unitializedComponents)
-        component->init();
-
-    this->unitializedComponents.clear();
-
     for (auto component : componentArray)
         component->update(deltaTime);
 }

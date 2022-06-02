@@ -22,6 +22,7 @@ public:
     void RemoveComponent(std::string name);
 
     Component *GetComponent(std::string name);
+    void init();
     void update(float deltaTime);
     void lateUpdate(float deltaTime);
     void render();
@@ -50,7 +51,6 @@ private:
     SDLApp *app;
     std::unordered_map<std::string, Component *> components; // Used for fast getComponent
     std::vector<Component *> componentArray;
-    std::list<Component *> unitializedComponents;
 };
 
 #endif

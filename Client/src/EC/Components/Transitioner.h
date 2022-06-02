@@ -25,7 +25,6 @@ private:
     float timer;
     Vector2D initialScale;
     bool isFinished;
-    bool adjusted;
     bool isScaling;
     bool disabled;
 };

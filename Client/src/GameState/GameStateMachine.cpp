@@ -39,6 +39,7 @@ void GameStateMachine::pushState(GameState *stateToPush)
         states.top()->onStateExit();
 
     states.push(stateToPush);
+    stateToPush->init();
     stateToPush->onStateEnter();
 }
 
@@ -52,6 +53,7 @@ void GameStateMachine::changeState(GameState *stateToPush)
     }
 
     states.push(stateToPush);
+    stateToPush->init();
     stateToPush->onStateEnter();
 }
 

@@ -34,7 +34,7 @@ public:
     void renderTextCenter(float p_x, float p_y, const char *p_text, std::string fontName, int size, SDL_Color textColor);
     void renderTextCenter(float p_x, float p_y, const char *p_text, TTF_Font *font, int size, SDL_Color textColor);
     void pushState(GameState *stateToPush);
-    void checkStateChanged();
+    void changeState(GameState *stateToPush);
     void popState();
     int getWidth() const;
     int getHeight() const;
