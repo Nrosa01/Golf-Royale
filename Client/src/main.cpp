@@ -19,8 +19,8 @@ int main()
     app.loadTextures("assets/images/");
     app.loadFonts("assets/fonts/");
     app.loadAudio("assets/sounds/");
-    app.pushState(new PlayState(&app));
-    //app.pushState(new MainMenuState(&app));
+    //app.pushState(new PlayState(&app));
+    app.pushState(new MainMenuState(&app));
 
     // Main loop flag
     bool quit = false;
