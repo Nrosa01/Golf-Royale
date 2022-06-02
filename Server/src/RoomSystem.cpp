@@ -43,15 +43,15 @@ bool RoomSystem::addPlayer(Socket *player, std::string code, std::string playerN
 
         clients.insert(std::pair<SocketID, GameRoom *>(player->getHashId(), room));
         room->addPlayer(player, playerNick);
-        return true;
     }
     else
     {
         GameRoom *room = new GameRoom(server, code, player, playerNick);
         rooms.insert(std::pair<std::string, GameRoom *>(code, room));
         clients.insert(std::pair<SocketID, GameRoom *>(player->getHashId(), room));
-        return true;
     }
+
+    return true;
 }
 
 bool RoomSystem::removePlayer(Socket *player)

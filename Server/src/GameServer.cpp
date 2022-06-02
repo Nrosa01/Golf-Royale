@@ -55,6 +55,7 @@ void GameServer::addClient(Socket *clientSocket, char *msg)
     if (isConnected(clientSocket))
     {
         std::cout << "Recv: Cliente ya conectado\n";
+        delete clientSocket;
         return;
     }
 
@@ -73,6 +74,8 @@ void GameServer::addClient(Socket *clientSocket, char *msg)
         else
             std::cout << "Player " << login.playerNick << " joined to Room, waiting for other player\n";
     }
+    else
+        delete clientSocket;
     std::cout << "Recv: Clientes conectados: " << clientManager.getPlayerCount() << "\n";
     std::cout << "---------- Log end -----------\n";
 }
@@ -82,6 +85,7 @@ void GameServer::removeClient(Socket *clientSocket)
     std::cout << "Recv: Mensaje de tipo LOGOUT\n";
 
     clientManager.removePlayer(clientSocket);
+    delete clientSocket;
     std::cout << "Recv: Clientes conectados: " << clientManager.getPlayerCount() << "\n";
 
     std::cout << "---------- Log end -----------\n";

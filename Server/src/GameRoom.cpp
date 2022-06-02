@@ -1,6 +1,6 @@
 #include "GameRoom.h"
 
-GameRoom::GameRoom(Socket* server, std::string code, Socket *player, std::string playerNick)
+GameRoom::GameRoom(Socket *server, std::string code, Socket *player, std::string playerNick)
 {
     this->server = server;
     gameCode = code;
@@ -12,6 +12,12 @@ GameRoom::~GameRoom()
 {
     NetworkMessage msg(PLAYER_DISCONNECTED);
     sendBroadcast(msg);
+
+    if (playerOne != nullptr)
+        delete playerOne;
+
+    if (playerTwo != nullptr)
+        delete playerTwo;
 
     playerOne = nullptr;
     playerTwo = nullptr;
