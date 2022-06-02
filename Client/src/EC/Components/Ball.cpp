@@ -98,7 +98,6 @@ void Ball::handleMain()
     }
 }
 
-
 float Ball::getDistance(Vector2D startPoint, Vector2D endPoint)
 {
     return SDL_sqrt(SDL_pow(endPoint.x - startPoint.x, 2) + SDL_pow(endPoint.y - startPoint.y, 2));
@@ -134,7 +133,7 @@ void Ball::receiveNetworkMessage(NetworkMessage &msg)
         velocity.y = hitMsg->yForce;
         state = BallState::MOVING;
     }
-    else if (msg.type == TURN_END) // Esto significa que el otro jugador ha acabado su turno
+    else if (msg.type == TURN_END && mainBall) // Esto significa que el otro jugador ha acabado su turno
         playerTurn = true;
 }
 

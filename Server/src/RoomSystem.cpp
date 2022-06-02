@@ -55,7 +55,11 @@ bool RoomSystem::addPlayer(Socket *player, std::string code, std::string playerN
     {
         GameRoom *room = rooms.at(code);
         if (room->isRoomFull() || isPlayerInRoom(player))
+        {
+            NetworkMessage msg(PLAYER_DISCONNECTED);
+            server->send(msg, *player);
             return logError("Room is full or player is already in room");
+        }
 
         clients.insert(std::pair<SocketID, GameRoom *>(player->getHashId(), room));
         room->addPlayer(player, playerNick);

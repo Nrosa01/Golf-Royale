@@ -47,9 +47,9 @@ void Client::net_thread_f()
 
         msg = socket.recv();
 
-        if (msg == nullptr && !terminated)
+        if (msg == nullptr)
         {
-            std::cerr << "Recv Client: Error al recibir mensaje\n";
+            std::cout << "Recv Client: Error al recibir mensaje\n";
             continue;
         }
 
@@ -69,7 +69,7 @@ void Client::net_thread_f()
         }
         case BALL_HIT:
         {
-            BallHitMessage *ballHitMessage = new BallHitMessage(0,0);
+            BallHitMessage *ballHitMessage = new BallHitMessage(0, 0);
             ballHitMessage->from_bin(msg);
 
             messages_mutex.lock();
@@ -77,6 +77,18 @@ void Client::net_thread_f()
             messages_mutex.unlock();
         }
         break;
+        case TURN_END:
+        {
+            NetworkMessage *netMsg = new NetworkMessage(msgType);
+
+            messages_mutex.lock();
+            messages.push(netMsg);
+            messages_mutex.unlock();
+        }
+        break;
+        case ERROR_MESSAGE:
+            std::cout << "Recv Client: Mensaje de tipo ERROR_MESSAGE \n";
+            break;
         default:
         {
             NetworkMessage *netMsg = new NetworkMessage(msgType);

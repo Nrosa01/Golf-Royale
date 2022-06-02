@@ -43,12 +43,15 @@ void GameServer::run()
         case MessageType::ERROR_MESSAGE:
             std::cout << "Recv: Mensaje de tipo ERROR_MESSAGE\n";
             break;
-        case MessageType::TURN_END:
-            std::cout << "Recv: Mensaje de tipo TURN_END de "<< clientManager.getClientName(clientSocket) << "\n";
-            break;
         default:
-            std::cerr << "Recv: Mensaje de tipo desconocido\n";
-            break;
+        {
+
+            NetworkMessage netMsg;
+            netMsg.from_bin(msg);
+            clientManager.sendMessageToOtherPlayer(clientSocket, netMsg);   
+            std::cout << "Mensaje general\n";
+        }
+        break;
         }
         delete msg;
     }
