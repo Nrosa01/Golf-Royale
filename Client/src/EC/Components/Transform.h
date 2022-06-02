@@ -13,9 +13,11 @@ public:
 
     Vector2D& GetPosition() { return position; }
     Vector2D& GetScale() { return scale; }
+    float& GetRotation() { return rotation; }
 private:
     Vector2D position;
     Vector2D scale;
+    float rotation;
 };
 
 #endif

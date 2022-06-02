@@ -21,12 +21,18 @@ public:
     virtual ~Ball();
     virtual void init();
     virtual void update(float deltaTime);
-    virtual void receiveNetworkMessage(NetworkMessage& msg);
+    virtual void receiveNetworkMessage(NetworkMessage &msg);
     bool isOutOfBoundsX(float deltaTime);
     bool isOutOfBoundsY(float deltaTime);
     float getDistance(Vector2D startPoint, Vector2D endPoint);
+    float getLaunchStrength(Vector2D startPoint, Vector2D endPoint);
     void setVelocity(Vector2D startPoint, Vector2D endPoint);
     void handleMain();
+
+    float getCurrentLaunchForce() const;
+    Vector2D getCurrentLaunchDirection() const;
+    float getMaxLaunchForce() const;
+    float getMininumThreshold() const;
 
 private:
     Vector2D velocity;
@@ -34,12 +40,15 @@ private:
     Transform *transform;
     Renderer *renderer;
     float friction;
-    float maxSpeed = 30.0f;
+    float maxLaunchForce; // Magnitud maxima
     bool mainBall;
     BallState state;
     float mininumThreshold;
-    float multiplicador;
+    float sensibilidad; // Multiplica la potencia del movimiento
     bool playerTurn;
+
+    float currentLaunchForce;
+    Vector2D currentLaunchDirection;
 };
 
 #endif

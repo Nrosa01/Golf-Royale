@@ -11,7 +11,7 @@
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 #define TARGET_FRAME_RATE 60
-const uint32_t FRAME_TIME_MS = (uint32_t)floor((1 / TARGET_FRAME_RATE) * 1000);
+constexpr uint32_t FRAME_TIME_MS = (uint32_t)floor((1.0f / TARGET_FRAME_RATE) * 1000);
 
 int main()
 {
@@ -19,8 +19,8 @@ int main()
     app.loadTextures("assets/images/");
     app.loadFonts("assets/fonts/");
     app.loadAudio("assets/sounds/");
-    //app.pushState(new PlayState(&app));
-    app.pushState(new MainMenuState(&app));
+    app.pushState(new PlayState(&app));
+    //app.pushState(new MainMenuState(&app));
 
     // Main loop flag
     bool quit = false;

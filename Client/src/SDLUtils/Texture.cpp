@@ -43,6 +43,14 @@ void Texture::render(const SDL_Rect& destRect, int angle, SDL_RendererFlip flip)
 	SDL_RenderCopyEx(renderer, texture, &srcRect, &destRect, angle, 0, flip);
 }
 
+void Texture::render(const SDL_Rect& destRect, int angle, SDL_Point center, SDL_RendererFlip flip) const
+{
+	SDL_Rect srcRect;
+	srcRect.x = 0; srcRect.y = 0;
+	srcRect.w = w; srcRect.h = h;
+	SDL_RenderCopyEx(renderer, texture, &srcRect, &destRect, angle, &center, flip);
+}
+
 void Texture::renderFrame(const SDL_Rect& destRect, int row, int col, int angle, SDL_RendererFlip flip) const
 {
 	SDL_Rect srcRect;

@@ -1,6 +1,7 @@
 #include "PlayState.h"
 #include "../EC/Entity.h"
 #include "../EC/Components/Ball.h"
+#include "../EC/Components/BallDirection.h"
 #include "../EC/Components/Transitioner.h"
 #include "../EC/Components/TextRenderer.h"
 #include "../SDLUtils/SDLApp.h"
@@ -12,6 +13,7 @@ PlayState::PlayState(SDLApp *app, std::string enemyNick, bool isMaster) : GameSt
 
     Entity *ball = createEntity(Vector2D(app->getWidth() / 4, app->getHeight() - (app->getHeight() / 15)), Vector2D(1, 1), "ball");
     ball->AddComponent(new Ball(true, isMaster));
+    ball->AddComponent(new BallDirection(app->getTexture("arrow")));
 
     Entity *enemyBall = createEntity(Vector2D(app->getWidth() - (app->getWidth() / 4), app->getHeight() - (app->getHeight() / 15)), Vector2D(1, 1), "ball");
     enemyBall->AddComponent(new Ball(false, !isMaster));

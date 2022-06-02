@@ -21,7 +21,7 @@ bool Vector2D::operator!=(const Vector2D& vector) const { return (x != vector.x 
 
 void Vector2D::operator=(const Vector2D& vector) { x = vector.x; y = vector.y; }
 
-Vector2D Vector2D::Invert() const { return *this * -1; }
+Vector2D Vector2D::Inverted() const { return *this * -1; }
 
 Vector2D Vector2D::Normalized() const
 {
@@ -45,4 +45,9 @@ ostream& operator<<(ostream& out, const Vector2D& vector)
 {
 	out << vector.x << " " << vector.y;
 	return out;
+}
+
+float Vector2D::angle() const
+{
+	return atan2(y, x) * 180 / M_PI;
 }

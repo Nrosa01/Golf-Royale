@@ -9,9 +9,13 @@ Ball::Ball(bool main, bool playerTurn) : Component(typeid(Ball).name())
 {
     state = BallState::IDLE;
     this->mainBall = main;
-    friction = 0.9995f;
+    friction = 1000.0f;
+    maxLaunchForce = 2000.0f;
     mininumThreshold = 1.5f;
     this->playerTurn = playerTurn;
+
+    currentLaunchForce = 0;
+    currentLaunchDirection = Vector2D(0, 0);
 }
 
 Ball::~Ball() {}
@@ -20,7 +24,7 @@ void Ball::init()
 {
     transform = this->ent->GetTransform();
     renderer = this->ent->GetComponent<Renderer>();
-    multiplicador = 10.0f;
+    sensibilidad = 10.0f;
 }
 
 void Ball::update(float deltaTime)
@@ -51,8 +55,9 @@ void Ball::update(float deltaTime)
     // Simulate friction
     if (velocity.Magnitude() > mininumThreshold)
     {
-        velocity.x *= friction;
-        velocity.y *= friction;
+        float vel = velocity.Magnitude() - (friction * deltaTime);
+        vel = vel < mininumThreshold ? 0 : vel;
+        velocity = velocity.Normalized() * vel;
     }
     else
     {
@@ -72,20 +77,29 @@ void Ball::update(float deltaTime)
 
 void Ball::handleMain()
 {
-    if (!this->mainBall || !playerTurn)
-        return;
+    // if (!this->mainBall || !playerTurn)
+    //     return;
+
+    Vector2D mousePos = Input()->GetMousePosition();
 
     if (Input()->IsMouseButtonDown(0) && state == BallState::IDLE)
     {
         state = BallState::PRESSED;
-        startPressPoint = Input()->GetMousePosition();
+        startPressPoint = mousePos;
         // std::cout << "startPressPoint: " << startPressPoint.x << " " << startPressPoint.y << std::endl;
+    }
+
+    if (state == BallState::PRESSED)
+    {
+        currentLaunchForce = getLaunchStrength(startPressPoint, mousePos);
+        currentLaunchDirection = (startPressPoint - mousePos).Normalized();
     }
 
     if (!Input()->IsMouseButtonDown(0) && state == BallState::PRESSED)
     {
         state = BallState::MOVING;
-        setVelocity(startPressPoint, Input()->GetMousePosition());
+        setVelocity(startPressPoint, mousePos);
+        currentLaunchForce = 0;
 
         if (velocity.Magnitude() > mininumThreshold)
         {
@@ -105,11 +119,14 @@ bool Ball::isOutOfBoundsX(float deltaTime)
     int posToCheckRight = posToCheck + renderer->getWidth() / 2 * transform->GetScale().x;
     int posToCheckLeft = posToCheck - renderer->getWidth() / 2 * transform->GetScale().x;
 
+    int postToCheckOtherRight = posToCheck - renderer->getWidth() / 2 * transform->GetScale().x;
+    int postToCheckOtherLeft = posToCheck + renderer->getWidth() / 2 * transform->GetScale().x;
+
     // If we are mainBall, we are retriscted to the left half of the screen
     if (mainBall)
         return posToCheckRight > screenWidth / 2 || posToCheckLeft < 0;
     else
-        return posToCheckRight < screenWidth / 2 || posToCheckLeft > screenWidth;
+        return postToCheckOtherRight < screenWidth / 2 || postToCheckOtherLeft > screenWidth;
 }
 
 bool Ball::isOutOfBoundsY(float deltaTime)
@@ -127,11 +144,19 @@ float Ball::getDistance(Vector2D startPoint, Vector2D endPoint)
     return SDL_sqrt(SDL_pow(endPoint.x - startPoint.x, 2) + SDL_pow(endPoint.y - startPoint.y, 2));
 }
 
+float Ball::getLaunchStrength(Vector2D startPoint, Vector2D endPoint)
+{
+    float distance = getDistance(startPoint, endPoint) * sensibilidad;
+    distance = distance > maxLaunchForce ? maxLaunchForce : distance;
+
+    return distance;
+}
+
 void Ball::setVelocity(Vector2D startPoint, Vector2D endPoint)
 {
-    float distance = getDistance(startPoint, endPoint) * multiplicador;
-    Vector2D dir = (endPoint - startPoint).Normalized();
-    dir *= -distance;
+    float force = getLaunchStrength(startPoint, endPoint);
+    Vector2D dir = (startPoint - endPoint).Normalized();
+    dir *= force;
     velocity = dir;
 }
 
@@ -146,4 +171,24 @@ void Ball::receiveNetworkMessage(NetworkMessage &msg)
     }
     else if (msg.type == TURN_END) // Esto significa que el otro jugador ha acabado su turno
         playerTurn = true;
+}
+
+float Ball::getCurrentLaunchForce() const
+{
+    return currentLaunchForce;
+}
+
+Vector2D Ball::getCurrentLaunchDirection() const
+{
+    return currentLaunchDirection.Normalized();
+}
+
+float Ball::getMaxLaunchForce() const
+{
+    return maxLaunchForce;
+}
+
+float Ball::getMininumThreshold() const
+{
+    return mininumThreshold;
 }
