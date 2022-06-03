@@ -78,11 +78,12 @@ void GameState::startExitTransitionTimer(GameStateCallback callback, void* args)
         transitioner->startFade();
 }
 
-void GameState::addTransitioner(Entity *e)
+Transitioner* GameState::addTransitioner(Entity *e)
 {
     Transitioner *transitioner = new Transitioner(TRANSITION_TIME);
     e->AddComponent(transitioner);
     transitioners.push_back(transitioner);
+    return transitioner;
 }
 
 Entity* GameState::createEntity(Vector2D pos, Vector2D scale, string textureName)

@@ -34,7 +34,7 @@ public:
     void sendNetworkMessage(NetworkMessage& msg);
 	virtual ~GameState();
 	void startExitTransitionTimer(GameStateCallback callback = nullptr, void* args = nullptr);
-	void addTransitioner(Entity* e);
+	Transitioner* addTransitioner(Entity* e);
 	Entity* createEntity(Vector2D pos, Vector2D scale = Vector2D(1,1), string textureName = "");
 	SDLApp* getApp();
 private:

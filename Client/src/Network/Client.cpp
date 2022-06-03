@@ -47,7 +47,7 @@ void Client::net_thread_f()
 
         msg = socket.recv();
 
-        if (msg == nullptr)
+        if (msg == nullptr && !terminated)
         {
             std::cout << "Recv Client: Error al recibir mensaje\n";
             continue;

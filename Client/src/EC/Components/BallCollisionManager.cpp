@@ -53,6 +53,13 @@ bool BallCollisionManager::checkIntersection(Renderer *ball, Renderer *obstacle)
     return SDL_HasIntersection(&ballRect, &obstacleRect);
 }
 
+bool BallCollisionManager::checkIntersection(Entity *obstacle)
+{
+    Renderer *obstacleRenderer = obstacle->GetComponent<Renderer>();
+
+    return checkIntersection(renderer, obstacleRenderer);
+}
+
 Vector2D BallCollisionManager::getCollisionNormal(Renderer *ball, Renderer *obstacle, Vector2D ballVelocity)
 {
     SDL_Rect ballRect = ball->getDestRect();

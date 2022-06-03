@@ -10,15 +10,21 @@
 #include "../SDLUtils/SDLApp.h"
 #include <sstream>
 
-PlayState::PlayState(SDLApp *app, std::string enemyNick, bool isMaster) : GameState(app), currentLevel(0)
+PlayState::PlayState(SDLApp *app, std::string enemyNick, bool isMaster, uint8_t playerScore, uint8_t enemyScore, uint8_t currentLevel) : GameState(app)
 {
+    this->currentLevel = currentLevel;
+    this->enemyNick = enemyNick;
+    this->playerScore = playerScore;
+    this->enemyScore = enemyScore;
+    waitingForLevel = false;
+
     createEntity(Vector2D(app->getWidth() / 2, app->getHeight() / 2), Vector2D(1, 1), "menuBg");
     Entity *fg = createEntity(Vector2D(app->getWidth() / 2, app->getHeight() / 2), Vector2D(1, 1), "GolfRoyaleBg");
 
     Entity *ball = createEntity(Vector2D(app->getWidth() / 2, app->getHeight() - (app->getHeight() / 15)), Vector2D(1, 1), "ball");
     ball->AddComponent(new Ball(true, isMaster));
     ball->AddComponent(new BallDirection(app->getTexture("arrow")));
-    ball->AddComponent(new BallCollisionManager(&this->obstacles));
+    ball->AddComponent(player = new BallCollisionManager(&this->obstacles));
 
     Entity *enemyBall = createEntity(Vector2D(app->getWidth() / 2, app->getHeight() - (app->getHeight() / 15)), Vector2D(1, 1), "ballEnemy");
     enemyBall->AddComponent(new BallCollisionManager(&this->obstacles));
@@ -31,20 +37,20 @@ PlayState::PlayState(SDLApp *app, std::string enemyNick, bool isMaster) : GameSt
     Entity *enemyNickEnt = addUI(Vector2D(app->getWidth() / 2 + 50, 50), Vector2D(0.15f, 0.4f), "button");
     enemyNickEnt->AddComponent(new TextRenderer(enemyNick, "toonFont", 24));
 
-    Entity *playerScore = addUI(Vector2D(app->getWidth() / 2 - 50, 80), Vector2D(0.075f, 0.2f), "button");
-    playerScore->AddComponent(new TextRenderer("0", "toonFont", 16));
+    Entity *playerScoreUI = addUI(Vector2D(app->getWidth() / 2 - 50, 80), Vector2D(0.075f, 0.2f), "button");
+    playerScoreUI->AddComponent(new TextRenderer(std::to_string(playerScore), "toonFont", 16));
 
-    Entity *enemyScore = addUI(Vector2D(app->getWidth() / 2 + 50, 80), Vector2D(0.075f, 0.2f), "button");
-    enemyScore->AddComponent(new TextRenderer("0", "toonFont", 16));
+    Entity *enemyScoreUI = addUI(Vector2D(app->getWidth() / 2 + 50, 80), Vector2D(0.075f, 0.2f), "button");
+    enemyScoreUI->AddComponent(new TextRenderer(std::to_string(enemyScore), "toonFont", 16));
 
     // Transitioners
-    addTransitioner(fg);
+    fgTransitioner = addTransitioner(fg);
     addTransitioner(ball);
     addTransitioner(enemyBall);
     addTransitioner(playerNick);
     addTransitioner(enemyNickEnt);
-    addTransitioner(playerScore);
-    addTransitioner(enemyScore);
+    addTransitioner(playerScoreUI);
+    addTransitioner(enemyScoreUI);
 
     loadLevel(currentLevel);
 }
@@ -65,7 +71,17 @@ void PlayState::receiveNetworkMessage(NetworkMessage &msg)
 {
     GameState::receiveNetworkMessage(msg);
     if (msg.type == PLAYER_DISCONNECTED)
+    {
+        fgTransitioner->enable();
         startExitTransitionTimer(popState);
+    }
+    else if (msg.type == LEVEL_END)
+    {
+        PlayState *nextState = new PlayState(app, enemyNick, false, playerScore, enemyScore + 1, currentLevel + 1);
+        startExitTransitionTimer(changeState, nextState);
+        app->playAudio("hole");
+        fgTransitioner->disable();
+    }
 }
 
 void PlayState::loadLevel(int level)
@@ -85,6 +101,18 @@ void PlayState::loadLevel(int level)
 
     if (levelFile.is_open())
     {
+        // First line is the goal
+        std::string goal;
+        if (std::getline(levelFile, goal))
+        {
+            std::stringstream ss(goal);
+            std::string type;
+            obstacle o;
+            ss >> o.pos.x >> o.pos.y >> o.scale.x >> o.scale.y;
+            this->hole = createEntity(o.pos, o.scale, "hole");
+            addTransitioner(hole);
+        }
+
         std::string line;
         while (std::getline(levelFile, line))
         {
@@ -102,9 +130,6 @@ void PlayState::loadLevel(int level)
 
     for (auto &o : obstacles)
         addObstacle(o.pos, o.scale, "obstacle");
-
-    for (auto &o : this->obstacles)
-        o->init();
 }
 
 Entity *PlayState::addObstacle(Vector2D pos, Vector2D scale, string textureName)
@@ -114,6 +139,9 @@ Entity *PlayState::addObstacle(Vector2D pos, Vector2D scale, string textureName)
     Renderer *rend = new Renderer(app->getTexture(textureName));
     e->AddComponent(rend);
     obstacles.push_back(rend);
+    entities.push_back(e);
+
+    addTransitioner(e);
 
     return e;
 }
@@ -133,17 +161,12 @@ void PlayState::render()
 {
     GameState::render();
 
-    for (auto &o : obstacles)
-        o->render();
-
     for (auto &u : ui)
         u->render();
 }
 
 void PlayState::deleteObstacles()
 {
-    for (auto &o : obstacles)
-        delete o->getOwner();
     obstacles.clear();
 }
 
@@ -160,6 +183,9 @@ void PlayState::init()
 
     for (auto &o : ui)
         o->init();
+
+    if (currentLevel > 0)
+        fgTransitioner->disable();
 }
 
 void PlayState::update(float dt)
@@ -171,4 +197,28 @@ void PlayState::update(float dt)
 
     for (auto &o : ui)
         o->lateUpdate(dt);
+
+    updateGameState();
+}
+
+bool PlayState::checkPlayerInHole()
+{
+    return player->checkIntersection(hole);
+}
+
+void PlayState::updateGameState()
+{
+    if (waitingForLevel)
+        return;
+
+    if (checkPlayerInHole())
+    {
+        PlayState *nextState = new PlayState(app, enemyNick, true, playerScore + 1, enemyScore, currentLevel + 1);
+        NetworkMessage msg(LEVEL_END);
+        this->sendNetworkMessage(msg);
+        startExitTransitionTimer(changeState, nextState);
+        waitingForLevel = true;
+        app->playAudio("hole");
+        fgTransitioner->disable();
+    }
 }
