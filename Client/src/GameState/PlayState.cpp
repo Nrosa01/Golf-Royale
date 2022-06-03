@@ -57,12 +57,14 @@ PlayState::PlayState(SDLApp *app, std::string enemyNick, bool isMaster, uint8_t 
 
 PlayState::~PlayState()
 {
-    deleteObstacles();
     deleteUI();
 }
 
 void PlayState::onStateExit()
 {
+    if (waitingForLevel)
+        return;
+
     NetworkMessage logout = NetworkMessage(LOGOUT);
     this->sendNetworkMessage(logout);
 }
@@ -81,12 +83,12 @@ void PlayState::receiveNetworkMessage(NetworkMessage &msg)
         startExitTransitionTimer(changeState, nextState);
         app->playAudio("hole");
         fgTransitioner->disable();
+        waitingForLevel = true;
     }
 }
 
 void PlayState::loadLevel(int level)
 {
-    deleteObstacles();
     std::string levelPath = "assets/levels";
     std::string levelName = "level" + std::to_string(level);
 
@@ -165,11 +167,6 @@ void PlayState::render()
         u->render();
 }
 
-void PlayState::deleteObstacles()
-{
-    obstacles.clear();
-}
-
 void PlayState::deleteUI()
 {
     for (auto &o : ui)
@@ -190,6 +187,10 @@ void PlayState::init()
 
 void PlayState::update(float dt)
 {
+    // Se ejecuta antes porque en el update se puede popear el estado, eso provoca que se borren los componentes
+    // y da problemas al acceder a ellos en BallManager al comprobar la interseccion
+    updateGameState();
+
     GameState::update(dt);
 
     for (auto &o : ui)
@@ -198,7 +199,6 @@ void PlayState::update(float dt)
     for (auto &o : ui)
         o->lateUpdate(dt);
 
-    updateGameState();
 }
 
 bool PlayState::checkPlayerInHole()
@@ -214,11 +214,11 @@ void PlayState::updateGameState()
     if (checkPlayerInHole())
     {
         PlayState *nextState = new PlayState(app, enemyNick, true, playerScore + 1, enemyScore, currentLevel + 1);
-        NetworkMessage msg(LEVEL_END);
-        this->sendNetworkMessage(msg);
-        startExitTransitionTimer(changeState, nextState);
         waitingForLevel = true;
         app->playAudio("hole");
         fgTransitioner->disable();
+        NetworkMessage msg(LEVEL_END);
+        this->sendNetworkMessage(msg);
+        startExitTransitionTimer(changeState, nextState);
     }
 }

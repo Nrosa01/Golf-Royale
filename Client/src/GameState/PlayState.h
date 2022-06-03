@@ -18,7 +18,6 @@ public:
     virtual void render();
     virtual void receiveNetworkMessage(NetworkMessage &msg);
     virtual void onStateExit();
-    void deleteObstacles();
     void deleteUI();
     bool checkPlayerInHole();
     void updateGameState();

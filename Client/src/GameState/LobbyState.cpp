@@ -75,10 +75,7 @@ void LobbyState::receiveNetworkMessage(NetworkMessage &msg)
     if (msg.type == PLAYER_DISCONNECTED)
         startExitTransitionTimer(popState);
     else if (msg.type == YOU_ARE_MASTER)
-    {
-        std::cout << "Master\n";
         isMaster = true;
-    }
     else if (msg.type == PLAYER_JOINED)
     {
         PlayerJoinedMessage *message = &static_cast<PlayerJoinedMessage &>(msg);

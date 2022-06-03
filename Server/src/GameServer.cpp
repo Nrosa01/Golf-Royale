@@ -29,9 +29,6 @@ void GameServer::run()
         case MessageType::LOGOUT:
             removeClient(clientSocket);
             break;
-        case MessageType::LEVEL_END:
-            std::cout << "Recv: Mensaje de tipo LEVEL_END\n";
-            break;
         case MessageType::BALL_HIT:
         {
             BallHitMessage ballHitMessage(0, 0);

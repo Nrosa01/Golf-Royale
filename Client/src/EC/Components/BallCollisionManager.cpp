@@ -30,7 +30,7 @@ void BallCollisionManager::init()
 
 void BallCollisionManager::update(float deltaTime)
 {
-    if (obstacles->empty())
+    if (obstacles == nullptr || obstacles->empty())
         return;
 
     for (auto obstacle : *obstacles)

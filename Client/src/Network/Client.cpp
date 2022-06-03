@@ -77,15 +77,6 @@ void Client::net_thread_f()
             messages_mutex.unlock();
         }
         break;
-        case TURN_END:
-        {
-            NetworkMessage *netMsg = new NetworkMessage(msgType);
-
-            messages_mutex.lock();
-            messages.push(netMsg);
-            messages_mutex.unlock();
-        }
-        break;
         case ERROR_MESSAGE:
             std::cout << "Recv Client: Mensaje de tipo ERROR_MESSAGE \n";
             break;
