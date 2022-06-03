@@ -8,6 +8,7 @@
 #include "../EC/Components/TextRenderer.h"
 #include "../EC/Components/BallCollisionManager.h"
 #include "../SDLUtils/SDLApp.h"
+#include "EndState.h"
 #include <sstream>
 
 PlayState::PlayState(SDLApp *app, std::string enemyNick, bool isMaster, uint8_t playerScore, uint8_t enemyScore, uint8_t currentLevel) : GameState(app)
@@ -72,18 +73,25 @@ void PlayState::onStateExit()
 void PlayState::receiveNetworkMessage(NetworkMessage &msg)
 {
     GameState::receiveNetworkMessage(msg);
-    if (msg.type == PLAYER_DISCONNECTED)
+    if (msg.type == PLAYER_DISCONNECTED && !waitingForLevel)
     {
         fgTransitioner->enable();
         startExitTransitionTimer(popState);
     }
     else if (msg.type == LEVEL_END)
     {
-        PlayState *nextState = new PlayState(app, enemyNick, false, playerScore, enemyScore + 1, currentLevel + 1);
-        startExitTransitionTimer(changeState, nextState);
-        app->playAudio("hole");
-        fgTransitioner->disable();
         waitingForLevel = true;
+        enemyScore++;
+        std::cout << "Level end" << std::endl;
+        if (currentLevel != LAST_LEVEL)
+        {
+            PlayState *nextState = new PlayState(app, enemyNick, false, playerScore, enemyScore, currentLevel + 1);
+            startExitTransitionTimer(changeState, nextState);
+            app->playAudio("hole");
+            fgTransitioner->disable();
+        }
+        else
+            startExitTransitionTimer(changeState, new EndState(app, playerScore, enemyScore));
     }
 }
 
@@ -120,7 +128,7 @@ void PlayState::loadLevel(int level)
         std::string line;
         while (std::getline(levelFile, line))
         {
-            if(line.length() == 0)
+            if (line.length() == 0)
                 continue;
             std::stringstream ss(line);
             std::string type;
@@ -224,12 +232,19 @@ void PlayState::updateGameState()
 
     if (checkPlayerInHole())
     {
-        PlayState *nextState = new PlayState(app, enemyNick, true, playerScore + 1, enemyScore, currentLevel + 1);
         waitingForLevel = true;
-        app->playAudio("hole");
-        fgTransitioner->disable();
+        playerScore++;
         NetworkMessage msg(LEVEL_END);
         this->sendNetworkMessage(msg);
-        startExitTransitionTimer(changeState, nextState);
+
+        if (currentLevel != LAST_LEVEL)
+        {
+            PlayState *nextState = new PlayState(app, enemyNick, true, playerScore, enemyScore, currentLevel + 1);
+            app->playAudio("hole");
+            fgTransitioner->disable();
+            startExitTransitionTimer(changeState, nextState);
+        }
+        else
+            startExitTransitionTimer(changeState, new EndState(app, playerScore, enemyScore));
     }
 }

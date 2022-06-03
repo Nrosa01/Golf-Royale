@@ -7,6 +7,7 @@
 #include "EC/Components/Renderer.h"
 #include "GameState/MainMenuState.h"
 #include "GameState/PlayState.h"
+#include "GameState/EndState.h"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
@@ -19,8 +20,10 @@ int main()
     app.loadTextures("assets/images/");
     app.loadFonts("assets/fonts/");
     app.loadAudio("assets/sounds/");
-    //app.pushState(new PlayState(&app));
+
+    //app.pushState(new PlayState(&app, "", true, 0, 0, 5));
     app.pushState(new MainMenuState(&app));
+    //app.pushState(new EndState(&app, true));
 
     // Main loop flag
     bool quit = false;

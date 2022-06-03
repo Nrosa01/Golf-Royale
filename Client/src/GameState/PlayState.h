@@ -7,6 +7,7 @@ class Entity;
 class Renderer;
 class BallCollisionManager;
 class Transitioner;
+#define LAST_LEVEL 5
 
 class PlayState : public GameState
 {
