@@ -28,6 +28,7 @@ public:
 	virtual void init(); // Called when the state is entered first time
 	virtual void update(float deltaTime);
 	virtual void render();
+	void handleTransition(float deltaTime);
 	virtual void onStateEnter(); // Called when state is pushed or when reached after popped other
 	virtual void onStateExit(); // Called when state is popped from stack
 	virtual void receiveNetworkMessage(NetworkMessage& msg);

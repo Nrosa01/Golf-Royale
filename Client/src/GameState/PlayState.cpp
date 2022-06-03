@@ -73,6 +73,7 @@ void PlayState::onStateExit()
 void PlayState::receiveNetworkMessage(NetworkMessage &msg)
 {
     GameState::receiveNetworkMessage(msg);
+
     if (msg.type == PLAYER_DISCONNECTED && !waitingForLevel)
     {
         fgTransitioner->enable();
@@ -82,7 +83,6 @@ void PlayState::receiveNetworkMessage(NetworkMessage &msg)
     {
         waitingForLevel = true;
         enemyScore++;
-        std::cout << "Level end" << std::endl;
         if (currentLevel != LAST_LEVEL)
         {
             PlayState *nextState = new PlayState(app, enemyNick, false, playerScore, enemyScore, currentLevel + 1);
@@ -210,6 +210,12 @@ void PlayState::update(float dt)
     // Se ejecuta antes porque en el update se puede popear el estado, eso provoca que se borren los componentes
     // y da problemas al acceder a ellos en BallManager al comprobar la interseccion
     updateGameState();
+
+    if (waitingForLevel)
+    {
+        handleTransition(dt);
+        return;
+    }
 
     GameState::update(dt);
 
