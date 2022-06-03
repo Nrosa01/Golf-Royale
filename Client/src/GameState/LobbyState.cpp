@@ -15,6 +15,7 @@ LobbyState::LobbyState(SDLApp *app) : GameState(app), isMaster(false)
 {
     int width = app->getWidth();
     int height = app->getHeight();
+    playerJoined = false;
 
     createEntity(Vector2D(width / 2, height / 2), Vector2D(1, 1), "menuBg");
 
@@ -30,8 +31,6 @@ LobbyState::LobbyState(SDLApp *app) : GameState(app), isMaster(false)
     Entity *exitButton = createEntity(Vector2D(width / 2, height / 2 + 200), Vector2D(0.5f, 1));
     exitButton->AddComponent(new Button(app->getTexture("button"), "Volver", "toonFont", 72, [this]()
                                         { 
-                                            NetworkMessage logout = NetworkMessage(LOGOUT);
-                                            this->sendNetworkMessage(logout);
                                             startExitTransitionTimer(popState); }));
 
     Entity *waitForPlayerLabel = createEntity(Vector2D(width / 2, height / 2 + 50), Vector2D(1.35f, 1), "button");
@@ -68,6 +67,17 @@ void LobbyState::onStateEnter()
     this->sendNetworkMessage(login);
 }
 
+void LobbyState::onStateExit()
+{
+    GameState::onStateExit();
+
+    if (playerJoined)
+        return;
+
+    NetworkMessage logout = NetworkMessage(LOGOUT);
+    this->sendNetworkMessage(logout);
+}
+
 void LobbyState::receiveNetworkMessage(NetworkMessage &msg)
 {
     GameState::receiveNetworkMessage(msg);
@@ -78,6 +88,7 @@ void LobbyState::receiveNetworkMessage(NetworkMessage &msg)
         isMaster = true;
     else if (msg.type == PLAYER_JOINED)
     {
+        playerJoined = true;
         PlayerJoinedMessage *message = &static_cast<PlayerJoinedMessage &>(msg);
         startExitTransitionTimer(changeState, new PlayState(app, message->playerNick, isMaster));
     }
