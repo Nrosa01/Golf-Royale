@@ -34,6 +34,12 @@ void Ball::update(float deltaTime)
     if (state != BallState::MOVING)
         return;
 
+    if (mainBall)
+    {
+        BallHitMessage hitMsg(transform->GetPosition().x, transform->GetPosition().y);
+        sendNetworkMessage(hitMsg);
+    }
+
     // Update position
     transform->GetPosition().x += velocity.x * deltaTime;
     transform->GetPosition().y += velocity.y * deltaTime;
@@ -90,8 +96,6 @@ void Ball::handleMain()
         if (velocity.Magnitude() > mininumThreshold)
         {
             this->playSound("swing");
-            BallHitMessage hitMsg(velocity.x, velocity.y);
-            sendNetworkMessage(hitMsg);
         }
         // std::cout << "endPressPoint: " << Input()->GetMousePosition().x << " " << Input()->GetMousePosition().y << std::endl;
         // std::cout << "setVelocity: " << velocity.x << " " << velocity.y << std::endl;
@@ -129,9 +133,10 @@ void Ball::receiveNetworkMessage(NetworkMessage &msg)
     if (msg.type == BALL_HIT && !mainBall)
     {
         BallHitMessage *hitMsg = &static_cast<BallHitMessage &>(msg);
-        velocity.x = hitMsg->xForce;
-        velocity.y = hitMsg->yForce;
+        // velocity.x = hitMsg->xForce;
+        // velocity.y = hitMsg->yForce;
         state = BallState::MOVING;
+        transform->GetPosition() = Vector2D(hitMsg->xForce, hitMsg->yForce);
     }
     else if (msg.type == TURN_END && mainBall) // Esto significa que el otro jugador ha acabado su turno
         playerTurn = true;
