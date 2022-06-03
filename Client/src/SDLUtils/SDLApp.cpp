@@ -67,15 +67,15 @@ SDLApp::SDLApp(int width, int height, const char *title)
     input = new InputSystem();
     exitRequested = false;
     newState = nullptr;
-
-    client = new Client("0.0.0.0", "13000");
 }
 
 SDLApp::~SDLApp()
 {
     delete gameStateMachine;
     delete input;
-    delete client;
+
+    if (client != nullptr)
+        delete client;
 
     // Free resources and close SDL
     for (auto &texture : textures)
@@ -127,6 +127,11 @@ void SDLApp::render()
 
     // Update screen
     SDL_RenderPresent(renderer);
+}
+
+void SDLApp::initNetClient(const char *address, const char *port)
+{
+    client = new Client(address, port);
 }
 
 void SDLApp::loadTextures(const char *pathName)

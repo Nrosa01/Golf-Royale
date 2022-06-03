@@ -6,24 +6,27 @@
 #include "EC/Entity.h"
 #include "EC/Components/Renderer.h"
 #include "GameState/MainMenuState.h"
-#include "GameState/PlayState.h"
-#include "GameState/EndState.h"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 #define TARGET_FRAME_RATE 60
 constexpr uint32_t FRAME_TIME_MS = 1000 / TARGET_FRAME_RATE;
 
-int main()
+int main(int argc, char **argv)
 {
+    if (argc != 3)
+    {
+        std::cerr << "Usage: " << argv[0] << " <address> <port>\n";
+        return 1;
+    }
+
     SDLApp app(SCREEN_WIDTH, SCREEN_HEIGHT, "Golf Royale");
+    app.initNetClient(argv[1], argv[2]);
     app.loadTextures("assets/images/");
     app.loadFonts("assets/fonts/");
     app.loadAudio("assets/sounds/");
 
-    //app.pushState(new PlayState(&app, "", true, 0, 0, 5));
     app.pushState(new MainMenuState(&app));
-    //app.pushState(new EndState(&app, true));
 
     // Main loop flag
     bool quit = false;

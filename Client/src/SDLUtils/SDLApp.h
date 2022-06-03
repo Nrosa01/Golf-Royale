@@ -21,6 +21,7 @@ public:
     SDLApp(int width, int height, const char *title);
     ~SDLApp();
 
+    void initNetClient(const char *address, const char *port);
     void loadTextures(const char *pathName);
     Texture *getTexture(std::string name) const;
     void loadFonts(const char *pathName);
