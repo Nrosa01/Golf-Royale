@@ -40,7 +40,6 @@ void BallCollisionManager::update(float deltaTime)
             Vector2D normal =  getCollisionNormal(renderer, obstacle, ball->getVelocity());
             takeBodyOutOfCollision(renderer, obstacle, normal);
             notifyCollision(normal);
-            //this->ball->setVelocity(Vector2D());
         }
     }
 }
@@ -114,6 +113,10 @@ void BallCollisionManager::takeBodyOutOfCollision(Renderer *ball, Renderer *obst
 
 void BallCollisionManager::notifyCollision(Vector2D collisionNormal)
 {
+    NetworkMessage hitMsg(BALL_HIT);
+    this->sendNetworkMessage(hitMsg);
+    this->playSound("collision");
+
     if (abs(collisionNormal.x) > 0.1)
         this->ball->sideCollision();
     else if (abs(collisionNormal.y) > 0.1)

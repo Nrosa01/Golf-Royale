@@ -11,6 +11,7 @@ enum MessageType : uint8_t
     LOGIN,
     LOGOUT,
     LEVEL_END,
+    BALL_POS,
     BALL_HIT,
     TURN_END,
     YOU_ARE_MASTER,
@@ -147,12 +148,12 @@ public:
     };
 };
 
-struct BallHitMessage : public NetworkMessage
+struct BallPosMessage : public NetworkMessage
 {
 public:
     float xForce, yForce;
 
-    BallHitMessage(float xForce, float yForce) : NetworkMessage(BALL_HIT), xForce(xForce), yForce(yForce) {}
+    BallPosMessage(float xForce, float yForce) : NetworkMessage(BALL_POS), xForce(xForce), yForce(yForce) {}
 
     inline void to_bin()
     {

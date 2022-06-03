@@ -67,9 +67,9 @@ void Client::net_thread_f()
             messages_mutex.unlock();
             break;
         }
-        case BALL_HIT:
+        case BALL_POS:
         {
-            BallHitMessage *ballHitMessage = new BallHitMessage(0, 0);
+            BallPosMessage *ballHitMessage = new BallPosMessage(0, 0);
             ballHitMessage->from_bin(msg);
 
             messages_mutex.lock();

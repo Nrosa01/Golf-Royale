@@ -36,7 +36,7 @@ void Ball::update(float deltaTime)
 
     if (mainBall)
     {
-        BallHitMessage hitMsg(transform->GetPosition().x, transform->GetPosition().y);
+        BallPosMessage hitMsg(transform->GetPosition().x, transform->GetPosition().y);
         sendNetworkMessage(hitMsg);
     }
 
@@ -130,16 +130,16 @@ void Ball::setVelocity(Vector2D vel)
 
 void Ball::receiveNetworkMessage(NetworkMessage &msg)
 {
-    if (msg.type == BALL_HIT && !mainBall)
+    if (msg.type == BALL_POS && !mainBall)
     {
-        BallHitMessage *hitMsg = &static_cast<BallHitMessage &>(msg);
-        // velocity.x = hitMsg->xForce;
-        // velocity.y = hitMsg->yForce;
-        state = BallState::MOVING;
+        BallPosMessage *hitMsg = &static_cast<BallPosMessage &>(msg);
         transform->GetPosition() = Vector2D(hitMsg->xForce, hitMsg->yForce);
+        state = BallState::MOVING;
     }
     else if (msg.type == TURN_END && mainBall) // Esto significa que el otro jugador ha acabado su turno
         playerTurn = true;
+    else if (msg.type == BALL_HIT)
+        this->playSound("collision");
 }
 
 float Ball::getCurrentLaunchForce() const
@@ -165,13 +165,11 @@ float Ball::getMininumThreshold() const
 void Ball::sideCollision()
 {
     velocity.x = -velocity.x;
-    this->playSound("collision");
 }
 
 void Ball::topDownCollision()
 {
     velocity.y = -velocity.y;
-    this->playSound("collision");
 }
 
 bool Ball::isMainBall() const

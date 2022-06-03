@@ -29,12 +29,12 @@ void GameServer::run()
         case MessageType::LOGOUT:
             removeClient(clientSocket);
             break;
-        case MessageType::BALL_HIT:
+        case MessageType::BALL_POS:
         {
-            BallHitMessage ballHitMessage(0, 0);
+            BallPosMessage ballHitMessage(0, 0);
             ballHitMessage.from_bin(msg);
             clientManager.sendMessageToOtherPlayer(clientSocket, ballHitMessage);
-            std::cout << "Recv: Mensaje de tipo BALL_HIT\n";
+            std::cout << "Recv: Mensaje de tipo BALL_POS\n";
         }
         break;
         case MessageType::ERROR_MESSAGE:
