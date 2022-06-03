@@ -28,7 +28,7 @@ void GameStateMachine::render()
     states.top()->render();
 }
 
-void GameStateMachine::receiveNetworkMessage(NetworkMessage &msg)
+void GameStateMachine::receiveNetworkMessage(NetworkMessage *msg)
 {
     states.top()->receiveNetworkMessage(msg);
 }

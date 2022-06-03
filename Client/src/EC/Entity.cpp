@@ -90,7 +90,7 @@ void Entity::render()
         component->render();
 }
 
-void Entity::receiveNetworkMessage(NetworkMessage &msg)
+void Entity::receiveNetworkMessage(NetworkMessage *msg)
 {
     for (auto component : componentArray)
         component->receiveNetworkMessage(msg);

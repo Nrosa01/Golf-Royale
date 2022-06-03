@@ -17,7 +17,7 @@ public:
     virtual void init();
     virtual void update(float dt);
     virtual void render();
-    virtual void receiveNetworkMessage(NetworkMessage &msg);
+    virtual void receiveNetworkMessage(NetworkMessage *msg);
     virtual void onStateExit();
     void deleteUI();
     bool checkPlayerInHole();

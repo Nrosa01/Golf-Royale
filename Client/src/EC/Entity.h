@@ -27,7 +27,7 @@ public:
     void update(float deltaTime);
     void lateUpdate(float deltaTime);
     void render();
-	void receiveNetworkMessage(NetworkMessage& msg);
+	void receiveNetworkMessage(NetworkMessage* msg);
 
     Transform *GetTransform();
     void SetGame(SDLApp *app);

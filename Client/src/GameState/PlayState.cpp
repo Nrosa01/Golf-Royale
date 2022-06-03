@@ -70,16 +70,16 @@ void PlayState::onStateExit()
     this->sendNetworkMessage(logout);
 }
 
-void PlayState::receiveNetworkMessage(NetworkMessage &msg)
+void PlayState::receiveNetworkMessage(NetworkMessage *msg)
 {
     GameState::receiveNetworkMessage(msg);
 
-    if (msg.type == PLAYER_DISCONNECTED && !waitingForLevel)
+    if (msg->type == PLAYER_DISCONNECTED && !waitingForLevel)
     {
         fgTransitioner->enable();
         startExitTransitionTimer(popState);
     }
-    else if (msg.type == LEVEL_END)
+    else if (msg->type == LEVEL_END)
     {
         waitingForLevel = true;
         enemyScore++;

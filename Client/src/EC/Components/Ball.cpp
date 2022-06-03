@@ -128,17 +128,17 @@ void Ball::setVelocity(Vector2D vel)
     velocity = vel;
 }
 
-void Ball::receiveNetworkMessage(NetworkMessage &msg)
+void Ball::receiveNetworkMessage(NetworkMessage *msg)
 {
-    if (msg.type == BALL_POS && !mainBall)
+    if (msg->type == BALL_POS && !mainBall)
     {
-        BallPosMessage *hitMsg = &static_cast<BallPosMessage &>(msg);
+        BallPosMessage *hitMsg = static_cast<BallPosMessage *>(msg);
         transform->GetPosition() = Vector2D(hitMsg->xForce, hitMsg->yForce);
         state = BallState::MOVING;
     }
-    else if (msg.type == TURN_END && mainBall) // Esto significa que el otro jugador ha acabado su turno
+    else if (msg->type == TURN_END && mainBall) // Esto significa que el otro jugador ha acabado su turno
         playerTurn = true;
-    else if (msg.type == BALL_HIT)
+    else if (msg->type == BALL_HIT)
         this->playSound("collision");
 }
 

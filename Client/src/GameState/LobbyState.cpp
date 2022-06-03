@@ -78,18 +78,18 @@ void LobbyState::onStateExit()
     this->sendNetworkMessage(logout);
 }
 
-void LobbyState::receiveNetworkMessage(NetworkMessage &msg)
+void LobbyState::receiveNetworkMessage(NetworkMessage *msg)
 {
     GameState::receiveNetworkMessage(msg);
 
-    if (msg.type == PLAYER_DISCONNECTED)
+    if (msg->type == PLAYER_DISCONNECTED)
         startExitTransitionTimer(popState);
-    else if (msg.type == YOU_ARE_MASTER)
+    else if (msg->type == YOU_ARE_MASTER)
         isMaster = true;
-    else if (msg.type == PLAYER_JOINED)
+    else if (msg->type == PLAYER_JOINED)
     {
         playerJoined = true;
-        PlayerJoinedMessage *message = &static_cast<PlayerJoinedMessage &>(msg);
+        PlayerJoinedMessage *message = static_cast<PlayerJoinedMessage *>(msg);
         startExitTransitionTimer(changeState, new PlayState(app, message->playerNick, isMaster));
     }
 }

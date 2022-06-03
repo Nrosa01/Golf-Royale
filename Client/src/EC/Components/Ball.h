@@ -21,7 +21,7 @@ public:
     virtual ~Ball();
     virtual void init();
     virtual void update(float deltaTime);
-    virtual void receiveNetworkMessage(NetworkMessage &msg);
+    virtual void receiveNetworkMessage(NetworkMessage *msg);
     float getDistance(Vector2D startPoint, Vector2D endPoint);
     float getLaunchStrength(Vector2D startPoint, Vector2D endPoint);
     void setVelocity(Vector2D startPoint, Vector2D endPoint);

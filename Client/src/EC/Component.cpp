@@ -24,4 +24,4 @@ std::string Component::getName() { return cmpName; }
 
 void Component::sendNetworkMessage(NetworkMessage &msg) { ent->GetGame()->sendNetworkMessage(msg); }
 
-void Component::receiveNetworkMessage(NetworkMessage &msg) {}
+void Component::receiveNetworkMessage(NetworkMessage *msg) {}
