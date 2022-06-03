@@ -111,6 +111,8 @@ void PlayState::loadLevel(int level)
             std::string type;
             obstacle o;
             ss >> o.pos.x >> o.pos.y >> o.scale.x >> o.scale.y;
+            o.pos.x = o.pos.x * 40 + 20 * o.scale.x;
+            o.pos.y = o.pos.y * 40 + 20 * o.scale.y;
             this->hole = createEntity(o.pos, o.scale, "hole");
             addTransitioner(hole);
         }
@@ -118,10 +120,14 @@ void PlayState::loadLevel(int level)
         std::string line;
         while (std::getline(levelFile, line))
         {
+            if(line.length() == 0)
+                continue;
             std::stringstream ss(line);
             std::string type;
             obstacle o;
             ss >> o.pos.x >> o.pos.y >> o.scale.x >> o.scale.y;
+            o.pos.x = o.pos.x * 40 + 20 * o.scale.x;
+            o.pos.y = o.pos.y * 40 + 20 * o.scale.y;
             obstacles.push_back(o);
         }
     }
@@ -129,6 +135,12 @@ void PlayState::loadLevel(int level)
     {
         std::cout << "Could not open level file: " << levelPath + "/" + levelName + ".dat" << std::endl;
     }
+
+    // Map Bounds
+    obstacles.push_back({{400, -430}, {22, 22}});
+    obstacles.push_back({{400, 1030}, {22, 22}});
+    obstacles.push_back({{-430, 400}, {22, 22}});
+    obstacles.push_back({{1230, 400}, {22, 22}});
 
     for (auto &o : obstacles)
         addObstacle(o.pos, o.scale, "obstacle");
@@ -198,7 +210,6 @@ void PlayState::update(float dt)
 
     for (auto &o : ui)
         o->lateUpdate(dt);
-
 }
 
 bool PlayState::checkPlayerInHole()

@@ -1,6 +1,4 @@
-400 300 1 1//Hoyo
-400 -430 20 20 //Upper bounds
-400 1030 20 20 // Lower bounds
--430 400 20 20 // Left bounds
-1230 400 20 20 // Right bounds
-
+9.5 3.5 1 1 //Hoyo
+0 0 5 5
+15 0 5 5
+7 6 6 6

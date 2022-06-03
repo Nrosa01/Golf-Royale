@@ -63,8 +63,8 @@ void Ball::update(float deltaTime)
 
 void Ball::handleMain()
 {
-    if (!this->mainBall || !playerTurn)
-        return;
+    // if (!this->mainBall || !playerTurn)
+    //     return;
 
     Vector2D mousePos = Input()->GetMousePosition();
 
