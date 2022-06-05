@@ -34,11 +34,11 @@ void GameServer::run()
             BallPosMessage ballHitMessage(0, 0);
             ballHitMessage.from_bin(msg);
             clientManager.sendMessageToOtherPlayer(clientSocket, ballHitMessage);
-            std::cout << "Recv: Mensaje de tipo BALL_POS\n";
+            //std::cout << "Recv: Mensaje de tipo BALL_POS\n";
         }
         break;
         case MessageType::ERROR_MESSAGE:
-            std::cout << "Recv: Mensaje de tipo ERROR_MESSAGE\n";
+            //std::cout << "Recv: Mensaje de tipo ERROR_MESSAGE\n";
             break;
         default:
         {
@@ -46,7 +46,7 @@ void GameServer::run()
             NetworkMessage netMsg;
             netMsg.from_bin(msg);
             clientManager.sendMessageToOtherPlayer(clientSocket, netMsg);   
-            std::cout << "Mensaje general\n";
+            //std::cout << "Mensaje general\n";
         }
         break;
         }
