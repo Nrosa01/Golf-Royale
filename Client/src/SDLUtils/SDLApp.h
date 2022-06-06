@@ -8,6 +8,7 @@
 #include "InputSytem.h"
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
+#include "../ResourceManager/TextureManager.h"
 
 class Texture;
 class Client;
@@ -60,7 +61,7 @@ private:
     SDL_Renderer *renderer;
     GameStateMachine *gameStateMachine;
     GameState *newState;
-    std::unordered_map<std::string, Texture *> textures;
+    TextureManager* textureManager;
     std::unordered_map<std::string, TTF_Font *> fonts;
     std::unordered_map<std::string, Mix_Chunk *> sounds;
     int width;

@@ -72,6 +72,9 @@ SDLApp::SDLApp(int width, int height, const char *title)
     input = new InputSystem();
     exitRequested = false;
     newState = nullptr;
+
+    // Resource Managers
+    textureManager = new TextureManager(renderer);
 }
 
 SDLApp::~SDLApp()
@@ -83,8 +86,7 @@ SDLApp::~SDLApp()
         delete client;
 
     // Free resources and close SDL
-    for (auto &texture : textures)
-        delete texture.second;
+    delete textureManager;
 
     for (auto &font : fonts)
         TTF_CloseFont(font.second);
@@ -141,45 +143,7 @@ void SDLApp::initNetClient(const char *address, const char *port)
 
 void SDLApp::loadTextures(const char *pathName)
 {
-    // Load textures
-    std::cout << "Loading textures from " << pathName << "..." << std::endl;
-
-    // Using dirent, check if pathName is a directory
-    DIR *dir = opendir(pathName);
-
-    // If it is a directory, load all files in it with extension .png or .jpg
-    if (dir != nullptr)
-    {
-        // Get all files in directory
-        struct dirent *ent;
-        while ((ent = readdir(dir)) != nullptr)
-        {
-            // Get file extension
-            std::string fileName = ent->d_name;
-            std::string ext = fileName.substr(fileName.find_last_of(".") + 1);
-            std::string fileNameWithoutExt = fileName.substr(0, fileName.find_last_of("."));
-
-            // If file extension is .png or .jpg, load texture
-            if (ext == "png" || ext == "jpg")
-            {
-                std::string filePath = pathName;
-                filePath.append("/");
-                filePath.append(fileName);
-
-                // Load texture
-                Texture *texture = new Texture(renderer);
-                // As this is simple project, there are no animations so all textures are 1*1, they are not spritesheets
-                // If I had more time, I would load these settings from a json
-                texture->load(filePath.c_str(), 1, 1);
-                std::cout << "Loaded texture " << fileNameWithoutExt << std::endl;
-                textures.insert(std::pair<std::string, Texture *>(fileNameWithoutExt, texture));
-            }
-        }
-
-        std::cout << "Textures loaded!" << std::endl;
-    }
-    else // If pathName is not a directory, we throw an error message
-        std::cout << "Path " << pathName << " is not a directory!" << std::endl;
+    textureManager->load(pathName);
 }
 
 void SDLApp::loadFonts(const char *pathName)
@@ -240,12 +204,7 @@ TTF_Font *SDLApp::getFont(std::string fontName) const
 
 Texture *SDLApp::getTexture(std::string name) const
 {
-    // Get texture from map
-    std::unordered_map<std::string, Texture *>::const_iterator it = textures.find(name);
-    if (it != textures.end())
-        return it->second;
-    else
-        return nullptr;
+    return textureManager->get(name);
 }
 
 void SDLApp::loadAudio(const char *pathName)
@@ -400,7 +359,7 @@ void SDLApp::sendNetworkMessage(NetworkMessage &message)
     this->client->send(message);
 }
 
-void SDLApp::rcvNetMessage(NetworkMessage* message)
+void SDLApp::rcvNetMessage(NetworkMessage *message)
 {
     this->gameStateMachine->receiveNetworkMessage(message);
 }
