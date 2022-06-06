@@ -19,7 +19,6 @@ TextField::~TextField()
 
 void TextField::init()
 {
-    this->transform = this->ent->getTransform();
     this->initialScale = transform->getScale();
     this->textLine = this->ent->getGame()->getTexture("textField");
     pulseSpeed = 0.75f;

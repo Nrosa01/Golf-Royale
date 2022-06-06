@@ -16,7 +16,6 @@ public:
     virtual void render();
 
 private:
-    Transform *transform;
     Texture *texture;
     Ball* ball;
     float maxLineDistance;

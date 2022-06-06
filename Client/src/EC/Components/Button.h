@@ -25,7 +25,6 @@ private:
     ButtonCallback callback;
     float lerpAnimTime;
     float timer = 0.0f;
-    Transform *transform;
     Vector2D initialScale;
     bool wasOverLastFrame;
     int fontSize;

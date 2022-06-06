@@ -7,6 +7,7 @@
 #include "../Network/NetworkMessage.h"
 
 class Entity;
+class Transform;
 
 class Component
 {
@@ -26,6 +27,7 @@ protected:
     void playSound(std::string soundName);
     void sendNetworkMessage(NetworkMessage &msg);
     Entity *ent;
+    Transform* transform;
 
 private:
     std::string cmpName;

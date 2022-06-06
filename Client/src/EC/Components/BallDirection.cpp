@@ -6,7 +6,7 @@
 #include "../../SDLUtils/SDLApp.h"
 #include <SDL2/SDL.h>
 
-BallDirection::BallDirection(Texture *texture) : Component(typeid(BallDirection).name()), transform(nullptr), texture(texture), ball(nullptr){};
+BallDirection::BallDirection(Texture *texture) : Component(typeid(BallDirection).name()), texture(texture), ball(nullptr){};
 
 BallDirection::~BallDirection()
 {
@@ -14,7 +14,6 @@ BallDirection::~BallDirection()
 
 void BallDirection::init()
 {
-    transform = this->ent->getTransform();
     ball = this->ent->getComponent<Ball>();
     maxLineDistance = 10;
 

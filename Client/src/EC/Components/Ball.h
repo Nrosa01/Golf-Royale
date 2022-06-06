@@ -42,7 +42,6 @@ public:
 private:
     Vector2D velocity;
     Vector2D startPressPoint;
-    Transform *transform;
     Renderer *renderer;
     float friction;
     float maxLaunchForce; // Magnitud maxima

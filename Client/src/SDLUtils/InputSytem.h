@@ -35,14 +35,14 @@ public:
     InputSystem();
     ~InputSystem();
     static InputSystem *instance;
-    void Init();
-    void UpdateState();
-    void ClearState();
+    void init();
+    void updateState();
+    void clearState();
     int getId(SDL_Keycode key); // keycode
 
     // UPDATE KEY STATE
-    void OnKeyDown(SDL_Keycode key);
-    void OnKeyUp(SDL_Keycode key);
+    void onKeyDown(SDL_Keycode key);
+    void onKeyUp(SDL_Keycode key);
 
     // CONSULT KEY STATE
     bool keyWasPressed(SDL_Keycode key);

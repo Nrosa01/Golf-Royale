@@ -1,6 +1,7 @@
 #include "Component.h"
 #include "../SDLUtils/SDLApp.h"
 #include "Entity.h"
+#include "./Components/Transform.h"
 
 Component::Component(std::string cmpName) : cmpName(cmpName)  {}
 
@@ -14,7 +15,7 @@ void Component::lateUpdate(float deltaTime) {}
 
 void Component::render() {}
 
-void Component::setOwner(Entity *owner) { ent = owner; }
+void Component::setOwner(Entity *owner) { ent = owner; transform = ent->getTransform(); }
 
 Entity* Component::getOwner() { return ent; }
 

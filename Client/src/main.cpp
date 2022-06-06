@@ -62,7 +62,7 @@ int main(int argc, char **argv)
     while (!quit && !app.isExitRequested())
     {
         time.frameStartTime = SDL_GetTicks();
-        Input()->UpdateState();
+        Input()->updateState();
 
         // Handle events on queue
         while (SDL_PollEvent(&e) != 0)
@@ -75,20 +75,20 @@ int main(int argc, char **argv)
             case SDL_KEYDOWN:
                 if (key == SDLK_ESCAPE)
                     quit = true;
-                Input()->OnKeyDown(key);
+                Input()->onKeyDown(key);
                 break;
             case SDL_KEYUP:
-                Input()->OnKeyUp(key);
+                Input()->onKeyUp(key);
                 break;
             case SDL_MOUSEBUTTONDOWN:
-                Input()->OnMouseButtonDown(e.button);
+                Input()->onMouseButtonDown(e.button);
                 break;
             case SDL_MOUSEBUTTONUP:
-                Input()->OnMouseButtonUp(e.button);
+                Input()->onMouseButtonUp(e.button);
                 break;
             case SDL_MOUSEMOTION:
                 // This is usually implemented as a callback but for now it will be this way, just for testing...
-                Input()->SetMouseMotion(Vector2D(e.motion.xrel, e.motion.yrel));
+                Input()->setMouseMotion(Vector2D(e.motion.xrel, e.motion.yrel));
                 break;
             default:
                 // std::cout << "Default (" << eventHandler.type << ")\n";
@@ -108,7 +108,7 @@ int main(int argc, char **argv)
             SDL_Delay(FRAME_TIME_MS - frameTime);
         }
 
-        time.UpdateTimeRegistry(SDL_GetTicks());
+        time.updateTimeRegistry(SDL_GetTicks());
     }
 
     return 0;
