@@ -20,21 +20,21 @@ LobbyState::LobbyState(SDLApp *app) : GameState(app), isMaster(false)
     createEntity(Vector2D(width / 2, height / 2), Vector2D(1, 1), "menuBg");
 
     Entity *lobbyTittle = createEntity(Vector2D(width / 2, 75), Vector2D(1, 1), "button");
-    lobbyTittle->aAddComponent(new TextRenderer("Lobby", "toonFont", 72));
+    lobbyTittle->addComponent(new TextRenderer("Lobby", "toonFont", 72));
 
     nameLabel = createEntity(Vector2D(width / 2 - 125, height / 2 - 100), Vector2D(0.4, 1), "button");
-    nameLabel->aAddComponent(new TextRenderer("Empty:", "toonFont", 72));
+    nameLabel->addComponent(new TextRenderer("Empty:", "toonFont", 72));
 
     gameCodeLabel = createEntity(Vector2D(width / 2 + 125, height / 2 - 100), Vector2D(0.4, 1), "button");
-    gameCodeLabel->aAddComponent(new TextRenderer("Code:", "toonFont", 72));
+    gameCodeLabel->addComponent(new TextRenderer("Code:", "toonFont", 72));
 
     Entity *exitButton = createEntity(Vector2D(width / 2, height / 2 + 200), Vector2D(0.5f, 1));
-    exitButton->aAddComponent(new Button(app->getTexture("button"), "Volver", "toonFont", 72, [this]()
+    exitButton->addComponent(new Button(app->getTexture("button"), "Volver", "toonFont", 72, [this]()
                                         { 
                                             startExitTransitionTimer(popState); }));
 
     Entity *waitForPlayerLabel = createEntity(Vector2D(width / 2, height / 2 + 50), Vector2D(1.35f, 1), "button");
-    waitForPlayerLabel->aAddComponent(new TextRenderer("Esperando jugadores...", "toonFont", 72));
+    waitForPlayerLabel->addComponent(new TextRenderer("Esperando jugadores...", "toonFont", 72));
 
     addTransitioner(exitButton);
     addTransitioner(nameLabel);

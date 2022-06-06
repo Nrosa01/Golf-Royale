@@ -11,7 +11,6 @@ Button::~Button() {}
 
 void Button::init()
 {
-    transform = this->ent->getTransform();
     initialScale = transform->getScale();
     wasOverLastFrame = false;
     initialFontSize = fontSize;

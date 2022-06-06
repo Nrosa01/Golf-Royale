@@ -27,7 +27,6 @@ private:
     uint maxLength;
     Texture *textLine;
     std::string text;
-    Transform *transform;
     Vector2D initialScale;
     bool wasOverLastFrame;
     bool selected;

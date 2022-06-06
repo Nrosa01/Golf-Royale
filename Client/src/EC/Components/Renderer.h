@@ -20,7 +20,6 @@ public:
     SDL_Rect getDestRect();
     SDL_Rect getDestRectAt(Vector2D position);
 private:
-Transform* transform;
 Texture* texture;
 };
 

@@ -10,7 +10,6 @@ BallCollisionManager::~BallCollisionManager(){};
 
 void BallCollisionManager::init()
 {
-    transform = this->ent->getComponent<Transform>();
     renderer = this->ent->getComponent<Renderer>();
     ball = this->ent->getComponent<Ball>();
     main = ball->isMainBall();

@@ -10,7 +10,6 @@ TextRenderer::~TextRenderer() {}
 
 void TextRenderer::init()
 {
-    Transform *transform = this->ent->getTransform();
     initialScale = transform->getScale();
 }
 
@@ -19,7 +18,6 @@ void TextRenderer::render()
     if (text.empty())
         return;
 
-    Transform *transform = this->ent->getTransform();
     float scaleRatio = transform->getScale().magnitude() / initialScale.magnitude();
 
     Vector2D pos = transform->getPosition() + offset;

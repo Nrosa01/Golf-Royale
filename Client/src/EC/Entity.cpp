@@ -9,14 +9,14 @@
 Entity::Entity(int x, int y, SDLApp *app)
 {
     transform = new Transform(Vector2D(x, y), 1.0f);
-    aAddComponent(transform);
+    addComponent(transform);
     setGame(app);
 }
 
 Entity::Entity(SDLApp *app)
 {
     transform = new Transform(Vector2D(0, 0), 1.0f);
-    aAddComponent(transform);
+    addComponent(transform);
     setGame(app);
 }
 
@@ -26,7 +26,7 @@ Entity::~Entity()
         delete component.second;
 }
 
-void Entity::aAddComponent(Component *component)
+void Entity::addComponent(Component *component)
 {
     components[component->getName()] = component;
     component->setOwner(this);
@@ -35,6 +35,12 @@ void Entity::aAddComponent(Component *component)
 
 void Entity::removeComponent(std::string name)
 {
+    if (name == transform->getName())
+    {
+        std::cerr << "Cannot remove transform component" << std::endl;
+        return;
+    }
+
     // Delete from array
     for (auto it = componentArray.begin(); it != componentArray.end(); it++)
     {

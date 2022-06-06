@@ -19,7 +19,7 @@ public:
     Entity(SDLApp *app);
     ~Entity();
 
-    void aAddComponent(Component *component);
+    void addComponent(Component *component);
     void removeComponent(std::string name);
 
     Component *getComponent(std::string name);

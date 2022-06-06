@@ -9,20 +9,20 @@ InputSystem::InputSystem()
 {
     // No es un singleton, pero es una clase que se instancia una sola vez.
     InputSystem::instance = this;
-    Init();
+    init();
 }
 
 InputSystem::~InputSystem()
 {
 }
 
-void InputSystem::Init()
+void InputSystem::init()
 {
     keyNums = 322;
     keys = std::vector<key>(keyNums, {false, false, false});
 }
 
-void InputSystem::UpdateState()
+void InputSystem::updateState()
 {
 
     KEY_WAS_PRESSED = false;
@@ -65,7 +65,7 @@ void InputSystem::UpdateState()
     mouseMotion = Vector2D();
 }
 
-void InputSystem::ClearState()
+void InputSystem::clearState()
 {
     for (int i = 0; i < keyNums; i++)
     {
@@ -82,7 +82,7 @@ int InputSystem::getId(SDL_Keycode key)
 }
 
 // UPDATE KEY STATE-------------------------------------------------------
-void InputSystem::OnKeyDown(SDL_Keycode key)
+void InputSystem::onKeyDown(SDL_Keycode key)
 {
     int i = getId(key);
 
@@ -98,7 +98,7 @@ void InputSystem::OnKeyDown(SDL_Keycode key)
     // YA ESTBA PULSADA ==> QUEREMOS MANTENERLA
 }
 
-void InputSystem::OnKeyUp(SDL_Keycode key)
+void InputSystem::onKeyUp(SDL_Keycode key)
 {
     // std::cout << "33333333333\n";
     int i = getId(key);

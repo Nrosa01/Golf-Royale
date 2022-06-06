@@ -23,7 +23,6 @@ private:
     void takeBodyOutOfCollision(Renderer *ball, Renderer *obstacle, Vector2D collisionNormal);
     void notifyCollision(Vector2D collisionNormal);
     Vector2D makeUnitary(Vector2D vector);
-    Transform *transform;
     Renderer *renderer;
     Ball *ball;
     std::vector<Renderer *> *obstacles;
