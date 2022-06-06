@@ -12,6 +12,7 @@ SDLApp::SDLApp(int width, int height, const char *title)
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
         std::cout << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
+        quit();
         return;
     }
     else
@@ -22,6 +23,7 @@ SDLApp::SDLApp(int width, int height, const char *title)
     if (window == NULL)
     {
         std::cout << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
+        quit();
         return;
     }
     else
@@ -32,6 +34,7 @@ SDLApp::SDLApp(int width, int height, const char *title)
     if (renderer == NULL)
     {
         std::cout << "Renderer could not be created! SDL_Error: " << SDL_GetError() << std::endl;
+        quit();
         return;
     }
     else
@@ -40,6 +43,7 @@ SDLApp::SDLApp(int width, int height, const char *title)
     if (TTF_Init() != 0)
     {
         std::cout << "TTF could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
+        quit();
         return;
     }
     else
@@ -48,6 +52,7 @@ SDLApp::SDLApp(int width, int height, const char *title)
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) < 0)
     {
         std::cout << "SDL_mixer could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
+        quit();
         return;
     }
     else

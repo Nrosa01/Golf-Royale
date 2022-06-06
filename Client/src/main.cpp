@@ -1,6 +1,6 @@
 // Copyright © 2022 Rioni
 
-// Permission is hereby granted, free of charge, to any person obtaining a copy of this 
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the “Software”), to deal in the Software without
 // restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute,
 // sublicense, and/or sell copies of the Software, and to permit persons to whom the Software
@@ -24,6 +24,7 @@
 #include "EC/Entity.h"
 #include "EC/Components/Renderer.h"
 #include "GameState/MainMenuState.h"
+#include "ParseTools/ParseTools.h"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
@@ -32,22 +33,36 @@ constexpr uint32_t FRAME_TIME_MS = 1000 / TARGET_FRAME_RATE;
 
 int main(int argc, char **argv)
 {
-    //TODO: Sanity check the arguments
     if (argc != 3)
     {
         std::cerr << "Usage: " << argv[0] << " <address> <port>\n";
         return 1;
     }
 
+    // Check address format
+    if (!ParseTool::is_address(argv[1]))
+    {
+        std::cerr << "Invalid address format.\n";
+        return 1;
+    }
+
+    // Check port format
+    uint32_t port = ParseTool::is_number(argv[2]) ? std::stoi(argv[2]) : -1;
+
+    if (port < 0 || port > 65535)
+    {
+        std::cerr << "Invalid port number.\n";
+        return 1;
+    }
+
     SDLApp app(SCREEN_WIDTH, SCREEN_HEIGHT, "Golf Royale");
-
-    // TODO: Quit if SDL fails to initialize
-
-    
     app.initNetClient(argv[1], argv[2]);
     app.loadTextures("assets/images/");
     app.loadFonts("assets/fonts/");
     app.loadAudio("assets/sounds/");
+
+    if(app.isExitRequested())
+        return 1;
 
     app.pushState(new MainMenuState(&app));
 
