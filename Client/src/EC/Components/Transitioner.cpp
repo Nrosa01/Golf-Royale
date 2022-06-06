@@ -18,7 +18,7 @@ Transitioner::~Transitioner() {}
 
 void Transitioner::init()
 {
-    transform = this->ent->getTransform();
+    transform = &this->ent->transform;;
     initialScale = transform->getScale();
 }
 

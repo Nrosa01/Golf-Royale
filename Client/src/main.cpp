@@ -1,6 +1,6 @@
 // Copyright © 2022 Rioni
 
-// Permission is hereby granted, free of charge, to any person obtaining a copy of this 
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the “Software”), to deal in the Software without
 // restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute,
 // sublicense, and/or sell copies of the Software, and to permit persons to whom the Software
@@ -24,6 +24,7 @@
 #include "EC/Entity.h"
 #include "EC/Components/Renderer.h"
 #include "GameState/MainMenuState.h"
+#include "SerializationsTools/BinaryMatrixSerializer.h"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
@@ -32,7 +33,32 @@ constexpr uint32_t FRAME_TIME_MS = 1000 / TARGET_FRAME_RATE;
 
 int main(int argc, char **argv)
 {
-    //TODO: Sanity check the arguments
+
+    // vec<vec<bool>> binMat(32, vec<bool>(32, 0));
+
+    // // Create a matrix
+    // // 0 1
+    // // 1 1
+
+    // binMat[0][0] = 0;
+    // binMat[0][1] = 1;
+    // binMat[1][0] = 1;
+    // binMat[1][1] = 1;
+
+    // uint32_t _serializedMat = BinaryMatrixSerializer::WriteMatrix(binMat, "./matrix.bin");
+    // int sum = 0; // for every bit of serializedMat, add 1 to sum
+
+    // for (int i = 0; i < 32; ++i)
+    //     sum += (_serializedMat >> i) & 1;
+
+    // std::cout << "Sum of the first 32 bits of the serialized matrix: " << sum << std::endl;
+    // return 0;
+    // binMat.clear();
+    // std::cout << BinaryMatrixSerializer::ReadMatrix(binMat, "./matrix.bin") << std::endl;
+
+    // return 0;
+
+    // TODO: Sanity check the arguments
     if (argc != 3)
     {
         std::cerr << "Usage: " << argv[0] << " <address> <port>\n";
@@ -43,7 +69,6 @@ int main(int argc, char **argv)
 
     // TODO: Quit if SDL fails to initialize
 
-    
     app.initNetClient(argv[1], argv[2]);
     app.loadTextures("assets/images/");
     app.loadFonts("assets/fonts/");
@@ -81,14 +106,14 @@ int main(int argc, char **argv)
                 Input()->OnKeyUp(key);
                 break;
             case SDL_MOUSEBUTTONDOWN:
-                Input()->OnMouseButtonDown(e.button);
+                Input()->onMouseButtonDown(e.button);
                 break;
             case SDL_MOUSEBUTTONUP:
-                Input()->OnMouseButtonUp(e.button);
+                Input()->onMouseButtonUp(e.button);
                 break;
             case SDL_MOUSEMOTION:
                 // This is usually implemented as a callback but for now it will be this way, just for testing...
-                Input()->SetMouseMotion(Vector2D(e.motion.xrel, e.motion.yrel));
+                Input()->setMouseMotion(Vector2D(e.motion.xrel, e.motion.yrel));
                 break;
             default:
                 // std::cout << "Default (" << eventHandler.type << ")\n";
@@ -108,7 +133,7 @@ int main(int argc, char **argv)
             SDL_Delay(FRAME_TIME_MS - frameTime);
         }
 
-        time.UpdateTimeRegistry(SDL_GetTicks());
+        time.updateTimeRegistry(SDL_GetTicks());
     }
 
     return 0;

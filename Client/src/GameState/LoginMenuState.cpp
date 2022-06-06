@@ -18,28 +18,28 @@ LoginMenuState::LoginMenuState(SDLApp *app) : GameState(app)
     createEntity(Vector2D(width / 2, height / 2), Vector2D(1, 1), "menuBg");
 
     Entity *lobbyTittle = createEntity(Vector2D(width / 2, 75), Vector2D(1, 1), "button");
-    lobbyTittle->aAddComponent(new TextRenderer("Lobby", "toonFont", 72));
+    lobbyTittle->addComponent(new TextRenderer("Lobby", "toonFont", 72));
 
     inputField = createEntity(Vector2D(width / 2 + 125, height / 2 - 100), Vector2D(0.5f, 1));
-    inputField->aAddComponent(new TextField(app->getTexture("button"), "toonFont", 72, 8));
+    inputField->addComponent(new TextField(app->getTexture("button"), "toonFont", 72, 8));
 
     Entity *inputLabel = createEntity(Vector2D(width / 2 - 125, height / 2 - 100), Vector2D(0.4, 0.5), "button");
-    inputLabel->aAddComponent(new TextRenderer("Ingrese su nombre:", "toonFont", 24));
+    inputLabel->addComponent(new TextRenderer("Ingrese su nombre:", "toonFont", 24));
 
     gameCodeInputField = createEntity(Vector2D(width / 2 + 125, height / 2), Vector2D(0.5f, 1));
-    gameCodeInputField->aAddComponent(new TextField(app->getTexture("button"), "toonFont", 72));
+    gameCodeInputField->addComponent(new TextField(app->getTexture("button"), "toonFont", 72));
 
     Entity *gameCodeInputLabel = createEntity(Vector2D(width / 2 - 125, height / 2), Vector2D(0.4, 0.5), "button");
-    gameCodeInputLabel->aAddComponent(new TextRenderer("Codigo del juego:", "toonFont", 24));
+    gameCodeInputLabel->addComponent(new TextRenderer("Codigo del juego:", "toonFont", 24));
 
     Entity *exitButton = createEntity(Vector2D(width / 2, height / 2 + 200), Vector2D(0.5f, 1));
-    exitButton->aAddComponent(new Button(app->getTexture("button"), "Menu", "toonFont", 72, exitStateCallback()));
+    exitButton->addComponent(new Button(app->getTexture("button"), "Menu", "toonFont", 72, exitStateCallback()));
 
     Entity *startButton = createEntity(Vector2D(width / 2, height / 2 + 100), Vector2D(0.5f, 1));
-    startButton->aAddComponent(new Button(app->getTexture("button"), "Unirse", "toonFont", 72, loginCallback()));
+    startButton->addComponent(new Button(app->getTexture("button"), "Unirse", "toonFont", 72, loginCallback()));
 
     errorLabel = createEntity(Vector2D(width / 2, height / 2 + 275), Vector2D(0.5f, 0.5f), "button");
-    errorLabel->aAddComponent(new TextRenderer("Introduzca nombre y codigo", "toonFont", 24, {255, 0, 0}));
+    errorLabel->addComponent(new TextRenderer("Introduzca nombre y codigo", "toonFont", 24, {255, 0, 0}));
 
     addTransitioner(exitButton);
     addTransitioner(inputField);
@@ -67,7 +67,7 @@ std::function<void()> LoginMenuState::loginCallback()
             return;
         }
 
-        if (this->errorLabel->getTransform()->getScale().x < 0.1f)
+        if (this->errorLabel->transform.scale.x < 0.1f)
             errorLabel->getComponent<Transitioner>()->disable();
 
         startExitTransitionTimer([this, name, gameCode](GameState *gmState, void *args)

@@ -6,17 +6,15 @@
 #include "../Network/NetworkMessage.h"
 #include <string>
 
-Entity::Entity(int x, int y, SDLApp *app)
+Entity::Entity(int x, int y, SDLApp *app): transform(*new Transform(Vector2D(x, y), 1.0f))
 {
-    transform = new Transform(Vector2D(x, y), 1.0f);
-    aAddComponent(transform);
+    addComponent(&transform);
     setGame(app);
 }
 
-Entity::Entity(SDLApp *app)
+Entity::Entity(SDLApp *app) : transform(*new Transform(Vector2D(0, 0), 1.0f))
 {
-    transform = new Transform(Vector2D(0, 0), 1.0f);
-    aAddComponent(transform);
+    addComponent(&transform);
     setGame(app);
 }
 
@@ -26,7 +24,7 @@ Entity::~Entity()
         delete component.second;
 }
 
-void Entity::aAddComponent(Component *component)
+void Entity::addComponent(Component *component)
 {
     components[component->getName()] = component;
     component->setOwner(this);
@@ -94,11 +92,6 @@ void Entity::receiveNetworkMessage(NetworkMessage *msg)
 {
     for (auto component : componentArray)
         component->receiveNetworkMessage(msg);
-}
-
-Transform *Entity::getTransform()
-{
-    return transform;
 }
 
 void Entity::setGame(SDLApp *app)
