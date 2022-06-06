@@ -5,18 +5,20 @@ using namespace std;
 
 void Texture::freeMemory()
 {
-   SDL_DestroyTexture(texture);
-   texture = nullptr;
-   w = h = 0;
+	SDL_DestroyTexture(texture);
+	texture = nullptr;
+	w = h = 0;
 }
 
 void Texture::load(string filename, uint nRows, uint nCols)
 {
-	SDL_Surface* tempSurface = IMG_Load(filename.c_str());
-	if (tempSurface == nullptr) throw string("Error loading surface from " + filename);
+	SDL_Surface *tempSurface = IMG_Load(filename.c_str());
+	if (tempSurface == nullptr)
+		throw string("Error loading surface from " + filename);
 	freeMemory();
 	texture = SDL_CreateTextureFromSurface(renderer, tempSurface);
-	if (texture == nullptr) throw string("Error loading texture from " + filename);
+	if (texture == nullptr)
+		throw string("Error loading texture from " + filename);
 	numRows = nRows;
 	numCols = nCols;
 	w = tempSurface->w;
@@ -27,43 +29,70 @@ void Texture::load(string filename, uint nRows, uint nCols)
 	this->filename = filename;
 }
 
-void Texture::render(const SDL_Rect& destRect, SDL_RendererFlip flip) const
+void Texture::loadFromSurface(SDL_Surface *tempSurface)
 {
-	SDL_Rect srcRect;
-	srcRect.x = 0; srcRect.y = 0;
-	srcRect.w = w; srcRect.h = h;
-	SDL_RenderCopyEx(renderer, texture, &srcRect, &destRect, 0, 0, flip);
+	if (tempSurface == nullptr)
+		throw string("Error loading surface");
+	freeMemory();
+
+	texture = SDL_CreateTextureFromSurface(renderer, tempSurface);
+	if (texture == nullptr)
+		throw string("Error loading texture from surface");
+	numRows = 1;
+	numCols = 1;
+	w = tempSurface->w;
+	h = tempSurface->h;
+	fw = w;
+	fh = h;
+	SDL_FreeSurface(tempSurface);
 }
 
-void Texture::render(const SDL_Rect& destRect, int angle, SDL_RendererFlip flip) const
-{
-	SDL_Rect srcRect;
-	srcRect.x = 0; srcRect.y = 0;
-	srcRect.w = w; srcRect.h = h;
-	SDL_RenderCopyEx(renderer, texture, &srcRect, &destRect, angle, 0, flip);
-}
+	void Texture::render(const SDL_Rect &destRect, SDL_RendererFlip flip) const
+	{
+		SDL_Rect srcRect;
+		srcRect.x = 0;
+		srcRect.y = 0;
+		srcRect.w = w;
+		srcRect.h = h;
+		SDL_RenderCopyEx(renderer, texture, &srcRect, &destRect, 0, 0, flip);
+	}
 
-void Texture::render(const SDL_Rect& destRect, int angle, SDL_Point center, SDL_RendererFlip flip) const
-{
-	SDL_Rect srcRect;
-	srcRect.x = 0; srcRect.y = 0;
-	srcRect.w = w; srcRect.h = h;
-	SDL_RenderCopyEx(renderer, texture, &srcRect, &destRect, angle, &center, flip);
-}
+	void Texture::render(const SDL_Rect &destRect, int angle, SDL_RendererFlip flip) const
+	{
+		SDL_Rect srcRect;
+		srcRect.x = 0;
+		srcRect.y = 0;
+		srcRect.w = w;
+		srcRect.h = h;
+		SDL_RenderCopyEx(renderer, texture, &srcRect, &destRect, angle, 0, flip);
+	}
 
-void Texture::renderFrame(const SDL_Rect& destRect, int row, int col, int angle, SDL_RendererFlip flip) const
-{
-	SDL_Rect srcRect;
-	srcRect.x = fw * col;
-	srcRect.y = fh * row;
-	srcRect.w = fw;
-	srcRect.h = fh;
-	SDL_RenderCopyEx(renderer, texture, &srcRect, &destRect, angle, 0, flip);
-}
+	void Texture::render(const SDL_Rect &destRect, int angle, SDL_Point center, SDL_RendererFlip flip) const
+	{
+		SDL_Rect srcRect;
+		srcRect.x = 0;
+		srcRect.y = 0;
+		srcRect.w = w;
+		srcRect.h = h;
+		SDL_RenderCopyEx(renderer, texture, &srcRect, &destRect, angle, &center, flip);
+	}
 
-Texture* Texture::getClone()
-{
-	Texture* t = new Texture(renderer);
-	t->load(filename, numRows, numCols);
-	return t;
-}
+	void Texture::renderFrame(const SDL_Rect &destRect, int row, int col, int angle, SDL_RendererFlip flip) const
+	{
+		SDL_Rect srcRect;
+		srcRect.x = fw * col;
+		srcRect.y = fh * row;
+		srcRect.w = fw;
+		srcRect.h = fh;
+		SDL_RenderCopyEx(renderer, texture, &srcRect, &destRect, angle, 0, flip);
+	}
+
+	Texture *Texture::getClone()
+	{
+		if(filename.empty())
+			throw string("Error cloning texture: no filename");
+
+		Texture *t = new Texture(renderer);
+		t->load(filename, numRows, numCols);
+		return t;
+	}

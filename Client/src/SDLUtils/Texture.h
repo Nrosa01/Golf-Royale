@@ -38,6 +38,7 @@ public:
     void setAlpha(uint alpha) { SDL_SetTextureAlphaMod(texture, alpha); };
 
     void load(string filename, uint numRows = 1, uint numCols = 1);                                                           // construir/cargar la textura de un fichero
+    void loadFromSurface(SDL_Surface* surface = nullptr);                                                                                // construir/cargar la textura de un surfae ya dado
     void render(const SDL_Rect &rect, SDL_RendererFlip flip = SDL_FLIP_NONE) const;                                           // dibujar la textura en su totalidad en la posición proporcionada
     void render(const SDL_Rect &rect, int angle, SDL_RendererFlip flip = SDL_FLIP_NONE) const;                                // dibujar la textura en su totalidad en la posición proporcionada
     void render(const SDL_Rect &rect, int angle, SDL_Point center, SDL_RendererFlip flip = SDL_FLIP_NONE) const;                                // dibujar la textura en su totalidad en la posición proporcionada

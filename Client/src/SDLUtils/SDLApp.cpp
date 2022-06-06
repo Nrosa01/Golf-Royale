@@ -5,7 +5,7 @@
 #include "Texture.h"
 #include "../Network/Client.h"
 #include "../Network/NetworkMessage.h"
-
+#include "SDLTextRenderer.h"
 
 SDLApp::SDLApp(int width, int height, const char *title)
 {
@@ -78,6 +78,7 @@ SDLApp::SDLApp(int width, int height, const char *title)
     textureManager = new TextureManager(renderer);
     fontManager = new FontManager(MAX_FONT_SIZE);
     soundsManager = new SoundsManager();
+    textRenderer = new SDLTextRenderer(renderer, MAX_FONT_SIZE);
 }
 
 SDLApp::~SDLApp()
@@ -198,28 +199,7 @@ void SDLApp::renderText(float p_x, float p_y, const char *p_text, std::string fo
 
 void SDLApp::renderText(float p_x, float p_y, const char *p_text, TTF_Font *font, int size, SDL_Color textColor)
 {
-    SDL_Surface *surfaceMessage = TTF_RenderText_Blended(font, p_text, textColor);
-    SDL_Texture *message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
-
-    SDL_Rect src;
-    src.x = 0;
-    src.y = 0;
-    src.w = surfaceMessage->w;
-    src.h = surfaceMessage->h;
-
-    float fontSize = (float)size / MAX_FONT_SIZE;
-    int fontSizeX = src.w * fontSize;
-    int fontSizeY = src.h * fontSize;
-
-    SDL_Rect dst;
-    dst.x = p_x - fontSizeX / 2;
-    dst.y = p_y - fontSizeY / 2;
-    dst.w = fontSizeX;
-    dst.h = fontSizeY;
-
-    SDL_RenderCopy(renderer, message, &src, &dst);
-    SDL_FreeSurface(surfaceMessage);
-    SDL_DestroyTexture(message);
+    textRenderer->renderText(p_x, p_y, p_text, font, size, textColor);
 }
 
 void SDLApp::renderTextCenter(float p_x, float p_y, const char *p_text, std::string fontName, int size, SDL_Color textColor)
@@ -229,28 +209,7 @@ void SDLApp::renderTextCenter(float p_x, float p_y, const char *p_text, std::str
 
 void SDLApp::renderTextCenter(float p_x, float p_y, const char *p_text, TTF_Font *font, int size, SDL_Color textColor)
 {
-    SDL_Surface *surfaceMessage = TTF_RenderText_Blended(font, p_text, textColor);
-    SDL_Texture *message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
-
-    SDL_Rect src;
-    src.x = 0;
-    src.y = 0;
-    src.w = surfaceMessage->w;
-    src.h = surfaceMessage->h;
-
-    int fontSize = size / MAX_FONT_SIZE;
-    int fontSizeX = src.w * fontSize;
-    int fontSizeY = src.h * fontSize;
-
-    SDL_Rect dst;
-    dst.x = this->getWidth() / 2 - fontSizeX / 2 + p_x;
-    dst.y = this->getHeight() / 2 - fontSizeY / 2 + p_y;
-    dst.w = fontSizeX;
-    dst.h = fontSizeY;
-
-    SDL_RenderCopy(renderer, message, &src, &dst);
-    SDL_FreeSurface(surfaceMessage);
-    SDL_DestroyTexture(message);
+    this->renderText(p_x + getWidth() / 2, p_y + getHeight() / 2, p_text, font, size, textColor);
 }
 
 void SDLApp::quit()

@@ -15,17 +15,12 @@ Easy, first clone this git repo:
 ```sh
 git clone https://github.com/Nrosa01/Proyecto-Final-Redes
 ```
-Then run the setup bash
 
-```sh
-bash setup.bash
-```
 
 ## Linux, MacOS and Windows
 
 There are build instructions inside [client](./Client/BUILD.md) and [server](./Server/BUILD.md) folders, including requisites.
 
-Just go to Client or Server and run `make`.
 
 
 # How to launch the game or the server
@@ -40,31 +35,38 @@ Inside Client or Server, just call
 ```
 Where app name is Golf-Royale-Debug/Release or Golf-Server-Debug/Release depending on what folder you are in.
 
+----
+
+
 There are also some bash scripts for making this easier:
-BuildAndExecute
+
+### BuildAndExecute
 ```sh
-bash buildAndExecute.bash (-r) ip address
+bash buildAndExecute.bash (-r) ip_address port
 ```
 
 You can build for debug with the flag -d or with no flag, and for release with -r flag.
 
-ExecuteOnlyBash
+----
+
+### ExecuteOnlyBash
 ```sh
-bash executeOnlyBash.bash (-r) ip address
+bash executeOnlyBash.bash (-r) ip_address port
 ```
 
 Yey you guessed it, this just runs the app, but doesn't builds it.
 
+-----
+
 There is also an special bat inside Client:
 
-MultiExecuteBash
+### MultiExecuteBash
 
-ExecuteOnlyBash
 ```sh
 bash multiExecuteBash.bash number (-r) ip address
 ```
 
-This creates n instances of the game, mainly use for testing purposes, it works the same as executeOnlyBash with an additional flag. If the first argument is not a number it will call executeOnlyBashInstead.
+This creates n instances of the game, mainly suited for testing purposes, it works the same as executeOnlyBash. If the first argument is not a number it will call executeOnlyBashInstead.
 
 The program currently don't sanitize the input, if you pass a string instead of an IP it will probably crash.
 
@@ -83,21 +85,23 @@ In the future I expect to upload the server to Heraku so anyone can play without
 Here I'll lazily list features and thing I want to get done as far of now. They are ordered by priority. Finish time won't be written because just depends on whether I feel like programming or not.
 
 - [x] Update Makefile to build debug and release.
-- [ ] Sanity check program arguments, quit game if SDL fails to init.
+- [x] Sanity check program arguments, quit game if SDL fails to init.
 - [ ] Add an input thread to the server to be able to quit it safely.
 - [ ] Improve ball physics (implement continuos collision detection).
 - [ ] Change netcode from sockets to SDL_Net (TCP instead of UDP).
-- [ ] Improve text render efficiency.
+- [x] Improve text render efficiency.
 - [ ] Refactor ball code, separate offline from remote.
 - [ ] Add visual feedback of where you start to press the ball.
-- [ ] Add Windows and CetOS support (build .exe, .deb and .rpm).
-- [ ] Serialize levels in a single uint32.
-- [ ] Improve physics (changing ball "collider" to circle collider, or using Box2D).
+- [ ] Add Windows and CentOS support (build .exe, .deb and .rpm).
+- [ ] Serialize levels in 128 bytes as maximum.
+- [ ] Make the ball use a circle collider.
+- [ ] Implemente fixedUpdate step and proper physics.
 - [ ] Ground types (ice, normal...).
 - [ ] Level editor.
 - [ ] Refactor code, separate engine from game.
 - [ ] Change windows ratio to 16/9, add real adaptative UI and fullscreen support.
 - [ ] Automatically turn off server after not receiving petitions for x time.
+- [ ] Add support for rooms for more than 2 players (8 max)
 
 # FAQ
 

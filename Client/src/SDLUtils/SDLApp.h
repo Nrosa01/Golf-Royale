@@ -15,6 +15,7 @@ class Client;
 class NetworkMessage;
 class TextureManager;
 class FontManager;
+class SDLTextRenderer;
 
 class SDLApp
 #define MAX_FONT_SIZE 240
@@ -66,6 +67,7 @@ private:
     TextureManager* textureManager;
     FontManager* fontManager;
     SoundsManager* soundsManager;
+    SDLTextRenderer* textRenderer;
     int width;
     int height;
     InputSystem *input;
