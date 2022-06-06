@@ -18,8 +18,8 @@ Transitioner::~Transitioner() {}
 
 void Transitioner::init()
 {
-    transform = this->ent->GetTransform();
-    initialScale = transform->GetScale();
+    transform = this->ent->getTransform();
+    initialScale = transform->getScale();
 }
 
 void Transitioner::lateUpdate(float deltaTime)
@@ -39,9 +39,9 @@ void Transitioner::lateUpdate(float deltaTime)
     if (!isScaling)
         lerpTime = 1 - lerpTime;
 
-    float scaleX = Lerp(0, initialScale.x, lerpTime);
-    float scaleY = Lerp(0, initialScale.y, lerpTime);
-    transform->GetScale() = Vector2D(scaleX, scaleY);
+    float scaleX = lerp(0, initialScale.x, lerpTime);
+    float scaleY = lerp(0, initialScale.y, lerpTime);
+    transform->getScale() = Vector2D(scaleX, scaleY);
 }
 
 void Transitioner::startScale()
@@ -51,7 +51,7 @@ void Transitioner::startScale()
     isScaling = true;
     timer = 0.0f;
     isFinished = false;
-    transform->GetScale() = Vector2D(0, 0);
+    transform->getScale() = Vector2D(0, 0);
 }
 
 void Transitioner::startFade()
@@ -61,7 +61,7 @@ void Transitioner::startFade()
     isScaling = false;
     timer = 0.0f;
     isFinished = false;
-    transform->GetScale() = initialScale;
+    transform->getScale() = initialScale;
 }
 
 void Transitioner::stop()

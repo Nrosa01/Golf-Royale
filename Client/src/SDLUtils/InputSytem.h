@@ -53,18 +53,18 @@ public:
     bool anyKeyIsDown();
     bool anyKeyWasReleased();
 
-    void OnMouseButtonDown(SDL_MouseButtonEvent buttonEvent);
-    void OnMouseButtonUp(SDL_MouseButtonEvent buttonEvent);
+    void onMouseButtonDown(SDL_MouseButtonEvent buttonEvent);
+    void onMouseButtonUp(SDL_MouseButtonEvent buttonEvent);
 
-    bool IsMouseButtonDown(int button);
-    bool IsMouseButtonPressed(int button);
-    bool IsMouseButtonReleased(int button);
+    bool isMouseButtonDown(int button);
+    bool isMouseButtonPressed(int button);
+    bool isMouseButtonReleased(int button);
 
-    void SetMouseMotion(Vector2D motion);
-    Vector2D GetMouseMotion() const;
-    Vector2D GetMousePosition();
+    void setMouseMotion(Vector2D motion);
+    Vector2D getMouseMotion() const;
+    Vector2D getMousePosition();
 
-    char GetLastKeyPressed();
+    char getLastKeyPressed();
 };
 
 inline InputSystem *Input()

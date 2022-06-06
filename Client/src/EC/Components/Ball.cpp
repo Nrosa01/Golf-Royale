@@ -22,8 +22,8 @@ Ball::~Ball() {}
 
 void Ball::init()
 {
-    transform = this->ent->GetTransform();
-    renderer = this->ent->GetComponent<Renderer>();
+    transform = this->ent->getTransform();
+    renderer = this->ent->getComponent<Renderer>();
     sensibilidad = 10.0f;
 }
 
@@ -36,20 +36,20 @@ void Ball::update(float deltaTime)
 
     if (mainBall)
     {
-        BallPosMessage hitMsg(transform->GetPosition().x, transform->GetPosition().y);
+        BallPosMessage hitMsg(transform->getPosition().x, transform->getPosition().y);
         sendNetworkMessage(hitMsg);
     }
 
     // Update position
-    transform->GetPosition().x += velocity.x * deltaTime;
-    transform->GetPosition().y += velocity.y * deltaTime;
+    transform->getPosition().x += velocity.x * deltaTime;
+    transform->getPosition().y += velocity.y * deltaTime;
 
     // Simulate friction
-    if (velocity.Magnitude() > mininumThreshold)
+    if (velocity.magnitude() > mininumThreshold)
     {
-        float vel = velocity.Magnitude() - (friction * deltaTime);
+        float vel = velocity.magnitude() - (friction * deltaTime);
         vel = vel < mininumThreshold ? 0 : vel;
-        velocity = velocity.Normalized() * vel;
+        velocity = velocity.normalized() * vel;
     }
     else
     {
@@ -72,9 +72,9 @@ void Ball::handleMain()
     if (!this->mainBall || !playerTurn)
         return;
 
-    Vector2D mousePos = Input()->GetMousePosition();
+    Vector2D mousePos = Input()->getMousePosition();
 
-    if (Input()->IsMouseButtonDown(0) && state == BallState::IDLE)
+    if (Input()->isMouseButtonDown(0) && state == BallState::IDLE)
     {
         state = BallState::PRESSED;
         startPressPoint = mousePos;
@@ -84,20 +84,20 @@ void Ball::handleMain()
     if (state == BallState::PRESSED)
     {
         currentLaunchForce = getLaunchStrength(startPressPoint, mousePos);
-        currentLaunchDirection = (startPressPoint - mousePos).Normalized();
+        currentLaunchDirection = (startPressPoint - mousePos).normalized();
     }
 
-    if (!Input()->IsMouseButtonDown(0) && state == BallState::PRESSED)
+    if (!Input()->isMouseButtonDown(0) && state == BallState::PRESSED)
     {
         state = BallState::MOVING;
         setVelocity(startPressPoint, mousePos);
         currentLaunchForce = 0;
 
-        if (velocity.Magnitude() > mininumThreshold)
+        if (velocity.magnitude() > mininumThreshold)
         {
             this->playSound("swing");
         }
-        // std::cout << "endPressPoint: " << Input()->GetMousePosition().x << " " << Input()->GetMousePosition().y << std::endl;
+        // std::cout << "endPressPoint: " << Input()->getMousePosition().x << " " << Input()->getMousePosition().y << std::endl;
         // std::cout << "setVelocity: " << velocity.x << " " << velocity.y << std::endl;
     }
 }
@@ -118,7 +118,7 @@ float Ball::getLaunchStrength(Vector2D startPoint, Vector2D endPoint)
 void Ball::setVelocity(Vector2D startPoint, Vector2D endPoint)
 {
     float force = getLaunchStrength(startPoint, endPoint);
-    Vector2D dir = (startPoint - endPoint).Normalized();
+    Vector2D dir = (startPoint - endPoint).normalized();
     dir *= force;
     velocity = dir;
 }
@@ -133,7 +133,7 @@ void Ball::receiveNetworkMessage(NetworkMessage *msg)
     if (msg->type == BALL_POS && !mainBall)
     {
         BallPosMessage *hitMsg = static_cast<BallPosMessage *>(msg);
-        transform->GetPosition() = Vector2D(hitMsg->xForce, hitMsg->yForce);
+        transform->getPosition() = Vector2D(hitMsg->xForce, hitMsg->yForce);
         state = BallState::MOVING;
     }
     else if (msg->type == TURN_END && mainBall) // Esto significa que el otro jugador ha acabado su turno
@@ -149,7 +149,7 @@ float Ball::getCurrentLaunchForce() const
 
 Vector2D Ball::getCurrentLaunchDirection() const
 {
-    return currentLaunchDirection.Normalized();
+    return currentLaunchDirection.normalized();
 }
 
 float Ball::getMaxLaunchForce() const

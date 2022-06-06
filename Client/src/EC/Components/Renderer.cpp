@@ -10,7 +10,7 @@ Renderer::~Renderer(){};
 
 void Renderer::init()
 {
-    transform = this->ent->GetComponent<Transform>();
+    transform = this->ent->getComponent<Transform>();
 
     if (transform == nullptr)
     {
@@ -25,10 +25,10 @@ void Renderer::render()
 
     return;
     // Render text with position, used for debug
-    int posx = transform->GetPosition().x;
-    int posy = transform->GetPosition().y;
-    this->ent->GetGame()->renderText(posx, posy, std::to_string(posx).c_str(), "toonFont", 20, {255, 0, 0});
-    this->ent->GetGame()->renderText(posx, posy + 20, std::to_string(posx).c_str(), "toonFont", 20, {0, 0, 0});
+    int posx = transform->getPosition().x;
+    int posy = transform->getPosition().y;
+    this->ent->getGame()->renderText(posx, posy, std::to_string(posx).c_str(), "toonFont", 20, {255, 0, 0});
+    this->ent->getGame()->renderText(posx, posy + 20, std::to_string(posx).c_str(), "toonFont", 20, {0, 0, 0});
 }
 
 int Renderer::getWidth()
@@ -44,10 +44,10 @@ int Renderer::getHeight()
 SDL_Rect Renderer::getDestRect()
 {
     SDL_Rect destRect;
-    int textW = texture->getW() * transform->GetScale().x;
-    int textH = texture->getH() * transform->GetScale().y;
-    destRect.x = transform->GetPosition().getX();
-    destRect.y = transform->GetPosition().getY();
+    int textW = texture->getW() * transform->getScale().x;
+    int textH = texture->getH() * transform->getScale().y;
+    destRect.x = transform->getPosition().getX();
+    destRect.y = transform->getPosition().getY();
     destRect.w = textW;
     destRect.h = textH;
 
@@ -57,10 +57,10 @@ SDL_Rect Renderer::getDestRect()
 SDL_Rect Renderer::getDestRectCentered()
 {
     SDL_Rect destRect;
-    int textW = texture->getW() * transform->GetScale().x;
-    int textH = texture->getH() * transform->GetScale().y;
-    destRect.x = transform->GetPosition().getX() - textW / 2;
-    destRect.y = transform->GetPosition().getY() - textH / 2;
+    int textW = texture->getW() * transform->getScale().x;
+    int textH = texture->getH() * transform->getScale().y;
+    destRect.x = transform->getPosition().getX() - textW / 2;
+    destRect.y = transform->getPosition().getY() - textH / 2;
     destRect.w = textW;
     destRect.h = textH;
 
@@ -71,8 +71,8 @@ SDL_Rect Renderer::getDestRectCentered()
 SDL_Rect Renderer::getDestRectAt(Vector2D position)
 {
     SDL_Rect destRect;
-    int textW = texture->getW() * transform->GetScale().x;
-    int textH = texture->getH() * transform->GetScale().y;
+    int textW = texture->getW() * transform->getScale().x;
+    int textH = texture->getH() * transform->getScale().y;
     destRect.x = position.getX();
     destRect.y = position.getY();
     destRect.w = textW;

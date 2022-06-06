@@ -19,33 +19,26 @@ public:
     Entity(SDLApp *app);
     ~Entity();
 
-    void AddComponent(Component *component);
-    void RemoveComponent(std::string name);
+    void aAddComponent(Component *component);
+    void removeComponent(std::string name);
 
-    Component *GetComponent(std::string name);
+    Component *getComponent(std::string name);
     void init();
     void update(float deltaTime);
     void lateUpdate(float deltaTime);
     void render();
 	void receiveNetworkMessage(NetworkMessage* msg);
 
-    Transform *GetTransform();
-    void SetGame(SDLApp *app);
-    SDLApp *GetGame();
+    Transform *getTransform();
+    void setGame(SDLApp *app);
+    SDLApp *getGame();
 
-    // I cant define this in the cpp as it is a non specialized template method
-    template <typename T>
-    T *GetComponent(std::string name)
-    {
-        return dynamic_cast<T *>(GetComponent(name));
-    }
-
-    // THis is dangerous, might not work
+    // This is dangerous, might not work
     template <class T>
-    T *GetComponent()
+    T *getComponent()
     {
         std::string n = typeid(T).name();
-        return dynamic_cast<T *>(GetComponent(n));
+        return dynamic_cast<T *>(getComponent(n));
     }
 
 private:

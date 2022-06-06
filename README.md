@@ -85,7 +85,8 @@ Here I'll lazily list features and thing I want to get done as far of now. They 
 - [x] Update Makefile to build debug and release.
 - [ ] Sanity check program arguments, quit game if SDL fails to init.
 - [ ] Add an input thread to the server to be able to quit it safely.
-- [ ] Change netcode from sockets to SDL_Net.
+- [ ] Improve ball physics (implement continuos collision detection).
+- [ ] Change netcode from sockets to SDL_Net (TCP instead of UDP).
 - [ ] Improve text render efficiency.
 - [ ] Refactor ball code, separate offline from remote.
 - [ ] Add visual feedback of where you start to press the ball.

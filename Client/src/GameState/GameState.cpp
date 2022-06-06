@@ -85,7 +85,7 @@ void GameState::startExitTransitionTimer(GameStateCallback callback, void *args)
 Transitioner *GameState::addTransitioner(Entity *e)
 {
     Transitioner *transitioner = new Transitioner(TRANSITION_TIME);
-    e->AddComponent(transitioner);
+    e->aAddComponent(transitioner);
     transitioners.push_back(transitioner);
     return transitioner;
 }
@@ -93,9 +93,9 @@ Transitioner *GameState::addTransitioner(Entity *e)
 Entity *GameState::createEntity(Vector2D pos, Vector2D scale, string textureName)
 {
     Entity *e = new Entity(pos.x, pos.y, app);
-    e->GetTransform()->GetScale() = scale;
+    e->getTransform()->getScale() = scale;
     if (!textureName.empty())
-        e->AddComponent(new Renderer(app->getTexture(textureName)));
+        e->aAddComponent(new Renderer(app->getTexture(textureName)));
     entities.push_back(e);
 
     return e;

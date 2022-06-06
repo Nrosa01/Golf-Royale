@@ -10,8 +10,8 @@ TextRenderer::~TextRenderer() {}
 
 void TextRenderer::init()
 {
-    Transform *transform = this->ent->GetTransform();
-    initialScale = transform->GetScale();
+    Transform *transform = this->ent->getTransform();
+    initialScale = transform->getScale();
 }
 
 void TextRenderer::render()
@@ -19,11 +19,11 @@ void TextRenderer::render()
     if (text.empty())
         return;
 
-    Transform *transform = this->ent->GetTransform();
-    float scaleRatio = transform->GetScale().Magnitude() / initialScale.Magnitude();
+    Transform *transform = this->ent->getTransform();
+    float scaleRatio = transform->getScale().magnitude() / initialScale.magnitude();
 
-    Vector2D pos = transform->GetPosition() + offset;
-    this->ent->GetGame()->renderText(pos.x, pos.y, text.c_str(), font, fontSize * scaleRatio, textColor);
+    Vector2D pos = transform->getPosition() + offset;
+    this->ent->getGame()->renderText(pos.x, pos.y, text.c_str(), font, fontSize * scaleRatio, textColor);
 }
 
 void TextRenderer::setText(const char *text)

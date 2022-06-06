@@ -27,9 +27,9 @@ public:
 	bool operator==     (const Vector2D& vector) const; // igualdad
 	bool operator!=     (const Vector2D& vector) const; // desigualdad
 	void operator=      (const Vector2D& vector);       // asignación
-	Vector2D Inverted     () const;						// devuelve el vector multiplicado por -1
-	Vector2D Normalized () const;						// devuelve el vector normalizado
-	float Magnitude  ()const;						// devuelve el módulo del vector
+	Vector2D inverted     () const;						// devuelve el vector multiplicado por -1
+	Vector2D normalized () const;						// devuelve el vector normalizado
+	float magnitude  ()const;						// devuelve el módulo del vector
 	friend istream& operator>>(istream& in, Vector2D& vector);
 	friend ostream& operator<<(ostream& out, const Vector2D& vector);
 };

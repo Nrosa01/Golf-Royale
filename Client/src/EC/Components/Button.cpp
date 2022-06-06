@@ -11,8 +11,8 @@ Button::~Button() {}
 
 void Button::init()
 {
-    transform = this->ent->GetTransform();
-    initialScale = transform->GetScale();
+    transform = this->ent->getTransform();
+    initialScale = transform->getScale();
     wasOverLastFrame = false;
     initialFontSize = fontSize;
 }
@@ -27,7 +27,7 @@ void Button::update(float deltaTime)
 
     if (isMouseOver())
     {
-        // Lerp scale from current Scale to 1.1f
+        // lerp scale from current Scale to 1.1f
         timer += deltaTime;
         if (timer > lerpAnimTime)
             timer = lerpAnimTime;
@@ -40,7 +40,7 @@ void Button::update(float deltaTime)
     }
     else
     {
-        // Lerp scale from current Scale to 1.0f
+        // lerp scale from current Scale to 1.0f
         timer -= deltaTime;
         if (timer < 0.0f)
             timer = 0.0f;
@@ -50,20 +50,20 @@ void Button::update(float deltaTime)
 
     float scaleX = initialScale.x + (timer / lerpAnimTime) * 0.1f;
     float scaleY = initialScale.y + (timer / lerpAnimTime) * 0.1f;
-    float scaleRatio = transform->GetScale().Magnitude() / initialScale.Magnitude();
+    float scaleRatio = transform->getScale().magnitude() / initialScale.magnitude();
 
     fontSize = initialFontSize + (timer / lerpAnimTime) * 20.0f;
     fontSize *= scaleRatio;
-    transform->GetScale() = Vector2D(scaleX, scaleY);
+    transform->getScale() = Vector2D(scaleX, scaleY);
 }
 
 void Button::render()
 {
     SDL_Rect destRect;
-    int textW = texture->getW() * transform->GetScale().x;
-    int textH = texture->getH() * transform->GetScale().y;
-    destRect.x = transform->GetPosition().getX() - textW / 2;
-    destRect.y = transform->GetPosition().getY() - textH / 2;
+    int textW = texture->getW() * transform->getScale().x;
+    int textH = texture->getH() * transform->getScale().y;
+    destRect.x = transform->getPosition().getX() - textW / 2;
+    destRect.y = transform->getPosition().getY() - textH / 2;
     destRect.w = textW;
     destRect.h = textH;
 
@@ -71,18 +71,18 @@ void Button::render()
 
     if (text != nullptr)
     {
-        int textPosX = transform->GetPosition().getX();
-        int textPosY = transform->GetPosition().getY();
+        int textPosX = transform->getPosition().getX();
+        int textPosY = transform->getPosition().getY();
         SDL_Color hoverColor = {255, 255, 255, 255};
         SDL_Color defaultColor = {255, 255, 255, 175};
         SDL_Color color = isMouseOver() ? hoverColor : defaultColor;
-        this->ent->GetGame()->renderText(textPosX, textPosY, text, font, fontSize, color);
+        this->ent->getGame()->renderText(textPosX, textPosY, text, font, fontSize, color);
     }
 }
 
 bool Button::isPressed()
 {
-    bool mouseButtonPressed = Input()->IsMouseButtonPressed(0);
+    bool mouseButtonPressed = Input()->isMouseButtonPressed(0);
     bool mouseOver = isMouseOver();
 
     return mouseButtonPressed && mouseOver;
@@ -90,13 +90,13 @@ bool Button::isPressed()
 
 bool Button::isMouseOver()
 {
-    Vector2D mousePos = Input()->GetMousePosition();
+    Vector2D mousePos = Input()->getMousePosition();
 
     // Check if mousePos is inside the button
-    int textW = texture->getW() * transform->GetScale().x;
-    int textH = texture->getH() * transform->GetScale().y;
-    if (mousePos.getX() > transform->GetPosition().getX() - textW / 2 && mousePos.getX() < transform->GetPosition().getX() + textW / 2 &&
-        mousePos.getY() > transform->GetPosition().getY() - textH / 2 && mousePos.getY() < transform->GetPosition().getY() + textH / 2)
+    int textW = texture->getW() * transform->getScale().x;
+    int textH = texture->getH() * transform->getScale().y;
+    if (mousePos.getX() > transform->getPosition().getX() - textW / 2 && mousePos.getX() < transform->getPosition().getX() + textW / 2 &&
+        mousePos.getY() > transform->getPosition().getY() - textH / 2 && mousePos.getY() < transform->getPosition().getY() + textH / 2)
     {
         return true;
     }

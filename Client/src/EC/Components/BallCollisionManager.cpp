@@ -10,9 +10,9 @@ BallCollisionManager::~BallCollisionManager(){};
 
 void BallCollisionManager::init()
 {
-    transform = this->ent->GetComponent<Transform>();
-    renderer = this->ent->GetComponent<Renderer>();
-    ball = this->ent->GetComponent<Ball>();
+    transform = this->ent->getComponent<Transform>();
+    renderer = this->ent->getComponent<Renderer>();
+    ball = this->ent->getComponent<Ball>();
     main = ball->isMainBall();
 
     if (transform == nullptr)
@@ -54,7 +54,7 @@ bool BallCollisionManager::checkIntersection(Renderer *ball, Renderer *obstacle)
 
 bool BallCollisionManager::checkIntersection(Entity *obstacle)
 {
-    Renderer *obstacleRenderer = obstacle->GetComponent<Renderer>();
+    Renderer *obstacleRenderer = obstacle->getComponent<Renderer>();
 
     return checkIntersection(renderer, obstacleRenderer);
 }
@@ -92,7 +92,7 @@ void BallCollisionManager::takeBodyOutOfCollision(Renderer *ball, Renderer *obst
 {
     SDL_Rect ballRect = ball->getDestRectCentered();
     SDL_Rect obstacleRect = obstacle->getDestRectCentered();
-    Vector2D &ballPos = transform->GetPosition();
+    Vector2D &ballPos = transform->getPosition();
 
     // We need to move the ball to the side of the obstacle.
     if (abs(collisionNormal.x) > 0.1)

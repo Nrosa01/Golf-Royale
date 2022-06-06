@@ -14,8 +14,8 @@ BallDirection::~BallDirection()
 
 void BallDirection::init()
 {
-    transform = this->ent->GetTransform();
-    ball = this->ent->GetComponent<Ball>();
+    transform = this->ent->getTransform();
+    ball = this->ent->getComponent<Ball>();
     maxLineDistance = 10;
 
     if (transform == nullptr)
@@ -41,15 +41,15 @@ void BallDirection::render()
     float lineDistance = currentLaunchForce / maxLineDistance;
 
     // Dibujar una linea en la direccion dir
-    SDL_RenderDrawLine(this->ent->GetGame()->getRenderer(), transform->GetPosition().getX(), transform->GetPosition().getY(), transform->GetPosition().getX() + dir.getX() * lineDistance, transform->GetPosition().getY() + dir.getY() * lineDistance);
+    SDL_RenderDrawLine(this->ent->getGame()->getRenderer(), transform->getPosition().getX(), transform->getPosition().getY(), transform->getPosition().getX() + dir.getX() * lineDistance, transform->getPosition().getY() + dir.getY() * lineDistance);
 
     SDL_Rect destRect;
-    int textW = texture->getW() * transform->GetScale().x;
-    int textH = texture->getH() * transform->GetScale().y;
+    int textW = texture->getW() * transform->getScale().x;
+    int textH = texture->getH() * transform->getScale().y;
     SDL_Point bottomCenter = {textW / 2, textH}; // Pivotar en la parte baja de la flecha
 
-    destRect.x = transform->GetPosition().getX() - bottomCenter.x;
-    destRect.y = transform->GetPosition().getY() - bottomCenter.y;
+    destRect.x = transform->getPosition().getX() - bottomCenter.x;
+    destRect.y = transform->getPosition().getY() - bottomCenter.y;
     destRect.w = textW;
     destRect.h = textH;
 

@@ -19,9 +19,9 @@ TextField::~TextField()
 
 void TextField::init()
 {
-    this->transform = this->ent->GetTransform();
-    this->initialScale = transform->GetScale();
-    this->textLine = this->ent->GetGame()->getTexture("textField");
+    this->transform = this->ent->getTransform();
+    this->initialScale = transform->getScale();
+    this->textLine = this->ent->getGame()->getTexture("textField");
     pulseSpeed = 0.75f;
     lineAlpha = 255;
     initialFontSize = fontSize;
@@ -32,7 +32,7 @@ void TextField::init()
 
 void TextField::update(float deltaTime)
 {
-    bool mouseButtonPressed = Input()->IsMouseButtonPressed(0);
+    bool mouseButtonPressed = Input()->isMouseButtonPressed(0);
 
     if (mouseButtonPressed)
         selected = isMouseOver();
@@ -49,7 +49,7 @@ void TextField::update(float deltaTime)
         }
         else
         {
-            char c = Input()->GetLastKeyPressed();
+            char c = Input()->getLastKeyPressed();
             if (c >= 'a' && c <= 'z')
             {
                 if (text.length() < maxLength)
@@ -75,17 +75,17 @@ void TextField::update(float deltaTime)
 
     textLine->setAlpha((int)this->lineAlpha);
 
-    float scaleRatio = transform->GetScale().Magnitude() / initialScale.Magnitude();
+    float scaleRatio = transform->getScale().magnitude() / initialScale.magnitude();
     fontSize = initialFontSize * scaleRatio;
 }
 
 void TextField::render()
 {
     SDL_Rect destRect;
-    int textW = texture->getW() * transform->GetScale().x;
-    int textH = texture->getH() * transform->GetScale().y;
-    destRect.x = transform->GetPosition().getX() - textW / 2;
-    destRect.y = transform->GetPosition().getY() - textH / 2;
+    int textW = texture->getW() * transform->getScale().x;
+    int textH = texture->getH() * transform->getScale().y;
+    destRect.x = transform->getPosition().getX() - textW / 2;
+    destRect.y = transform->getPosition().getY() - textH / 2;
     destRect.w = textW;
     destRect.h = textH;
 
@@ -95,15 +95,15 @@ void TextField::render()
     if (text.size() == 0)
         return;
 
-    int textPosX = transform->GetPosition().getX();
-    int textPosY = transform->GetPosition().getY();
+    int textPosX = transform->getPosition().getX();
+    int textPosY = transform->getPosition().getY();
     SDL_Color defaultColor = {255, 255, 255, 255};
-    this->ent->GetGame()->renderText(textPosX, textPosY, text.c_str(), font, fontSize, defaultColor);
+    this->ent->getGame()->renderText(textPosX, textPosY, text.c_str(), font, fontSize, defaultColor);
 }
 
 bool TextField::isPressed()
 {
-    bool mouseButtonPressed = Input()->IsMouseButtonPressed(0);
+    bool mouseButtonPressed = Input()->isMouseButtonPressed(0);
     bool mouseOver = isMouseOver();
 
     return mouseButtonPressed && mouseOver;
@@ -111,13 +111,13 @@ bool TextField::isPressed()
 
 bool TextField::isMouseOver()
 {
-    Vector2D mousePos = Input()->GetMousePosition();
+    Vector2D mousePos = Input()->getMousePosition();
 
     // Check if mousePos is inside the button
-    int textW = texture->getW() * transform->GetScale().x;
-    int textH = texture->getH() * transform->GetScale().y;
-    if (mousePos.getX() > transform->GetPosition().getX() - textW / 2 && mousePos.getX() < transform->GetPosition().getX() + textW / 2 &&
-        mousePos.getY() > transform->GetPosition().getY() - textH / 2 && mousePos.getY() < transform->GetPosition().getY() + textH / 2)
+    int textW = texture->getW() * transform->getScale().x;
+    int textH = texture->getH() * transform->getScale().y;
+    if (mousePos.getX() > transform->getPosition().getX() - textW / 2 && mousePos.getX() < transform->getPosition().getX() + textW / 2 &&
+        mousePos.getY() > transform->getPosition().getY() - textH / 2 && mousePos.getY() < transform->getPosition().getY() + textH / 2)
     {
         return true;
     }

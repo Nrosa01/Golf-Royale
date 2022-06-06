@@ -21,16 +21,16 @@ bool Vector2D::operator!=(const Vector2D& vector) const { return (x != vector.x 
 
 void Vector2D::operator=(const Vector2D& vector) { x = vector.x; y = vector.y; }
 
-Vector2D Vector2D::Inverted() const { return *this * -1; }
+Vector2D Vector2D::inverted() const { return *this * -1; }
 
-Vector2D Vector2D::Normalized() const
+Vector2D Vector2D::normalized() const
 {
 	if (this->x == 0 && this->y == 0) return { 0,0 };
-	float module = Magnitude();
+	float module = magnitude();
 	return {(this->x / module), (this->y/module)};
 }
 
-float Vector2D::Magnitude() const
+float Vector2D::magnitude() const
 {
 	return sqrt(pow(this->x, 2) + pow(this->y, 2));
 }

@@ -9,15 +9,15 @@
 Entity::Entity(int x, int y, SDLApp *app)
 {
     transform = new Transform(Vector2D(x, y), 1.0f);
-    AddComponent(transform);
-    SetGame(app);
+    aAddComponent(transform);
+    setGame(app);
 }
 
 Entity::Entity(SDLApp *app)
 {
     transform = new Transform(Vector2D(0, 0), 1.0f);
-    AddComponent(transform);
-    SetGame(app);
+    aAddComponent(transform);
+    setGame(app);
 }
 
 Entity::~Entity()
@@ -26,14 +26,14 @@ Entity::~Entity()
         delete component.second;
 }
 
-void Entity::AddComponent(Component *component)
+void Entity::aAddComponent(Component *component)
 {
     components[component->getName()] = component;
     component->setOwner(this);
     this->componentArray.push_back(component);
 }
 
-void Entity::RemoveComponent(std::string name)
+void Entity::removeComponent(std::string name)
 {
     // Delete from array
     for (auto it = componentArray.begin(); it != componentArray.end(); it++)
@@ -56,7 +56,7 @@ void Entity::RemoveComponent(std::string name)
     }
 }
 
-Component *Entity::GetComponent(std::string name)
+Component *Entity::getComponent(std::string name)
 {
     // Find component
     auto component = components.find(name);
@@ -96,17 +96,17 @@ void Entity::receiveNetworkMessage(NetworkMessage *msg)
         component->receiveNetworkMessage(msg);
 }
 
-Transform *Entity::GetTransform()
+Transform *Entity::getTransform()
 {
     return transform;
 }
 
-void Entity::SetGame(SDLApp *app)
+void Entity::setGame(SDLApp *app)
 {
     this->app = app;
 }
 
-SDLApp *Entity::GetGame()
+SDLApp *Entity::getGame()
 {
     return app;
 }

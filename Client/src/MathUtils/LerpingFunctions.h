@@ -23,7 +23,7 @@ namespace MathUtils
 	}
 
 	//Este es el metodo a llamar para usar el lerping
-	inline float Lerp(const float &v0,const float &v1, const float &t, LerpType lerpType = LerpType::EaseOut) 
+	inline float lerp(const float &v0,const float &v1, const float &t, LerpType lerpType = LerpType::EaseOut) 
 	{
 		switch (lerpType)
 		{
