@@ -39,7 +39,7 @@ LoginMenuState::LoginMenuState(SDLApp *app) : GameState(app)
     startButton->addComponent(new Button(app->getTexture("button"), "Unirse", "toonFont", 72, loginCallback()));
 
     errorLabel = createEntity(Vector2D(width / 2, height / 2 + 275), Vector2D(0.5f, 0.5f), "button");
-    errorLabel->addComponent(new TextRenderer("Introduzca nombre y codigo", "toonFont", 24, {255, 0, 0}));
+    errorLabel->addComponent(new TextRenderer("Introduzca nombre y codigo", "toonFont", 24, {255, 0, 0, 255}));
 
     addTransitioner(exitButton);
     addTransitioner(inputField);
