@@ -23,26 +23,26 @@ PlayState::PlayState(SDLApp *app, std::string enemyNick, bool isMaster, uint8_t 
     Entity *fg = createEntity(Vector2D(app->getWidth() / 2, app->getHeight() / 2), Vector2D(1, 1), "GolfRoyaleBg");
 
     Entity *ball = createEntity(Vector2D(app->getWidth() / 2, app->getHeight() - (app->getHeight() / 15)), Vector2D(1, 1), "ball");
-    ball->addComponent(new Ball(true, isMaster));
-    ball->addComponent(new BallDirection(app->getTexture("arrow")));
-    ball->addComponent(player = new BallCollisionManager(&this->obstacles));
+    ball->aAddComponent(new Ball(true, isMaster));
+    ball->aAddComponent(new BallDirection(app->getTexture("arrow")));
+    ball->aAddComponent(player = new BallCollisionManager(&this->obstacles));
 
     Entity *enemyBall = createEntity(Vector2D(app->getWidth() / 2, app->getHeight() - (app->getHeight() / 15)), Vector2D(1, 1), "ballEnemy");
-    enemyBall->addComponent(new BallCollisionManager(&this->obstacles));
-    enemyBall->addComponent(new Ball(false, true));
+    enemyBall->aAddComponent(new BallCollisionManager(&this->obstacles));
+    enemyBall->aAddComponent(new Ball(false, true));
 
     // UI
     Entity *playerNick = addUI(Vector2D(app->getWidth() / 2 - 50, 50), Vector2D(0.15f, 0.4f), "button");
-    playerNick->addComponent(new TextRenderer(app->getPlayerName(), "toonFont", 24));
+    playerNick->aAddComponent(new TextRenderer(app->getPlayerName(), "toonFont", 24));
 
     Entity *enemyNickEnt = addUI(Vector2D(app->getWidth() / 2 + 50, 50), Vector2D(0.15f, 0.4f), "button");
-    enemyNickEnt->addComponent(new TextRenderer(enemyNick, "toonFont", 24));
+    enemyNickEnt->aAddComponent(new TextRenderer(enemyNick, "toonFont", 24));
 
     Entity *playerScoreUI = addUI(Vector2D(app->getWidth() / 2 - 50, 80), Vector2D(0.075f, 0.2f), "button");
-    playerScoreUI->addComponent(new TextRenderer(std::to_string(playerScore), "toonFont", 16));
+    playerScoreUI->aAddComponent(new TextRenderer(std::to_string(playerScore), "toonFont", 16));
 
     Entity *enemyScoreUI = addUI(Vector2D(app->getWidth() / 2 + 50, 80), Vector2D(0.075f, 0.2f), "button");
-    enemyScoreUI->addComponent(new TextRenderer(std::to_string(enemyScore), "toonFont", 16));
+    enemyScoreUI->aAddComponent(new TextRenderer(std::to_string(enemyScore), "toonFont", 16));
 
     // Transitioners
     fgTransitioner = addTransitioner(fg);
@@ -157,9 +157,9 @@ void PlayState::loadLevel(int level)
 Entity *PlayState::addObstacle(Vector2D pos, Vector2D scale, string textureName)
 {
     Entity *e = new Entity(pos.x, pos.y, app);
-    e->transform.scale = scale;
+    e->getTransform()->getScale() = scale;
     Renderer *rend = new Renderer(app->getTexture(textureName));
-    e->addComponent(rend);
+    e->aAddComponent(rend);
     obstacles.push_back(rend);
     entities.push_back(e);
 
@@ -171,9 +171,9 @@ Entity *PlayState::addObstacle(Vector2D pos, Vector2D scale, string textureName)
 Entity *PlayState::addUI(Vector2D pos, Vector2D scale, string textureName)
 {
     Entity *e = new Entity(pos.x, pos.y, app);
-    e->transform.scale= scale;
+    e->getTransform()->getScale() = scale;
     if (!textureName.empty())
-        e->addComponent(new Renderer(app->getTexture(textureName)));
+        e->aAddComponent(new Renderer(app->getTexture(textureName)));
     ui.push_back(e);
 
     return e;

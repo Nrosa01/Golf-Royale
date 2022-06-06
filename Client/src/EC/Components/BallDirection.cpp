@@ -14,7 +14,7 @@ BallDirection::~BallDirection()
 
 void BallDirection::init()
 {
-    transform = &this->ent->transform;
+    transform = this->ent->getTransform();
     ball = this->ent->getComponent<Ball>();
     maxLineDistance = 10;
 

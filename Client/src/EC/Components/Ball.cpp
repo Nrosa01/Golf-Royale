@@ -22,7 +22,7 @@ Ball::~Ball() {}
 
 void Ball::init()
 {
-    transform = &this->ent->transform;
+    transform = this->ent->getTransform();
     renderer = this->ent->getComponent<Renderer>();
     sensibilidad = 10.0f;
 }

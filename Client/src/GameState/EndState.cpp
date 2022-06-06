@@ -23,10 +23,10 @@ EndState::EndState(SDLApp *app, uint8_t playerScore, uint8_t enemyScore) : GameS
     }
 
     Entity *text = createEntity(Vector2D(app->getWidth() / 2, app->getHeight() / 2 - 50), Vector2D(1, 1), "button");
-    text->addComponent(new TextRenderer(endExt, "toonFont", 72));
+    text->aAddComponent(new TextRenderer(endExt, "toonFont", 72));
 
     Entity *returnButton = createEntity(Vector2D(app->getWidth() / 2, app->getHeight() / 2 + 50), Vector2D(0.5, 0.75));
-    returnButton->addComponent(new Button(app->getTexture("button"), "Volver al Menu", "toonFont", 36, [this]()
+    returnButton->aAddComponent(new Button(app->getTexture("button"), "Volver al Menu", "toonFont", 36, [this]()
                                           { startExitTransitionTimer(popState); }));
 
     addTransitioner(text);

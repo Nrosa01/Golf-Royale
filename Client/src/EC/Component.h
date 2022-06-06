@@ -16,7 +16,7 @@ public:
     virtual void init();
     virtual void update(float deltaTime);
     virtual void lateUpdate(float deltaTime);
-    virtual void receiveNetworkMessage(NetworkMessage *msg);
+	virtual void receiveNetworkMessage(NetworkMessage* msg);
     virtual void render();
     std::string getName();
     void setOwner(Entity *owner);

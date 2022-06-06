@@ -18,9 +18,8 @@ public:
     Entity(int x, int y, SDLApp *app);
     Entity(SDLApp *app);
     ~Entity();
-    Transform& transform;
 
-    void addComponent(Component *component);
+    void aAddComponent(Component *component);
     void removeComponent(std::string name);
 
     Component *getComponent(std::string name);
@@ -30,6 +29,7 @@ public:
     void render();
 	void receiveNetworkMessage(NetworkMessage* msg);
 
+    Transform *getTransform();
     void setGame(SDLApp *app);
     SDLApp *getGame();
 
@@ -42,6 +42,7 @@ public:
     }
 
 private:
+    Transform *transform;
     SDLApp *app;
     std::unordered_map<std::string, Component *> components; // Used for fast getComponent
     std::vector<Component *> componentArray;
