@@ -77,6 +77,7 @@ SDLApp::SDLApp(int width, int height, const char *title)
     // Resource Managers
     textureManager = new TextureManager(renderer);
     fontManager = new FontManager(MAX_FONT_SIZE);
+    soundsManager = new SoundsManager();
 }
 
 SDLApp::~SDLApp()
@@ -90,9 +91,7 @@ SDLApp::~SDLApp()
     // Free resources and close SDL
     delete textureManager;
     delete fontManager;
-
-    for (auto &sound : sounds)
-        Mix_FreeChunk(sound.second);
+    delete soundsManager;
 
     Mix_CloseAudio();
     TTF_Quit();
@@ -163,56 +162,12 @@ Texture *SDLApp::getTexture(std::string name) const
 
 void SDLApp::loadAudio(const char *pathName)
 {
-    // Load audio
-    std::cout << "Loading audio from " << pathName << "..." << std::endl;
-
-    // Using dirent, check if pathName is a directory
-    DIR *dir = opendir(pathName);
-
-    // If it is a directory, load all files in it with extension .wav
-    if (dir != nullptr)
-    {
-        // Get all files in directory
-        struct dirent *ent;
-        while ((ent = readdir(dir)) != nullptr)
-        {
-            // Get file extension
-            std::string fileName = ent->d_name;
-            std::string ext = fileName.substr(fileName.find_last_of(".") + 1);
-            std::string fileNameWithoutExt = fileName.substr(0, fileName.find_last_of("."));
-
-            // If file extension is .wav, load audio
-            if (ext == "wav" || ext == "mp3")
-            {
-                std::string filePath = pathName;
-                filePath.append("/");
-                filePath.append(fileName);
-
-                // Load audio
-                Mix_Chunk *chunk = Mix_LoadWAV(filePath.c_str());
-                if (chunk == nullptr)
-                {
-                    std::cout << "Audio could not be loaded! SDL_Error: " << SDL_GetError() << std::endl;
-                    return;
-                }
-                else
-                    std::cout << "Loaded audio " << fileNameWithoutExt << std::endl;
-                sounds.insert(std::pair<std::string, Mix_Chunk *>(fileNameWithoutExt, chunk));
-            }
-        }
-
-        std::cout << "Audio loaded!" << std::endl;
-    }
-    else // If pathName is not a directory, we throw an error message
-        std::cout << "Path " << pathName << " is not a directory!" << std::endl;
+    soundsManager->load(pathName);
 }
 
 void SDLApp::playAudio(std::string name)
 {
-    // Get audio from map
-    std::unordered_map<std::string, Mix_Chunk *>::const_iterator it = sounds.find(name);
-    if (it != sounds.end())
-        Mix_PlayChannel(-1, it->second, 0);
+    soundsManager->play(name);
 }
 
 SDL_DisplayMode SDLApp::getDisplayMOde() const

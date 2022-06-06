@@ -52,7 +52,7 @@ public:
             }
 
             std::string resourceTypeFirstUpper = resourceType;
-            std::transform(resourceTypeFirstUpper.begin(), resourceTypeFirstUpper.end(), resourceTypeFirstUpper.begin(), ::toupper);
+            resourceTypeFirstUpper[0] = toupper(resourceTypeFirstUpper[0]);
             std::cout << resourceTypeFirstUpper << "s loaded!" << std::endl;
         }
         else // If pathName is not a directory, we throw an error message

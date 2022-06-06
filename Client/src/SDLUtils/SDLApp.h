@@ -9,6 +9,7 @@
 #include <SDL2/SDL_mixer.h>
 #include "../ResourceManager/TextureManager.h"
 #include "../ResourceManager/FontManager.h"
+#include "../ResourceManager/SoundsManager.h"
 
 class Client;
 class NetworkMessage;
@@ -64,7 +65,7 @@ private:
     GameState *newState;
     TextureManager* textureManager;
     FontManager* fontManager;
-    std::unordered_map<std::string, Mix_Chunk *> sounds;
+    SoundsManager* soundsManager;
     int width;
     int height;
     InputSystem *input;
