@@ -16,11 +16,11 @@ public:
     ResourceManager(std::string resourceType, std::vector<std::string> supportedExtensions, std::function<T *(std::string)> loadFunction) : resourceType(resourceType), supportedExtensions(supportedExtensions), createResource(loadFunction) {}
     ResourceManager(std::string resourceType, std::vector<std::string> supportedExtensions, const char *path, std::function<T *(std::string)> loadFunction) : resourceType(resourceType), supportedExtensions(supportedExtensions), createResource(loadFunction) { load(path); }
 
-    virtual ~ResourceManager() { clear(); };
+    virtual ~ResourceManager() {};
 
     void load(const char *pathName)
     {
-        std::cout << "Loading " << resourceType << " from " << pathName << "..." << std::endl;
+        std::cout << "Loading " << resourceType << "s from " << pathName << "..." << std::endl;
 
         // Using dirent, check if pathName is a directory
         DIR *dir = opendir(pathName);
@@ -51,7 +51,9 @@ public:
                 }
             }
 
-            std::cout << resourceType << "s loaded!" << std::endl;
+            std::string resourceTypeFirstUpper = resourceType;
+            std::transform(resourceTypeFirstUpper.begin(), resourceTypeFirstUpper.end(), resourceTypeFirstUpper.begin(), ::toupper);
+            std::cout << resourceTypeFirstUpper << "s loaded!" << std::endl;
         }
         else // If pathName is not a directory, we throw an error message
             std::cout << "Path " << pathName << " is not a directory!" << std::endl;
@@ -70,10 +72,12 @@ public:
     virtual void clear()
     {
         for (auto &resource : resourceMap)
-            delete resource.second;
+            freeResource(resource.second);
 
         resourceMap.clear();
     };
+
+    virtual void freeResource(T* resource) = 0;
 
 private:
     bool isSupported(std::string extension) const
@@ -81,8 +85,10 @@ private:
         return std::find(supportedExtensions.begin(), supportedExtensions.end(), extension) != supportedExtensions.end();
     };
 
-private:
+protected:
     std::unordered_map<std::string, T *> resourceMap;
+
+private:
     std::string resourceType;
     std::vector<std::string> supportedExtensions;
     std::function<T *(std::string)> createResource;

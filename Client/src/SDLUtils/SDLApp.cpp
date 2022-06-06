@@ -6,6 +6,7 @@
 #include "../Network/Client.h"
 #include "../Network/NetworkMessage.h"
 
+
 SDLApp::SDLApp(int width, int height, const char *title)
 {
     // Init sdl and create window
@@ -75,6 +76,7 @@ SDLApp::SDLApp(int width, int height, const char *title)
 
     // Resource Managers
     textureManager = new TextureManager(renderer);
+    fontManager = new FontManager(MAX_FONT_SIZE);
 }
 
 SDLApp::~SDLApp()
@@ -87,9 +89,7 @@ SDLApp::~SDLApp()
 
     // Free resources and close SDL
     delete textureManager;
-
-    for (auto &font : fonts)
-        TTF_CloseFont(font.second);
+    delete fontManager;
 
     for (auto &sound : sounds)
         Mix_FreeChunk(sound.second);
@@ -148,58 +148,12 @@ void SDLApp::loadTextures(const char *pathName)
 
 void SDLApp::loadFonts(const char *pathName)
 {
-    // Load fonts
-    std::cout << "Loading fonts from " << pathName << "..." << std::endl;
-
-    // Using dirent, check if pathName is a directory
-    DIR *dir = opendir(pathName);
-
-    // If it is a directory, load all files in it with extension .ttf
-    if (dir != nullptr)
-    {
-        // Get all files in directory
-        struct dirent *ent;
-        while ((ent = readdir(dir)) != nullptr)
-        {
-            // Get file extension
-            std::string fileName = ent->d_name;
-            std::string ext = fileName.substr(fileName.find_last_of(".") + 1);
-            std::string fileNameWithoutExt = fileName.substr(0, fileName.find_last_of("."));
-
-            // If file extension is .ttf, load font
-            if (ext == "ttf" || ext == "otf")
-            {
-                std::string filePath = pathName;
-                filePath.append("/");
-                filePath.append(fileName);
-
-                // Load font with size 12, 24, 36, 48, 60, 72, 84, 96, 108, 120
-                TTF_Font *font = TTF_OpenFont(filePath.c_str(), MAX_FONT_SIZE);
-                if (font == nullptr)
-                {
-                    std::cout << "Font could not be loaded! SDL_Error: " << SDL_GetError() << std::endl;
-                    return;
-                }
-                else
-                    std::cout << "Loaded font " << fileNameWithoutExt << " with size " << MAX_FONT_SIZE << std::endl;
-                fonts.insert(std::pair<std::string, TTF_Font *>(fileNameWithoutExt, font));
-            }
-        }
-
-        std::cout << "Fonts loaded!" << std::endl;
-    }
-    else // If pathName is not a directory, we throw an error message
-        std::cout << "Path " << pathName << " is not a directory!" << std::endl;
+    fontManager->load(pathName);
 }
 
 TTF_Font *SDLApp::getFont(std::string fontName) const
 {
-    // Get font from map
-    std::unordered_map<std::string, TTF_Font *>::const_iterator it = fonts.find(fontName);
-    if (it != fonts.end())
-        return it->second;
-    else
-        return nullptr;
+    return fontManager->get(fontName);
 }
 
 Texture *SDLApp::getTexture(std::string name) const

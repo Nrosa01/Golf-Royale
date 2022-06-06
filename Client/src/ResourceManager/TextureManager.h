@@ -16,6 +16,13 @@ class TextureManager : public ResourceManager<Texture>
         texture->load(filePath.c_str(), 1, 1);
         return texture;
     }) {}
+
+    ~TextureManager() { clear(); }
+
+    virtual void freeResource(Texture *texture) override
+    {
+        delete texture;
+    }
 };
 
 #endif

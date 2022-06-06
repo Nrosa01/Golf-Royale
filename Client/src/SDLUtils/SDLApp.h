@@ -6,13 +6,14 @@
 #include <vector>
 #include "../GameState/GameStateMachine.h"
 #include "InputSytem.h"
-#include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
 #include "../ResourceManager/TextureManager.h"
+#include "../ResourceManager/FontManager.h"
 
-class Texture;
 class Client;
 class NetworkMessage;
+class TextureManager;
+class FontManager;
 
 class SDLApp
 #define MAX_FONT_SIZE 240
@@ -62,7 +63,7 @@ private:
     GameStateMachine *gameStateMachine;
     GameState *newState;
     TextureManager* textureManager;
-    std::unordered_map<std::string, TTF_Font *> fonts;
+    FontManager* fontManager;
     std::unordered_map<std::string, Mix_Chunk *> sounds;
     int width;
     int height;
