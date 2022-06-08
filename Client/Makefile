@@ -11,28 +11,33 @@ APPNAMER := Golf-Royale-Release.exe
 CC := x86_64-w64-mingw32-g++
 CXXFLAGS := -std=c++11 -Wall -g -I/usr/local/win64/x86_64-w64-mingw32/include
 CXXFLAGSRELEASE := -std=c++11 -Wall -Os -I/usr/local/win64/x86_64-w64-mingw32/include
-LDFLAGS := -static -static-libgcc
-LIBS := `/usr/local/win64/x86_64-w64-mingw32/bin/sdl2-config --static-libs`
+LDFLAGS := 
+LIBS := `/usr/local/win64/x86_64-w64-mingw32/bin/sdl2-config --libs`
+DLLDIR := /usr/local/win64/x86_64-w64-mingw32/bin/
+# These two are for static linking, good luck making that work lol
+# LDFLAGS := -static -static-libgcc
+# LIBS := `/usr/local/win64/x86_64-w64-mingw32/bin/sdl2-config --static-libs`
 OBJDIRDEBUG := obj/windows/debug
 OBJDIRRELEASE := obj/windows/release
+BINDIR := bin/windows
 else
 os := linux
 APPNAME := Golf-Royale-Debug
 APPNAMER := Golf-Royale-Release
 CC := g++
-CXXFLAGS := -std=c++11 -Wall -g -fpermissive `pkg-config --cflags sdl2 SDL2_image SDL2_ttf SDL2_mixer`
-CXXFLAGSRELEASE := -std=c++11 -Wall -Os -fpermissive `pkg-config --cflags sdl2 SDL2_image SDL2_ttf SDL2_mixer`
-LDFLAGS := -lpthread
-LIBS := `pkg-config --cflags sdl2 SDL2_image SDL2_ttf SDL2_mixer`
+CXXFLAGS := -std=c++11 -Wall -g
+CXXFLAGSRELEASE := -std=c++11 -Wall -Os
+LDFLAGS := -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lpthread
+LIBS := 
 OBJDIRDEBUG = obj/linux/debug
 OBJDIRRELEASE = obj/linux/release
+BINDIR := bin/linux
 endif
 
 # Makefile settings - Can be customized.
 EXT = .cpp
 SRCDIR = src
 OBJDIR = obj
-BINDIR = bin
 
 ############## Do not change anything from here downwards! #############
 # Recursive wildcar to search in all subdirectories no matter the depth.
@@ -58,6 +63,9 @@ $(APPNAME): $(OBJD)
 	$(CC) $(CXXFLAGS) -o $@ $^ $(LDFLAGS) $(LIBS)
 	mkdir -p $(BINDIR)
 	mv $(APPNAME) $(BINDIR)
+ifeq ($(os),windows)
+		cp $(DLLDIR)/*.dll $(BINDIR)
+endif
 
 # Building rule for .o files and its .c/.cpp in combination with all .h
 $(OBJDIRDEBUG)/%.o: $(SRCDIR)/%$(EXT)
@@ -73,6 +81,9 @@ $(APPNAMER): $(OBJR)
 	$(CC) $(CXXFLAGSRELEASE) -o $@ $^ $(LDFLAGS) $(LIBS)
 	mkdir -p $(BINDIR)
 	mv $(APPNAMER) $(BINDIR)
+ifeq ($(os),windows)
+		cp $(DLLDIR)/*.dll $(BINDIR)
+endif
 
 # Building rule for .o files and its .c/.cpp in combination with all .h
 $(OBJDIRRELEASE)/%.o: $(SRCDIR)/%$(EXT)

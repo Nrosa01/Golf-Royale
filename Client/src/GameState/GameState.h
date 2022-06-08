@@ -1,12 +1,13 @@
 #ifndef GAMESTATE_H
 #define GAMESTATE_H
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <vector>
 #include <string>
 #include "../MathUtils/Vector2D.h"
 #include "Callbacks.h"
 #include "../Network/NetworkMessage.h"
+#include "../SDLUtils/TypeUtils.h"
 
 using namespace std;
 

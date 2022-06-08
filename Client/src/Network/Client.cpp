@@ -6,11 +6,21 @@ Client::Client(const char *address, const char *port) : /*socket(address, port),
 {
     // this->net_thread = std::thread([this]()
     //                                { this->net_thread_f(); });
+    this->messages_mutex = SDL_CreateMutex();
+    SDL_ThreadFunction net_thread_f = [](void* args)
+    {
+        Client* client = (Client*)args;
+        client->net_thread_f();
+        return 0;
+    };
+    this->net_thread = SDL_CreateThread(net_thread_f, "net_thread", this);
 }
 
 Client::~Client()
 {
     terminated = true;
+    SDL_WaitThread(net_thread, NULL);
+    SDL_DestroyMutex(messages_mutex);
     // socket.close();
     // net_thread.join();
 
@@ -33,19 +43,19 @@ void Client::disconnect()
 
 void Client::send(NetworkMessage &msg)
 {
-    //socket.send(msg, socket);
+    // socket.send(msg, socket);
 }
 
 void Client::net_thread_f()
 {
-    char *msg;
+    char *msg = nullptr;
 
     while (!terminated)
     {
         if (!connected)
             continue;
 
-        //msg = socket.recv();
+        // msg = socket.recv();
 
         if (msg == nullptr && !terminated)
         {
@@ -62,9 +72,9 @@ void Client::net_thread_f()
             PlayerJoinedMessage *playerJoinedMessage = new PlayerJoinedMessage();
             playerJoinedMessage->from_bin(msg);
 
-            messages_mutex.lock();
+            SDL_LockMutex(messages_mutex);
             messages.push(playerJoinedMessage);
-            messages_mutex.unlock();
+            SDL_UnlockMutex(messages_mutex);
             break;
         }
         case BALL_POS:
@@ -72,9 +82,9 @@ void Client::net_thread_f()
             BallPosMessage *ballHitMessage = new BallPosMessage(0, 0);
             ballHitMessage->from_bin(msg);
 
-            messages_mutex.lock();
+            SDL_LockMutex(messages_mutex);
             messages.push(ballHitMessage);
-            messages_mutex.unlock();
+            SDL_UnlockMutex(messages_mutex);
         }
         break;
         case ERROR_MESSAGE:
@@ -84,9 +94,9 @@ void Client::net_thread_f()
         {
             NetworkMessage *netMsg = new NetworkMessage(msgType);
 
-            messages_mutex.lock();
+            SDL_LockMutex(messages_mutex);
             messages.push(netMsg);
-            messages_mutex.unlock();
+            SDL_UnlockMutex(messages_mutex);
         }
         break;
         }
@@ -95,14 +105,17 @@ void Client::net_thread_f()
 
 NetworkMessage *Client::consumeMessage()
 {
+    SDL_LockMutex(messages_mutex);
     if (messages.empty())
+    {
+        SDL_UnlockMutex(messages_mutex);
         return nullptr;
+    }
 
-    messages_mutex.lock();
 
     NetworkMessage *msg = messages.front();
     messages.pop();
 
-    messages_mutex.unlock();
+    SDL_UnlockMutex(messages_mutex);
     return msg;
 }

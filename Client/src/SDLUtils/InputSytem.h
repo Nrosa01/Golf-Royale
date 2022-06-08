@@ -1,7 +1,7 @@
 #ifndef INPUT_SYSTEM_H
 #define INPUT_SYSTEM_H
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <vector>
 #include "../MathUtils/Vector2D.h"
 #include <iostream>

@@ -2,7 +2,7 @@
 #define TEXTURE_MANAGER_H
 
 #include "ResourceManager.h"
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "../SDLUtils/Texture.h"
 
 class TextureManager : public ResourceManager<Texture>

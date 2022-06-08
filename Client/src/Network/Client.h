@@ -2,9 +2,9 @@
 #define CLIENT_H
 
 //#include "Socket.h"
-#include <thread>
 #include <queue>
-#include <mutex>
+#include <SDL2/SDL_thread.h>
+#include <SDL2/SDL_mutex.h>
 #define MAX_MESSAGE_LIVE_SECONDS 5
 class NetworkMessage;
 
@@ -24,9 +24,9 @@ private:
     bool connected;
     bool terminated;
     std::queue<NetworkMessage*> messages;
-    std::mutex messages_mutex;
+    SDL_mutex* messages_mutex;
 
-    std::thread net_thread;
+    SDL_Thread* net_thread;
     void net_thread_f();
 };
 

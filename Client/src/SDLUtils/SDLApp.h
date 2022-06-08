@@ -1,15 +1,16 @@
 #ifndef SDLAppH
 #define SDLAppH
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <unordered_map>
 #include <vector>
 #include "../GameState/GameStateMachine.h"
 #include "InputSytem.h"
-#include <SDL_mixer.h>
+#include <SDL2/SDL_mixer.h>
 #include "../ResourceManager/TextureManager.h"
 #include "../ResourceManager/FontManager.h"
 #include "../ResourceManager/SoundsManager.h"
+#include "TypeUtils.h"
 
 class Client;
 class NetworkMessage;

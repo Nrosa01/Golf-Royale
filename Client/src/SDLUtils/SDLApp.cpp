@@ -1,5 +1,5 @@
 #include "SDLApp.h"
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <iostream>
 #include <dirent.h>
 #include "Texture.h"

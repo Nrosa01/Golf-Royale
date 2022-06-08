@@ -1,8 +1,8 @@
 #ifndef NETWORKMESSAGE_H
 #define NETWORKMESSAGE_H
 
-#include "Serializable.h"
 #include <stdint.h>
+#include "Serializable.h"
 #include <cstring>
 
 enum MessageType : uint8_t

@@ -17,7 +17,7 @@
 // IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <iostream>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "SDLUtils/Texture.h"
 #include "SDLUtils/SDLApp.h"
 #include "SDLUtils/TimeManager.h"
@@ -31,7 +31,7 @@
 #define TARGET_FRAME_RATE 60
 constexpr uint32_t FRAME_TIME_MS = 1000 / TARGET_FRAME_RATE;
 
-int main(int argc, char **argv)
+int main(int argc, char *argv[])
 {
     if (argc != 3)
     {

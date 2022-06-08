@@ -5,6 +5,7 @@
 #include "../SDLUtils/InputSytem.h"
 #include <typeinfo>
 #include "../Network/NetworkMessage.h"
+#include "../SDLUtils/TypeUtils.h"
 
 class Entity;
 class Transform;

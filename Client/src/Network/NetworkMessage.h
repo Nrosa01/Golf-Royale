@@ -4,6 +4,7 @@
 #include "Serializable.h"
 #include <stdint.h>
 #include <cstring>
+#include <string>
 
 enum MessageType : uint8_t
 {

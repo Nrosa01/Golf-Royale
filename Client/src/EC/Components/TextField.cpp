@@ -3,6 +3,7 @@
 #include "../../SDLUtils/SDLApp.h"
 #include "../../SDLUtils/Texture.h"
 #include "../Entity.h"
+#include <math.h>
 
 TextField::TextField(Texture *buttonImg, std::string font, int fontSize, int maxLength) : Component(typeid(TextField).name()), texture(buttonImg), font(font), fontSize(fontSize), maxLength(maxLength)
 {
@@ -70,7 +71,7 @@ void TextField::update(float deltaTime)
         timer = 0.0f;
     else if (timer < 0.0f)
         timer = 0.0f;
-    lineAlpha = 255 * (sin(timer * 3.14f));
+    lineAlpha = 255 * (std::sin(timer * 3.14f));
 
     textLine->setAlpha((int)this->lineAlpha);
 

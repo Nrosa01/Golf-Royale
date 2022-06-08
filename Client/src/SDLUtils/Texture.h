@@ -1,14 +1,13 @@
 #ifndef Texture_H
 #define Texture_H
 
-#include <SDL.h>
-#include <SDL_image.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 #include <string>
+#include "TypeUtils.h"
 
 using namespace std;
-
-typedef unsigned int uint;
 
 class Texture
 {

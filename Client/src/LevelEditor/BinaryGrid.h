@@ -1,9 +1,9 @@
 #ifndef BINARY_GRID_H
 #define BINARY_GRID_H
 
+#include <stdint.h>
 #include "../Network/Serializable.h" //TODO: mover serializable a un sitio mejor
 #include <vector>
-#include <stdint.h>
 
 class BinaryGrid : public Serializable
 {
