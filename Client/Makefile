@@ -14,6 +14,7 @@ CXXFLAGSRELEASE := -std=c++11 -Wall -Os -I/usr/local/win64/x86_64-w64-mingw32/in
 LDFLAGS := 
 LIBS := `/usr/local/win64/x86_64-w64-mingw32/bin/sdl2-config --libs`
 DLLDIR := /usr/local/win64/x86_64-w64-mingw32/bin/
+ICOPATH := ./assets/icon.o
 # These two are for static linking, good luck making that work lol
 # LDFLAGS := -static -static-libgcc
 # LIBS := `/usr/local/win64/x86_64-w64-mingw32/bin/sdl2-config --static-libs`
@@ -29,6 +30,7 @@ CXXFLAGS := -std=c++11 -Wall -g
 CXXFLAGSRELEASE := -std=c++11 -Wall -Os
 LDFLAGS := -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lpthread
 LIBS := 
+ICOPATH := ./assets/icon.o
 OBJDIRDEBUG = obj/linux/debug
 OBJDIRRELEASE = obj/linux/release
 BINDIR := bin/linux
@@ -60,7 +62,7 @@ debug: $(APPNAME)
 # Builds the app
 $(APPNAME): $(OBJD) 
 	$(info Compiling for $(os)...)
-	$(CC) $(CXXFLAGS) -o $@ $^ $(LDFLAGS) $(LIBS)
+	$(CC) $(CXXFLAGS) -o $@ $^ $(LDFLAGS) $(LIBS) $(ICOPATH)
 	mkdir -p $(BINDIR)
 	mv $(APPNAME) $(BINDIR)
 ifeq ($(os),windows)
@@ -78,7 +80,7 @@ release: $(APPNAMER)
 # Builds the app
 $(APPNAMER): $(OBJR) 
 	$(info$(os))
-	$(CC) $(CXXFLAGSRELEASE) -o $@ $^ $(LDFLAGS) $(LIBS)
+	$(CC) $(CXXFLAGSRELEASE) -o $@ $^ $(LDFLAGS) $(LIBS) $(ICOPATH)
 	mkdir -p $(BINDIR)
 	mv $(APPNAMER) $(BINDIR)
 ifeq ($(os),windows)

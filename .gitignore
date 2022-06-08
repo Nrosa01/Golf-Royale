@@ -1,10 +1,9 @@
 
 *.o
+!icon.o
 
 Client/bin/
 
 Server/bin/
 
 .vscode/
-NetworkMessage.h
-updateNet.bash
