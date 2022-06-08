@@ -2,7 +2,7 @@
 #define ENT_RENDERER_H
 
 #include "../Component.h"
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 class Texture;
 class Transform;

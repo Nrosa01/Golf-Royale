@@ -5,19 +5,33 @@
 # I used a makefile template but it didn't work as expected so I heavily modified it.
 
 # Compiler settings - Can be customized.
-CC = g++
-CXXFLAGS = -std=c++11 -Wall -g -I.
-CXXFLAGSRELEASE = -std=c++11 -Wall -Os -I.
-LDFLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lpthread
+ifeq ($(os),windows)
+APPNAME := Golf-Royale-Debug.exe
+APPNAMER := Golf-Royale-Release.exe
+CC := x86_64-w64-mingw32-g++
+CXXFLAGS := -std=c++11 -Wall -g -I/usr/local/win64/x86_64-w64-mingw32/include
+CXXFLAGSRELEASE := -std=c++11 -Wall -Os -I/usr/local/win64/x86_64-w64-mingw32/include
+LDFLAGS := -static -static-libgcc
+LIBS := `/usr/local/win64/x86_64-w64-mingw32/bin/sdl2-config --static-libs`
+OBJDIRDEBUG := obj/windows/debug
+OBJDIRRELEASE := obj/windows/release
+else
+os := linux
+APPNAME := Golf-Royale-Debug
+APPNAMER := Golf-Royale-Release
+CC := g++
+CXXFLAGS := -std=c++11 -Wall -g -fpermissive `pkg-config --cflags sdl2 SDL2_image SDL2_ttf SDL2_mixer`
+CXXFLAGSRELEASE := -std=c++11 -Wall -Os -fpermissive `pkg-config --cflags sdl2 SDL2_image SDL2_ttf SDL2_mixer`
+LDFLAGS := -lpthread
+LIBS := `pkg-config --cflags sdl2 SDL2_image SDL2_ttf SDL2_mixer`
+OBJDIRDEBUG = obj/linux/debug
+OBJDIRRELEASE = obj/linux/release
+endif
 
 # Makefile settings - Can be customized.
-APPNAME = Golf-Royale-Debug
-APPNAMER = Golf-Royale-Release
 EXT = .cpp
 SRCDIR = src
 OBJDIR = obj
-OBJDIRDEBUG = obj/debug
-OBJDIRRELEASE = obj/release
 BINDIR = bin
 
 ############## Do not change anything from here downwards! #############
@@ -40,7 +54,8 @@ debug: $(APPNAME)
 
 # Builds the app
 $(APPNAME): $(OBJD) 
-	$(CC) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+	$(info Compiling for $(os)...)
+	$(CC) $(CXXFLAGS) -o $@ $^ $(LDFLAGS) $(LIBS)
 	mkdir -p $(BINDIR)
 	mv $(APPNAME) $(BINDIR)
 
@@ -54,7 +69,8 @@ release: $(APPNAMER)
 
 # Builds the app
 $(APPNAMER): $(OBJR) 
-	$(CC) $(CXXFLAGSRELEASE) -o $@ $^ $(LDFLAGS)
+	$(info$(os))
+	$(CC) $(CXXFLAGSRELEASE) -o $@ $^ $(LDFLAGS) $(LIBS)
 	mkdir -p $(BINDIR)
 	mv $(APPNAMER) $(BINDIR)
 

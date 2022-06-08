@@ -2,7 +2,7 @@
 #define SOUNDS_MANAGER_H
 
 #include "ResourceManager.h"
-#include <SDL2/SDL_mixer.h>
+#include <SDL_mixer.h>
 
 class SoundsManager : public ResourceManager<Mix_Chunk>
 {

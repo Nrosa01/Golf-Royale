@@ -1,7 +1,7 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
-#include "Socket.h"
+//#include "Socket.h"
 #include <thread>
 #include <queue>
 #include <mutex>
@@ -20,7 +20,7 @@ public:
     NetworkMessage* consumeMessage();
 
 private:
-    Socket socket;
+    //Socket socket;
     bool connected;
     bool terminated;
     std::queue<NetworkMessage*> messages;

@@ -8,7 +8,7 @@
 CC = g++
 CXXFLAGS = -std=c++11 -Wall -g -I.
 CXXFLAGSRELEASE = -std=c++11 -Wall -Os -I.
-LDFLAGS = -lpthread
+LDFLAGS =
 
 # Makefile settings - Can be customized.
 APPNAME = Golf-Server-Debug

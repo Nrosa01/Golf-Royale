@@ -2,17 +2,17 @@
 #include "NetworkMessage.h"
 #include <iostream>
 
-Client::Client(const char *address, const char *port) : socket(address, port), connected(true), terminated(false)
+Client::Client(const char *address, const char *port) : /*socket(address, port),*/ connected(true), terminated(false)
 {
-    this->net_thread = std::thread([this]()
-                                   { this->net_thread_f(); });
+    // this->net_thread = std::thread([this]()
+    //                                { this->net_thread_f(); });
 }
 
 Client::~Client()
 {
     terminated = true;
-    socket.close();
-    net_thread.join();
+    // socket.close();
+    // net_thread.join();
 
     while (!messages.empty())
     {
@@ -33,7 +33,7 @@ void Client::disconnect()
 
 void Client::send(NetworkMessage &msg)
 {
-    socket.send(msg, socket);
+    //socket.send(msg, socket);
 }
 
 void Client::net_thread_f()
@@ -45,7 +45,7 @@ void Client::net_thread_f()
         if (!connected)
             continue;
 
-        msg = socket.recv();
+        //msg = socket.recv();
 
         if (msg == nullptr && !terminated)
         {

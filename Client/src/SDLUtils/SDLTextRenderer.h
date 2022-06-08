@@ -1,7 +1,7 @@
 #ifndef SDL_TEXT_RENDERER_H
 #define SDL_TEXT_RENDERER_H
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <unordered_map>
 

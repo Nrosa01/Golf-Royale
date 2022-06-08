@@ -17,7 +17,7 @@
 // IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <iostream>
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include "SDLUtils/Texture.h"
 #include "SDLUtils/SDLApp.h"
 #include "SDLUtils/TimeManager.h"

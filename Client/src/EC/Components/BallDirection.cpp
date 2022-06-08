@@ -4,7 +4,7 @@
 #include "Ball.h"
 #include "../../SDLUtils/Texture.h"
 #include "../../SDLUtils/SDLApp.h"
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 BallDirection::BallDirection(Texture *texture) : Component(typeid(BallDirection).name()), texture(texture), ball(nullptr){};
 
